@@ -1,0 +1,54 @@
+\documentclass{book}
+
+\usepackage{makeidx}
+\makeindex
+
+
+%% PREAMBLE -- BITTE NICHT BEARBEITEN!
+
+% Formatvorlage einbinden
+
+\IfFileExists{osp-intern/osp_main_v2.sty}{%
+    \usepackage{osp-intern/osp_main_v2}
+  }{%
+    \usepackage{autorenhinweise/opensourcepress_v2}
+}
+
+%% END PREAMBLE
+
+\hyphenation{%
+Py-Side
+Py-Qt}
+
+\begin{document}
+
+\include{pyqt_titelei}
+
+\tableofcontents
+\ospvacat
+
+\include{kapitel_01}
+
+\include{kapitel_02}
+
+\include{kapitel_03}
+
+\include{kapitel_04}  
+
+\include{kapitel_05} 
+
+%\include{kapitel_06} % nicht in 1ed
+
+\include{kapitel_07}
+
+\include{kapitel_08}
+
+%\include{kapitel_09} %nicht in 1ed
+
+
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 

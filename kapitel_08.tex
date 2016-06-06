@@ -1,0 +1,1068 @@
+\ospchapter{Grafik- und Audioprogrammierung}{Grafik- und Audioprogrammierung}{chap:graphicsaudio}
+
+\index{Audio}%
+\index{Grafik}%
+\index{Multimedia}%
+\index{QtMultimedia}%
+Neben den in Kapitel \ref{chap:einfuehrung} vorgestellten Widgets für
+Benutzeroberflächen bietet Qt auch für grafische Darstellungen einige
+Möglichkeiten. Die zuletzt zum Framework hinzugekommene ist die
+Darstellung von Grafiken und Animation in Qt Quick. In Kapitel
+\ref{chap:qtquick} wurden Animationen besprochen; für die Anzeige und
+das Bewegen von Grafiken deklariert man wiederum Zustände und
+Zustandsübergänge für bestimmte Aktionen.  
+
+Während dieses Kapitel entsteht, arbeiten die Qt-Entwickler unter
+Hochdruck an den grundlegenden Technologien für eine schnelle und
+optimierte Variante zur Darstellung und Animation grafischer Szenen.
+Schließlich werden hier noch zahlreiche QML-Elemente für die 2D- und
+3D"=Programmierung entstehen, sobald die Basisarbeiten einmal
+abgeschlossen sind. In Kapitel \ref{sec:graphicsscenesandviews} soll
+die Grafikprogrammierung mit den Standard-Qt-Widgets besprochen
+werden. Qt unterscheidet hier zwischen View und Szene, wie sich auch
+in anderen Frameworks zur Grafikprogrammierung zu finden ist.
+
+Ein angrenzendes Feld ist die Multimedia-Unterstützung in Qt, die
+derzeit auch vollkommen neu aufgebaut wird. Bisher war das
+Phonon-Projekt Basis für Video und Audio in Qt. Es ist Teil von KDE
+und eine API für die Ausgabe und Eingabe von Audio und Video.  Phonon
+versucht eine einheitliche Multimedia-API für unterschiedliche
+Plattformen zur Verfügung zu stellen. Dazu trennt das Projekt zwischen
+der API-Schicht, auf die der Entwickler zugreift, und einer Reihe von
+Backends zur (De)Kodierung von Multimediadaten sowie zum Zugriff auf
+die Hardware. Letztlich hat sich das Projekt aber nur unter Linux
+etablieren können, vor allem die Windows-Variante hinkt bei der
+Unterstützung von Hardware und Codecs deutlich hinterher. Auch die
+Trennung zwischen Frontend und Backend bereitet in Teilen immer noch
+Probleme, da die beiden Komponenten doch soweit ineinander verzahnt
+sind, dass sich Änderungen oder Neuentwicklungen immer auf beide Teile
+beziehen müssen. Qt übernahm Phonon zunächst als
+Multimedia-Komponente, da sich die API auch einigermaßen in das
+Framework einfügt. Mit dem Kauf durch Nokia wurde aber relativ schnell
+ein neues Projekt gestartet, das mittlerweile als
+\emph{QtMultimedia}-Komponente Einzug in das Qt-Framework gehalten
+hat. Die Funktionen sind zwar noch sehr rudimentär. Der Aufbau der API
+und Klassen folgt nun aber von Anfang an den Qt-Regeln, so dass sich
+die Programmierung von Audio und Video nun besser in den Rest des
+Frameworks einfügt. Auch hier wird derzeit massiv entwickelt; dennoch
+wollen wir in Kapitel \ref{sec:qtmultimediaaudio} schon einen ersten
+Blick auf die Programmierung von \emph{QtMultimedia} werfen.
+
+
+\ospsection{Grafikprogrammierung mit Szenen und Views}{Grafikprogrammierung mit Szenen und Views}{sec:graphicsscenesandviews}
+
+\index{QGraphicsScene}%
+\index{QGraphicsView}%
+Für die Darstellung einer grafischen Szene greift man in Qt auf die
+Kombination zweier Klassen zurück: \ospcmd{QGraphicsScene} und
+\ospcmd{QGraphicsView}. Letztere ist von \ospcmd{QWidget} abgeleitet
+und kann so in Fenster und Layouts eingefügt werden. Die Klasse dient
+der grafischen Ausgabe, der Darstellung der Szene. Die Szenen-Klasse
+ist demgegenüber direkt von \ospcmd{QObject} abgeleitet; von ihr
+abgeleitete Objekte können also nicht direkt auf dem Bildschirm
+dargestellt werden. Stattdessen übergibt man ein Objekt der Klasse
+\ospcmd{QGraphicsScene} an ein Objekt der Klasse
+\ospcmd{QGraphicsView}, die sich dann um die Darstellung der Szene
+kümmert. Über die Einstellungen des Views bestimmt der Entwickler
+dann, welcher Ausschnitt der Szene dargestellt werden soll, ob die
+Szene auf irgendeine Weise transformiert werden soll und wie
+der Benutzer mit den Objekten in der Szene interagieren kann.
+
+\index{QGraphicsWidget}%
+Die Szene kann eine Reihe von Objekten aufnehmen, die aus den
+grafischen Qt-Widgets abgeleitet sind. Dabei handelt es sich um eine
+Untermenge der Qt-Klassen, in der alle Klassen von
+\ospcmd{QGraphicsWidget} abgeleitet sind. Basisklasse aller grafischen
+Elemente, also auch von \ospcmd{QGraphicsWidget}, ist die Klasse
+\ospcmd{QGraphicsItem}. Eine Zeit lang war es das Ziel der
+Qt"=Entwickler, alle Qt-Standard-Widgets (also diejenigen, die von
+\ospcmd{QWidget} abgeleitet sind) zur Gestaltung von Oberflächen auch
+in einer Version für grafische Darstellung anzubieten. So entstand
+eine lange Liste grafischer Klassen für Text, Buttons, Web-View usw.,
+die dem Entwickler innerhalb der Szene zur Verfügung stehen.
+Grundsätzlich kann man mittlerweile fast jede Qt-Oberfläche auch in
+einer Version für grafische Views und Szenen implementieren. Mit dem
+Start des Qt-Quick-Projekts ist man von dieser Entwicklung wieder
+abgerückt, da definitiv deklarative Oberflächen die Zukunft von Qt
+sein sollen. Wie in Kapitel \ref{sec:qtcomponents}
+besprochen, ist es nun das Ziel, alle Qt-Widgets auch in einer
+QML-Version anzubieten -- zumindest soweit, wie das für die zu
+unterstützenden Plattformen notwendig ist. Aber selbst diese basieren
+letztlich auf den hier besprochenen grafischen Views und Items. Qt Quick
+benutzt nämlich im Hintergrund genau ein Objekt der Klasse
+\ospcmd{QGraphicsView} zur Darstellung der deklarativen Oberfläche.
+Dadurch lassen sich grafische Qt-Widgets und QML-Oberflächen und
+-Elemente in Anwendungen kombinieren, worauf hier aber nicht näher
+eingegangen werden soll.
+
+Dem Entwickler stehen also für grafische Szenen eine Reihe von
+Elementen zur Verfügung, aus denen er eine Oberfläche aufbauen kann.
+Als Beispiel wollen wir in diesem Kapitel einen einfachen Foto-Browser
+und -Betrachter entwickeln. Der Benutzer kann in der Oberfläche ein
+Verzeichnis auswählen. Daraufhin werden alle Grafikdateien dieses
+Verzeichnisses geladen und in verkleinerter Form samt Dateinamen in
+einer Liste angezeigt. Sobald der Benutzer doppelt auf eines der Fotos
+klickt, wird es in einem eigenen, maximierten Fenster in vergrößerter
+Ansicht dargestellt. Abbildung \ospfigref{fig:graphics1_photoviewer}
+zeigt die Oberfläche der fertigen Anwendung.
+
+\ospfigure{0.6}{images/graphics1_photoviewer}{Oberfläche des Foto-Browsers}{fig:graphics1_photoviewer}
+
+
+\ospsubsection{Hauptanwendung und Hauptfensterklasse mit View und Szene}{Hauptanwendung und Hauptfensterklasse mit View und Szene}{sec:graphics1_main}
+
+Die Python-Hauptanwendung des Foto-Browsers besteht wieder aus dem
+üblichen Rahmen, wie er in den bisherigen Kapiteln verwendet wurde.
+Die Hauptfenster-Klasse heißt hier \ospcmd{PhotoViewerWindow},
+aus ihr erzeugen wir das Hauptfenster und zeigen es direkt an:
+
+\begin{osplisting}{Python}{Hauptanwendung erzeugt Hauptfenster}{code:graphics1_1}
+import sys, os
+import re
+from PyQt4 import QtCore, QtGui
+
+def main(argv):
+  app = QtGui.QApplication(argv)
+  main = PhotoViewerWindow()
+  main.show()
+  sys.exit(app.exec_())
+
+if __name__ == "__main__":
+    main(sys.argv)
+\end{osplisting}
+
+Auch die Klasse \ospcmd{PhotoViewWindows} startet zunächst gewöhnlich.
+Sie ist von \ospcmd{QMainWindow} abgeleitet und ruft die in
+Kapitel \ref{sec:hauptfenster} eingeführten Standard"=Methoden zur
+Erzeugung der GUI-Elemente, des Layouts sowie der Verbindungen von
+Signalen und Slots auf. Außerdem setzen wir gleich Fenstergröße und
+-titel. Darüber hinaus erhält die Klasse ein Attribut
+\ospcmd{current\-Directory}, in dem das aktuell dargestellte Verzeichnis
+gespeichert wird:
+
+\begin{osplisting}{Python}{Beginn der Hauptfensterklasse und Konstruktor}{code:graphics1_2}
+class PhotoViewerWindow(QtGui.QMainWindow):
+    
+    def __init__(self, *args):
+        QtGui.QMainWindow.__init__(self, *args)
+
+        self.createComponents()
+        self.createLayout()
+        self.createConnects()
+
+        self.currentDirectory = ""
+        
+        self.resize(600, 600)
+        self.setWindowTitle(self.tr("Photo Viewer"))
+\end{osplisting}
+
+Das aktuelle Verzeichnis ist zu Beginn einfach ein leerer String; erst
+wenn der Benutzer ein Verzeichnis auswählt, wird das Attribut gesetzt.
+Die Fenstergröße wählen wir so, dass die Bilder später
+untereinander in einer maximalen Größe von 500 mal 500 Pixeln
+dargestellt werden können.
+
+Nun folgt die Definition der Methode \ospcmd{createComponents()}, die
+alle GUI-Elemente erzeugt. In diesem Fall besitzt das Hauptfenster
+drei sichtbare Elemente: die Eingabezeile für das Verzeichnis, den
+Button zur Auswahl des Verzeichnisses per Datei-Browser sowie den
+Bereich zur Anzeige der Fotos als Objekt der Klasse
+\ospcmd{QGraphicsView}. Außerdem soll gleich eine leere grafische
+Szene aus der Klasse \ospcmd{QGraphicsScene} erzeugt und dem View zur
+Darstellung übergeben werden:
+
+\index{QGraphicsView}%
+\index{QGraphicsScene}%
+\index{QGraphicsView!setScene()}%
+\begin{osplisting}{Python}{Erzeugung der GUI-Elemente}{code:graphics1_2}
+def createComponents(self):
+    self.buttonSelectDir = QtGui.QPushButton(self.tr("Select directory"))
+    self.editCurrentDir = QtGui.QLineEdit()
+    self.graphicsviewPhotos = QtGui.QGraphicsView()
+    self.photobrowser = QtGui.QGraphicsScene()
+    self.graphicsviewPhotos.setScene(self.photobrowser)
+\end{osplisting}
+
+Die Szene wird per Methode \ospcmd{setScene()} an den View übergeben.
+Damit stellt der View die Szene dar, und zwar entspricht die linke
+obere Ecke des Views der linken oberen Ecke der Szene. In unserem Fall
+ist der View leer, weil die Szene noch keine Objekte enthält. Sie
+werden erst hinzugefügt, sobald der Benutzer ein Verzeichnis
+ausgewählt hat.
+
+Das Layout ordnet Eingabezeile und Button horizontal zueinander, den
+grafischen View dann vertikal darunter an. Wir verschachteln also ein
+horizontales in ein vertikales Layout. Letzteres weisen wir dem
+Hauptfenster zu bzw. wie gewohnt dem zentralen Widget des
+Hauptfensters:
+
+\begin{osplisting}{Python}{Erzeugung des Layouts}{code:graphics1_3}
+def createLayout(self):
+    layoutCentral = QtGui.QVBoxLayout()
+
+    layoutHoriz = QtGui.QHBoxLayout()
+    layoutHoriz.addWidget(self.editCurrentDir)
+    layoutHoriz.addWidget(self.buttonSelectDir)
+    layoutCentral.addLayout(layoutHoriz)
+        
+    layoutCentral.addWidget(self.graphicsviewPhotos)
+        
+    widgetCentral = QtGui.QWidget()
+    widgetCentral.setLayout(layoutCentral)
+    self.setCentralWidget(widgetCentral)
+\end{osplisting}
+
+Schließlich sind noch zwei Signale mit einem Slot zu verbinden.  Wenn
+der Benutzer ein Verzeichnis in die Eingabezeile einträgt und
+Return drückt, sollen die Fotos aus diesem Verzeichnis
+geladen werden. Außerdem soll ein Verzeichnis-Browser geöffnet werden,
+sobald der Benutzer den Button anklickt. Die beiden Signale der
+GUI-Elemente werden jeweils mit einem noch zu implementierenden Slot
+verknüpft:
+
+\begin{osplisting}{Python}{Signale und Slots verbinden}{code:graphics1_4}
+def createConnects(self):
+    self.editCurrentDir.returnPressed.connect(self.loadPhotos)
+    self.buttonSelectDir.clicked.connect(self.fileBrowser)
+\end{osplisting}
+
+Jetzt fehlen der Klasse noch die beiden Slots. Zunächst soll
+\ospcmd{loadPhotos()} vorgestellt werden. Außer dem Laden der Fotos in
+die Szene wollen wir in der Statusleiste des Hauptfensters Nachrichten
+über die ausgeführte Aktion anzeigen. Dadurch bekommt der Benutzer
+gleich eine Rückmeldung, dass die Aktion gestartet wurde.  Gerade bei
+möglicherweise länger andauernden Aufgaben wie dem Laden von Fotos
+stellt die Statusleiste eine hervorragende Möglichkeit zur Anzeige von
+Rückmeldungen dar. Eine Alternative ist eine Fortschrittsleiste, die
+sich mit dem Laden von Foto zu Foto langsam füllt. Auch eine solche
+wollen wir später anzeigen. Wir werden sie aber direkt in einer
+eigenen Klasse \ospcmd{PhotoBrowser} verwenden, die wir noch
+implementieren. In \ospcmd{loadPhotos()} wird zunächst das aktuelle
+Verzeichnis aus der Eingabezeile ausgewählt und im Attribut
+\ospcmd{currentDirectory} gespeichert. Danach wird die Statusleiste
+aktualisiert und wir  erzeugen ein Objekt aus der noch zu
+implementierenden Klasse \ospcmd{PhotoBrowser}, das eine Szene mit
+allen Bildern des Verzeichnisses erzeugt. Dazu übergeben wir der Klasse
+bei der Erzeugung das aktuell ausgewählte Verzeichnis:
+
+\index{QStatusBar}%
+\index{QMainWindow!statusBar()}%
+\index{QStatusBar!showMessage()}%
+\index{QStatusBar!clearMessage()}%
+\begin{osplisting}{Python}{Laden der Fotos per Klasse PhotoBrowser}{code:graphics1_5}
+@QtCore.pyqtSlot()
+def loadPhotos(self):
+    self.currentDirectory = unicode(self.editCurrentDir.text())
+    self.statusBar().showMessage(self.tr("Loading photos..."))
+    self.photobrowser = PhotoBrowser(self, self.currentDirectory)
+    count = self.photobrowser.loadPhotos()
+    self.graphicsviewPhotos.setScene(self.photobrowser)
+    self.statusBar().showMessage(
+        unicode(self.tr("{0} photos")).format(count))
+\end{osplisting}
+
+Die Klasse \ospcmd{PhotoBrowser} besitzt eine Methode
+\ospcmd{loadPhotos()}, die die Bilder aus dem Verzeichnis lädt und der
+Szene hinzufügt. In dieser Methode wird später auch die
+Fortschrittsanzeige erscheinen. Anschließend setzen wir die neue Szene
+per \ospcmd{setScene()} als aktuelle Szene des Views. Erst dann werden
+die Bilder auch im Hauptfenster sichtbar. Zugriff auf die Statusleiste
+des Hauptfensters erhalten Sie immer per Methode \ospcmd{statusBar()}.
+Diese liefert die aktuelle Statusleiste eines Fensters als Objekt der
+Klasse \ospcmd{QStatusBar} zurück. Die Klasse besitzt die Methode
+\ospcmd{showMessage()}, über die wir eine Nachricht an die
+Statusleiste senden können. Sie können der Methode einen zweiten
+Parameter übergeben, der eine Zeitangabe in Sekunden enthält. Nach
+Ablauf der angegebenen Sekunden wird die Nachricht dann wieder aus der
+Statusleiste gelöscht. Standardmäßig bleibt die Nachricht so lange in
+der Statusleiste sichtbar, bis eine neue Nachricht geschickt oder die
+Methode \ospcmd{clearMessage()} aufgerufen wird.
+
+Zuletzt benötigen wir noch einen Slot \ospcmd{fileBrowser} zur Anzeige
+eines Verzeichnis"=Browsers. Der Benutzer soll hier ein Verzeichnis
+auswählen können, das dann als String in die Eingabeleiste geschrieben
+wird. Danach können wir die implementierte Methode
+\ospcmd{loadPhtots()} aufrufen, um die Bilder im gewählten Verzeichnis
+anzuzeigen. Der Verzeichnis-Browser soll immer im Bilder-Verzeichnis
+des Benutzers starten und nur Verzeichnisse zum Auswählen
+anbieten. Dazu benutzen wir die Klasse \ospcmd{QFileDialog}, der wir
+das Standardverzeichnis aus \ospcmd{QDesktopServices.PicturesLocation}
+übergeben (s. Kapitel \ref{sec:filedialogs}). Per Methode
+\ospcmd{setFileMode()} können wir dem Browser-Dialog außerdem
+mitteilen, dass der Benutzer nur Verzeichnisse auswählen soll:
+
+\index{Dialoge!Verzeichnisdialoge}%
+\index{QFileDialog!selectedFiles()}%
+\begin{osplisting}{Python}{Slot für Anzeige des Verzeichnis-Browsers}{code:graphics1_6}
+    @QtCore.pyqtSlot()
+    def fileBrowser(self):
+        dialog = QtGui.QFileDialog(self, self.tr("Select Directory"),
+                                   QtGui.QDesktopServices.storageLocation(
+                                   QtGui.QDesktopServices.PicturesLocation))
+        dialog.setFileMode(QtGui.QFileDialog.DirectoryOnly)
+        if (dialog.exec_()):
+            self.editCurrentDir.setText(unicode(dialog.selectedFiles()[0]))
+            self.loadPhotos()
+\end{osplisting}
+
+Wir erzeugen den Dialog als Objekt, damit wir danach den
+\emph{File Mode} setzen können. Mit der Methode \ospcmd{exec\_()}
+zeigen wir den Verzeichnis-Browser schließlich als modalen Dialog an.
+Falls der Benutzer nicht auf \ospmenu{Abbrechen} geklickt hat,
+bekommen wir das gewählte Verzeichnis als erstes Element der Liste
+\ospcmd{dialog.selectedFiles()} zurückgeliefert. Mit diesem String
+befüllen wir also die Eingabezeile und rufen dann
+\ospcmd{loadPhotos()} auf. Die Hautfenster-Klasse ist damit fertig
+implementiert. Anschließend implementieren wir die Klasse
+\ospcmd{PhotoBrowser}, die eine grafische Szene mit den Bildern aus
+dem aktuellen Verzeichnis erzeugt.
+
+
+\ospsubsection{Ein Foto-Browser als grafische Szene}{Ein Foto-Browser als grafische Szene}{sec:graphicsphotobrowser}
+
+Der Foto-Browser besteht aus der Klasse \ospcmd{PhotoBrowser}, die wir
+direkt von \ospcmd{QGraphicsScene} ableiten. Die Klasse verwaltet
+intern eine Liste von Dateinamen sowie eine Liste verkleinerter
+Bilder, wobei jeweils der Index in der einen Liste dem Index in der
+anderen Liste entspricht. Jeder Dateiname gehört damit zu einem Bild
+und umgekehrt. In Qt heißen diese Bilder \emph{Pixmap}; die
+Bilder werden wir als Objekte der Klasse \ospcmd{QPixmap} speichern.
+Zunächst jedoch starten wir mit dem Konstruktor der Klasse
+\ospcmd{PhotoBrowser}:
+
+\begin{osplisting}{Python}{Kopf und Konstruktor des Foto-Browsers}{code:graphics1_7}
+class PhotoBrowser(QtGui.QGraphicsScene):
+
+    def __init__(self, parent, directory):
+        QtGui.QGraphicsScene.__init__(self, parent)
+        self.directory = directory
+        self.fileList = []
+        self.pixmaps = []
+        self.initFileList()
+\end{osplisting}
+
+Nach der Initialisierung der Attribute (Verzeichnis und die beiden
+Listen) wird gleich die Dateiliste initialisiert. Dazu ruft der
+Konstruktor die Methode \ospcmd{initFileList()} auf. In dieser Methode
+werden nun alle Bilddateien aus dem übergebenen Verzeichnis ausgelesen
+und in \ospcmd{fileList} gespeichert. Dazu werden die Endungen der
+Dateien per regulärem Ausdruck überprüft. Nur Dateien mit den Endungen
+\ospcmd{jp(e)g} oder \ospcmd{png} werden als Bilddateien akzeptiert,
+jeweils in Groß- oder Kleinschreibung. Qt-Pixmaps können zwar
+grundsätzlich auch aus anderen Dateiformaten erzeugt werden, der
+Einfachheit halber beschränken wir uns aber hier auf die
+gebräuchlichsten.\ospfootnote{fn:qpixmap}{Eine vollständige Liste der
+  unterstützten Dateiformate finden Sie in der Online-Dokumentation
+  der Klasse \ospcmd{QPixmap}.} Die Methode \ospcmd{initFileList()}
+lädt alle Dateien des Verzeichnisses, geht dann durch die gesamte
+Liste und filtert alle Dateien nach der Dateiendung. Am Ende werden
+die Dateien noch per \ospcmd{sort()} sortiert:
+
+\begin{osplisting}{Python}{Initialisierung der Liste mit Bilddateien}{code:graphics1_8}
+def initFileList(self):
+    flist = os.listdir(self.directory)
+    imageextension = re.compile("(?:[Jj][Pp][Ee]?[Gg]|[Pp][Nn][Gg])$")
+    self.fileList = []
+    for filename in flist:
+        if imageextension.search(filename):
+            self.fileList.append(filename)
+    self.fileList.sort()
+\end{osplisting}
+
+\index{Dialoge!Fortschrittsdialog}%
+\index{Fortschrittsbalken}%
+\index{QProgressDialog}%
+\index{QProgressDialog!setMinimumDuration()}%
+\index{QWidget!setWindowModality()}%
+In der Hauptfenster-Klasse in Listing \osplistingref{code:graphics1_5}
+wurde die Methode \ospcmd{loadPhotos()} der hier vorgestellten
+Foto-Browser-Klasse aufgerufen. Diese Methode wollen wir nun
+implementieren. Da das Laden und Verkleinern der Fotos je nach Größe
+und Anzahl der Dateien länger dauern kann, wollen wir dem Benutzer bei
+längeren Ladezeiten einen Fortschrittsbalken präsentieren. Das
+Qt-Framework enthält dazu die Klasse \ospcmd{QProgressDialog}, die mit
+der Gesamtzahl der zu verarbeitenden Elemente initialisiert wird und
+dann nach Verarbeitung jedes Elements aktualisiert werden muss. Die
+Klasse bietet den netten Automatismus, dass der Fortschrittsdialog
+erst nach Ablauf einer bestimmten Zeit angezeigt wird. Bei kurzen
+Verarbeitungszeiten wird der Benutzer also nicht durch einen
+zusätzlichen Dialog abgelenkt. Die Zeit, die der Dialog bis zur
+Anzeige wartet, beträgt standardmäßig 4 Sekunden und kann per Methode
+\ospcmd{setMinimumDuration()} geändert werden. Der Methode wird die zu
+wartende Zeitspanne in Millisekunden übergeben.  Zum Start der
+Methode \ospcmd{loadPhotos()} erzeugen wir also gleich einen solchen
+Fortschrittsdialog mit dem Startwert \ospcmd{0} (null) und der
+Länge der Liste mit Dateinamen als Zielwert:
+
+\begin{osplisting}{Python}{Fortschrittsdialog für das Laden der Fotos}{code:graphics1_9}
+def loadPhotos(self):
+    progress = QtGui.QProgressDialog(
+        self.tr("Loading photos..."),
+        self.tr("Abort"),
+        0,
+        len(self.fileList),
+        self.parent())
+    progress.setWindowModality(QtCore.Qt.WindowModal)
+\end{osplisting}
+
+Die ersten beiden Parameter des Dialog-Konstruktors sind ein
+Informationstext für das Fenster und die Aufschrift für den Knopf
+\ospmenu{Abbrechen}. Danach folgende Start- und Zielwert, schließlich
+noch das Elternobjekt in der Qt-Objekthierarchie. Wir verwenden hier
+den View als \ospcmd{parent()} der Szene, da die Szene selbst ja
+kein Qt-Widget ist. Schließlich setzen wir noch den Dialog als
+\dqo{}modal\dqc{}, damit er nicht hinter dem Hauptfenster verschwinden
+kann. Nicht-modale Fortschrittsanzeigen ermöglichen es in Qt, die
+Anwendungsoberfläche trotz eines länger andauernden
+Bearbeitungsvorgangs weiterhin für den Benutzer verfügbar zu halten.
+In unserem Fall wollen wir aber zunächst die Bilder komplett laden,
+der Benutzer soll erst dann wieder mit dem Hauptfenster interagieren
+können.
+
+\index{QPixmap}%
+\index{QPixmap!scaled()}%
+\index{Grafik!Item Group}%
+\index{Grafik!Bilddatei laden}%
+\index{Grafik!Text anzeigen}%
+\index{Grafik!Element selektierbar machen}%
+\index{QGraphicsView!Item Group}%
+\index{QGraphicsView!addPixmap()}%
+\index{QGraphicsView!addSimpleText()}%
+\index{QGraphicsView!createItemGroup()}%
+\index{QGraphicsItem!setData()}%
+\index{QGraphicsItem!setPos()}%
+\index{QGraphicsItem!setFlag()}%
+\index{QProgressDialog!wasCanceled()}%
+In der Methode \ospcmd{loadPhotos()} wollen wir danach die Bilder
+laden. Dazu erzeugen wir jeweils ein Objekt der Klasse
+\ospcmd{QPixmap} für jeden Dateinamen in der Dateiliste und
+verkleinern bei Bedarf anschließend das Bild auf eine maximale Größe
+von 500 mal 500 Pixel. Außerdem wollen wir die Pixmap und den
+Dateinamen zusammen anzeigen. Dazu gruppieren wir die beiden Elemente
+als sogenannte \emph{Item Group} in der Szene. Diese
+Gruppenbildung ist nötig, damit später ein Doppelklick auf eines der
+beiden Elemente (Bild oder Text) die vergrößerte Ansicht öffnet. Die
+Gruppierung sorgt dafür, dass der Doppelklick einer solchen Gruppe
+zugeordnet werden kann. Außerdem lassen sich nun alle Elemente einer
+Gruppe gesammelt in der Szene anordnen, so dass die Koordinaten für
+Bild und Dateinamen nur einmal zusammengesetzt werden müssen. Die
+Bilder werden in einer Schleife über die Dateinamen geladen, der Rest
+der Methode \ospcmd{loadPhotos()} sieht dann folgendermaßen aus:
+
+\begin{osplisting}{Python}{Laden der Fotos in die Szene}{code:graphics1_10}
+y = 0
+i = 0
+for filename in self.fileList:
+    progress.setValue(i)
+    filepath = os.path.join(self.directory, filename)
+    pixmap = QtGui.QPixmap(filepath)
+    pixmap = pixmap.scaled(QtCore.QSize(500,500),
+                           QtCore.Qt.KeepAspectRatio)
+    pixmapitem = self.addPixmap(pixmap)
+    textitem = self.addSimpleText(filename)
+    textitem.setPos(QtCore.QPointF(0, pixmap.height()+5))
+    itemGroup = self.createItemGroup([pixmapitem, textitem])
+    itemGroup.setPos(QtCore.QPointF((300-pixmap.width())/2, y+10))
+    itemGroup.setData(0, QtCore.QVariant(filename))
+    itemGroup.setFlag(QtGui.QGraphicsItem.ItemIsSelectable)
+    y = y + pixmap.height() + 50
+    i = i + 1
+    if (progress.wasCanceled()):
+        self.clear()
+        break
+progress.setValue(len(self.fileList))
+return len(self.fileList)
+\end{osplisting}
+
+Der Wert \ospcmd{y} enthält jeweils die aktuelle y-Position der Gruppe
+und wird am Anfang der Schleife auf Null gesetzt. Gleiches gilt für
+den aktuellen Listen-Index \ospcmd{i}, den wir zur Aktualisierung des
+Fortschrittsbalkens im Fortschrittsdialog verwenden. Diese
+Aktualisierung erfolgt gleich zu Beginn der Schleife, indem die
+Methode \ospcmd{setValue()} des Dialogs aufgerufen wird. Anschließend
+wird der komplette Dateipfad des Bildes konstruiert und daraus das
+Pixmap-Objekt erzeugt. Nun folgt per Methode \ospcmd{scaled()} die
+Skalierung des Bildes. Als zweiten Parameter übergeben wir
+\ospcmd{QtCore.Qt.KeepAspect\-Ratio}, damit das Seitenverhältnis bei der
+Skalierung beibehalten wird. Danach werden der Szene das Bild und der
+Dateiname per \ospcmd{addPixmap()} und \ospcmd{addSimpleText()}
+hinzugefügt. Die beiden Elemente sind damit schon Teil der Szene,
+allerdings wurden sie noch nicht positioniert. Lediglich das
+Text-Element wird per \ospcmd{setPos()} schon einmal mit 5 Pixeln
+Abstand unterhalb des Bildes positioniert (y-Koordinate ist
+\ospcmd{pixmap.height()+5}). Die Methode erwartet einen Parameter vom
+Typ \ospcmd{QPointF}, also eine Koordinate aus zwei Fließkomma-Werten.
+Den Parameter erzeugen wir direkt beim Aufruf der Methode als Objekt
+der Klasse \ospcmd{QPointF}, deren Konstruktor die beiden
+Fließkomma-Werte für die Koordinate entgegennimmt.
+
+\index{QVariant}%
+Rückgabe der beiden \ospcmd{add}-Methoden sind zwei von
+\ospcmd{QGraphicsItem} abgeleitete Objekte, aus denen anschließend
+eine Gruppe gebildet wird. Dazu rufen wir die Methode
+\ospcmd{createItemGroup()} der Szene mit einer Liste der zu
+gruppierenden Elemente als Parameter auf; diese liefert ein Objekt der
+Klasse \ospcmd{QGraphicsItemGroup} zurück. Das Gruppenobjekt kann nun
+wie jedes andere Objekt der Szene positioniert werden. Per
+\ospcmd{setPos()} zentrieren wir das Objekt bei einer Fensterbreite
+von 600 Pixeln (x-Position ist \ospcmd{(300-pixmap.width())/2}), die
+y-Koordinate ergibt sich aus der Variablen \ospcmd{y}. Danach fügen
+wir den Dateinamen als Dateneintrag zur Gruppe hinzu. Dazu rufen wir
+die Methode \ospcmd{setData()} auf, die jedes Objekt der Klasse
+\ospcmd{QGrahicsItem} oder einer davon abgeleiteten Klasse besitzt.
+Die Dateneinträge werden in einer Art Dictionary gespeichert, wobei
+der erste Parameter für \ospcmd{setData()} der Schlüssel als Integer
+ist, und der Wert für den Dateneintrag als zweiter Parameter vom Typ
+\ospcmd{QVariant} übergeben wird. In unserem Fall speichern wir zu
+jeder Gruppe den Dateinamen des Bildes als Dateneintrag unter dem
+Schlüssel \ospcmd{0} (null). So können wir den Dateinamen später
+einfach auslesen, sobald er Benutzer doppelt auf eine der Gruppen
+geklickt hat. Damit die Gruppen auch per Maus ausgewählt werden können,
+müssen wir sie außerdem noch per Aufruf von
+\ospcmd{setFlag(QtGui.QGraphicsItem.ItemIsSelectable)} auswählbar
+ma-\osplinebreak{}chen.
+
+Die Schleife endet mit der Aktualisierung der beiden Variablen
+\ospcmd{y} und \ospcmd{i} sowie der Überprüfung des
+Fortschrittsdialogs. Wenn der Benutzer auf \ospmenu{Abbrechen}
+geklickt hat, liefert die Methode \ospcmd{wasCanceled()} den Wert
+\ospcmd{True} zurück und die Schleife sollte abgebrochen werden.
+Diese Überprüfung muss im Code immer manuell erfolgen, damit der Knopf
+\ospmenu{Abbrechen} des Fortschrittsdialogs aktiviert ist. So können
+auch eventuell temporär gespeicherte Zustände und Objekte bereinigt
+werden, bevor die Schleife verlassen wird. In unserem Fall löschen wir
+bei Abbruch durch den Benutzer die gesamte Szene einfach per Methode
+\ospcmd{clear()}.
+
+Nach dem Ende der Schleife setzen wir schließlich noch den
+Fortschrittsbalken auf den Maximalwert. Nur so wird der
+Fortschrittsdialog dann auch geschlossen. Zurück geben wir  die
+Anzahl der geladenen Bilder, damit das Hauptfenster die entsprechende
+Nachricht in der Statusleiste anzeigen kann.
+
+\index{Events!Doppelklick}%
+\index{QWidget!mouseDoubelClickEvent()}%
+Nun fehlt noch die Reaktion auf den Doppelklick per Maus. Am
+einfachsten fängt man Doppelklicks ab, indem man den entsprechenden
+Event-Handler überschreibt (s. Kapitel \ref {sec:eventhandler}).  Für
+Doppelklicks heißt dieser \ospcmd{mouse\-DoubleClickEvent()} und
+gehört zu den Klassen \ospcmd{QGraphicsScene}, \ospcmd{QWid\-get} und
+\ospcmd{QGraphicsSceneItem} sowie allen davon abgeleiteten Klassen.
+Folgender Code fängt dieses Event in unserer Klasse ab:
+
+\begin{osplisting}{Python}{Event-Handler für Doppelklicks}{code:graphics1_11}
+def mouseDoubleClickEvent(self, event):
+    filename = self.currentFilename()
+    if filename:
+        filepath = os.path.join(self.directory, filename)
+        fotoviewer = PhotoViewer(self.parent(), filepath)
+        fotoviewer.show()
+\end{osplisting}
+
+Zunächst ruft der Handler eine gleich noch vorgestellte Methode
+\ospcmd{current\-Filename()} auf, die den Dateinamen des gerade
+ausgewählten Bildes zurückliefert. Falls ein Bild ausgewählt ist, d.\,h.
+falls der Doppelklick ein Bild getroffen hat, wird dieser
+Dateiname an eine neue Klasse \ospcmd{PhotoViewer} übergeben. Auch
+diese werden wir gleich noch implementieren; sie stellt das Bild in
+einem eigenen Dialog mit eigenem grafischen View samt Szene in
+vergrößerter Ansicht dar.
+
+Um den Dateinamen des gerade ausgewählten Bildes auszulesen, können wir
+auf das erste Datenelement der selektierten Gruppe zugreifen. Die
+Methode \ospcmd{currentFilename()} unserer Klasse
+\ospcmd{PhotoBrowser} sieht dann so aus:
+
+\begin{osplisting}{Python}{Auslesen des Dateneintrags eines selektierten Elements}{code:graphics1_12}
+def currentFilename(self):
+    if not self.selectedItems():
+        return None
+    else:
+        return unicode(self.selectedItems()[0].data(0).toString())
+\end{osplisting}
+
+Die Methode \ospcmd{sleectedItems()} liefert eine Liste mit allen
+selektierten Elementen zurück. Falls die Liste leer ist, liefern wir
+ein \ospcmd{None} zurück. Andernfalls greifen wir auf das erste
+Element in der Liste zu und lesen per Aufruf von \ospcmd{data(0)} den
+Dateneintrag unter dem Schlüssel \ospcmd{0} (null) zurück. Dieser wird
+per Methode \ospcmd{toString()} in einen String verwandelt,
+schließlich wurde er oben als \ospcmd{QVariant} gespeichert. Der
+String kann dann zum Öffnen der Datei verwendet werden. Die Klasse
+\ospcmd{PhotoBrowser} ist damit fertig implementiert. Als letzter Teil
+der Anwendung fehlt nun noch der Foto-Betrachter.
+
+
+\ospsubsection{Der Foto-Betrachter als eigener Dialog}{Der Foto-Betrachter als eigener Dialog}{sec:graphicsfotoviewer}
+
+Der Foto-Betrachter soll nun als eigener Dialog implementiert werden.
+In Listing \osplistingref{code:graphics1_11} wurde dieser Dialog mit
+dem Dateinamen als Parameter des Konstruktors erzeugt und dann per
+\ospcmd{show()} angezeigt. Wir wollen den Dialog hier von der Klasse
+\ospcmd{QDialog} ableiten; \ospcmd{show()} zeigt den Dialog dann modal
+an. Außerdem soll der Dialog gleich maximiert werden, so dass er den
+gesamten Desktop einnimmt. In diesem Fall enthält der Dialog nur ein
+einziges Widget, ein Objekt der Klasse \ospcmd{QGraphicsView}, das wir
+samt Layout im Konstruktor der Klasse \ospcmd{PhotoViewer} erstellen:
+
+\index{QWidget!setWindowState()}%
+\begin{osplisting}{Python}{Kopf und Konstruktor der Klasse \ospcmd{PhotoViewer}}{code:graphics1_13}
+class PhotoViewer(QtGui.QDialog):
+    def __init__(self, parent, filepath):
+        QtGui.QDialog.__init__(self, parent)
+        self.setWindowTitle("Foto Viewer")
+        self.setWindowState(QtCore.Qt.WindowMaximized)
+
+        self.graphicsview = QtGui.QGraphicsView(self)
+        self.pixmap = QtGui.QPixmap(filepath)
+
+        layout = QtGui.QVBoxLayout()
+        layout.addWidget(self.graphicsview)
+        self.setLayout(layout)
+\end{osplisting}
+
+Außer dem grafischen View erzeugen wir die Pixmap als Objekt
+der Klasse \ospcmd{QPixmap}. Den Pfad entnehmen wir dem Parameter
+\ospcmd{filepath}. Das Layout des Dialogs enthält schließlich nur das
+Element in \ospcmd{self.graphicsview}. Bisher enthält dieser View aber
+weder eine Szene noch ein Bild. Beide Elemente können wir nun nach der
+Anzeige des Dialogs erzeugen und hinzufügen, indem wir wiederum einen
+Event-Handler überschreiben. Es bietet sich hier an, den Event-Handler
+für die Größenänderung des Dialogs zu überschreiben. Schließlich kann
+auch der Benutzer die Fenstergröße manuell ändern, und das enthaltene
+Bild soll sich dann an die neue Fenstergröße anpassen. Da das
+entsprechende Event auch bei der Erzeugung des Dialogs ausgelöst wird,
+können wir hier zwei Fliegen mit einer Klappe schlagen. Bei einer
+Änderung der Fenstergröße soll also die Pixmap zunächst skaliert
+werden, dann soll sie in eine grafische Szene eingefügt werden, die
+schließlich dem View zugewiesen wird. Der entsprechende Handler heißt
+\ospcmd{resizeEvent()} und ruft für die beiden Aufgaben jeweils eine
+weitere Methode auf:
+
+\begin{osplisting}{Python}{Event-Handler für Änderung der Fenstergröße}{code:graphics1_14}
+    def resizeEvent(self, event):        
+        self.scalePixmap()
+        self.showPixmap()
+\end{osplisting}
+
+In der Methode \ospcmd{scalePixmap()} wird die Pixmap nun auf die neue
+Fenstergröße skaliert und in einem eigenen Attribut
+\ospcmd{scaledPixmap} abgelegt. Dazu greifen wir auf die oben schon
+verwendete Methode \ospcmd{scaled()} der Klasse \ospcmd{QPixmap}
+zurück. Sie liefert ein neues Pixmap-Objekt zurück:
+
+\index{QPixmap!scaled()}%
+\begin{osplisting}{Python}{Skalieren der Pixmap auf die aktuelle Fenstergröße}{code:graphics1_15}
+  def scalePixmap(self):
+     self.scaledPixmap = \
+         self.pixmap.scaled(QtCore.QSize(self.graphicsview.width()-5,
+                                         self.graphicsview.height()-5),
+                            QtCore.Qt.KeepAspectRatio)
+\end{osplisting}
+
+Die neue Größe der Pixmap lesen wir hier aus Höhe und Breite des
+Objekts in \ospcmd{graphicview}, das sich im Layout dynamisch an die
+Fenstergröße anpasst. Von diesen Werten ziehen wir jeweils 5 Pixel ab,
+um einen kleinen Abstand zum Fensterrahmen zu lassen. Per
+\ospcmd{QtCore.Qt.KeepAspectRatio} wird das Seitenverhältnis der
+Pixmap beibehalten.
+
+Nun kann das Bild angezeigt werden. Die Methode \ospcmd{showPixmap()}
+erzeugt zunächst eine Szene, der die skalierte Pixmap per Methode
+\ospcmd{addPixmap()} hinzugefügt wird:
+
+\begin{osplisting}{Python}{Anzeige der skalierten Pixmap}{code:graphics1_16}
+    def showPixmap(self):
+        self.graphicsscene = QtGui.QGraphicsScene(self)
+        pixmapitem = self.graphicsscene.addPixmap(self.scaledPixmap)
+        self.graphicsview.setScene(self.graphicsscene)
+\end{osplisting}
+
+Damit wird jetzt bei jeder Änderung der Fenstergröße die Pixmap
+automatisch neu skaliert und in einer neuen Szene angezeigt.  Die
+Implementierung der Klasse \ospcmd{PhotoViewer} ist damit vollständig.
+
+Auch die Anwendung kann nun gestartet werden. Das Beispiel zeigt, wie
+Sie durch das Zusammenspiel zwischen \ospcmd{QGraphicsView} und
+\ospcmd{QGraphicsScene} auf einfache Weise grafische Darstellungen in
+Qt realisieren. Sie haben nun alle grundlegenden Werkzeuge in der
+Hand, um die zahlreichen weiteren grafischen Elemente des Frameworks
+auszuprobieren und in Ihren Anwendungen einzusetzen.
+
+
+\ospsection{Audioausgabe mit QtMultimedia}{Audioausgabe mit QtMultimedia}{sec:qtmultimediaaudio}
+
+\index{QtMultimedia}%
+\index{Audio}%
+\index{Video}%
+\index{Multimedia}%
+\index{WAV-Datei}%
+\index{Audio!WAV-Datei abspielen}%
+Wie in der Einführung dieses Kapitels schon erwähnt, handelt es sich
+bei \emph{QtMultimedia} um eine erst kürzlich eingeführte Komponente
+des Qt"=Frame\-works. Seit Version 4.6 enthält Qt Klassen zur Eingabe und
+Ausgabe von Audio und Video, die langfristig das Multimedia-Framework
+Phonon in Qt ablösen sollen. Vor allem auf mobilen Geräten ist die
+Unterstützung von Codecs und Formaten schon weit
+fortgeschritten, schließlich standen diese bei der Entwicklung eine
+Zeit lang im Vordergrund. Die Unterstützung von Multimedia auf
+Desktop-Systemen blieb demgegenüber zurück, trotzdem lassen sich
+beispielsweise schon Audio- und Videosignale auf allen Plattformen in
+einer einheitlichen API ausgeben. Dabei werden im Moment aber nur
+unkomprimierte Formate plattformübergreifend unterstützt. Bei Bedarf
+muss der Python-Programmierer im Moment dann auf zusätzliche
+Bibliotheken zurückgreifen, um komprimierte Multimedia-Formate in die
+von QtMultimedia unterstützten Formate umzuwandeln. In diesem
+Kapitel soll zunächst das grundlegende Ansprechen der Audio-API
+beschrieben werden. Anschließend wird eine kleine Beispielanwendung
+zum Abspielen einer WAV-Datei präsentiert, die zum Lesen der Daten auf
+das Standard-Python-Modul \ospcmd{wave} zurückgreift und die rohen
+Daten über die Audio"=Klassen in \emph{QtMultimedia} abspielt.
+
+
+\ospsubsection{Abfrage der Hardware und unterstützten Codecs}{Abfrage der Hardware und unterstützten Formate}{sec:audiohwandcodecs}
+
+\index{Audio!Codecs}%
+\index{Audio!Ausgabegerät}%
+\index{Audio!Gerätename}%
+\index{QAudioDeviceInfo}%
+\index{QAudioDeviceInfo!defaultOutputDevice()}%
+\index{QAudioDeviceInfo!supportedCodecs()}%
+\index{QAudioDeviceInfo!deviceName()}%
+Die zentrale Klasse zur Abfrage der Hardware und deren Eigenschaften
+ist \ospcmd{QAudioDeviceInfo}. Sie stellt eine Reihe von Methoden mit
+dem Präfix \ospcmd{supported} zur Verfügung, die jeweils eine Liste
+zurückliefern. Diese Liste enthält dann je nach aufgerufener Methode
+die unterstützten Codecs, Samplingraten usw. Für eine Abfrage der
+unterstützten Codecs des Standardausgabegeräts muss man zunächst ein
+Objekt der Klasse \ospcmd{QAudioDe\-viceInfo} für das entsprechende
+Gerät erzeugen. Am einfachsten geht das, indem man die statische
+Methode \ospcmd{defaultOutputDevice()} der Klasse aufruft, die sofort
+das Geräte-Objekt zurückliefert. Ein einfaches Skript, das alle
+unterstützten Codecs ausgibt, sieht folgendermaßen aus:
+
+\begin{osplisting}{Python}{Ausgabe einer Liste von Codecs für das Standardgerät}{code:audiocodecs}
+from PyQt4 import QtMultimedia
+
+device = QtMultimedia.QAudioDeviceInfo.defaultOutputDevice()
+info = QtMultimedia.QAudioDeviceInfo(device)
+codecs = info.supportedCodecs()
+
+print u"Device {0} unterstützt folgende Codecs:".format(device.deviceName())
+for c in codecs:
+    print unicode(c)
+\end{osplisting}
+
+\index{QAudioFormat}%
+\index{QAudioFormat!setChannels()}%
+\index{QAudioFormat!setFrequency()}%
+\index{QAudioFormat!setSampleSize()}%
+\index{QAudioFormat!setCodec()}%
+\index{QAudioFormat!setByteOrder()}%
+\index{QAudioFormat!setSampleType()}%
+\index{Audio!Formate}%
+\index{QAudioDeviceInfo!isFormatSupported()}%
+\index{Audio!PCM-Codec}%
+Das Skript importiert zunächst das Paket \ospcmd{QtMultimedia}, das
+alle neuen \emph{QtMultimedia}-Klassen enthält. Danach erzeugen wir
+das Objekt für das Standardgerät und fragen die Codecs ab. Den Namen
+des Geräts erhalten Sie über die Methode \ospcmd{deviceName()} des
+Geräte-Objekts. Wie gesagt, können Sie neben den Codecs auch andere
+Eigenschaften des Audioformats abfragen, die vom Gerät unterstützt
+werden. Für die gesammelten Eigenschaften eines Audioformats existiert
+nun aber auch eine eigene Klasse \ospcmd{QAudioFormat}. Wenn Sie
+abfragen wollen, ob das Gerät ein vorhandenes Format unterstützt, 
+erzeugen Sie am besten ein Objekt dieser Klasse mit allen gewünschten
+Eigenschaften. Dann fragen Sie das Gerät per
+\ospcmd{isFormatSupported()}, ob das Format unterstützt wird:
+
+\begin{osplisting}{Python}{Abfrage nach Formatunterstützung}{code:audioformat}
+format = QtMultimedia.QAudioFormat()
+format.setChannels(2)
+format.setFrequency(44100)
+format.setSampleSize(16)
+format.setCodec("audio/pcm")
+format.setByteOrder(QtMultimedia.QAudioFormat.LittleEndian)
+format.setSampleType(QtMultimedia.QAudioFormat.SignedInt)
+
+if device.isFormatSupported(format):
+    print u"Format wird unterstützt."
+else:
+    print u"Format wird nicht unterstützt."
+\end{osplisting}
+
+Das im Beispiel-Code erzeugte Format (PCM, Stereo, 16-Bit, 44100~kHz)
+wird derzeit von allen Plattformen unterstützt. Genau dieses Format
+wollen wir nun auch im folgenden Beispiel verwenden, um eine WAV-Datei
+abzuspielen.
+
+\ospsubsection{Audioplayer zum Abspielen von WAV-Dateien}{Audioplayer zum Abspielen von WAV-Dateien}{sec:audiowaveplayer}
+
+Um das Beispiel dieses Kapitels ausprobieren zu können, benötigen Sie
+zunächst eine Audiodatei mit den von QtMultimedia unterstützten
+Eigenschaften. Im Prinzip funktionieren die meisten im Internet
+herunterladbaren Beispiel-WAV-Dateien problemlos. Suchen Sie einfach
+einmal nach \dqo{}wav example stereo\dqc{} und probieren Sie die
+gefundenen Dateien mit dem hier vorgestellten Beispiel. Es wird im
+Weiteren vorausgesetzt, dass eine WAV-Datei mit dem Dateinamen
+\ospfile{test.wav} in einem Verzeichnis mit der Python-Code-Datei
+liegt. Die fertige Anwendung wird nur aus zwei Buttons zum Starten und
+Stoppen der Audioausgabe bestehen. Abbildung
+\ospfigref{fig:audioplayer_main} zeigt das Hauptfenster der Anwendung.
+
+\ospfigure{0.5}{images/audioplayer_main}{Oberfläche des Audioplayers}{fig:audioplayer_main}
+
+\index{wave}%
+\index{QBuffer}%
+\index{QIODevice}%
+\index{QAudioOutput}%
+Die QtMultimedia-Klassen unterstützen das Abspielen von Audiodateien
+leider nicht direkt. Wir müssen darum die Eigenschaften der Datei
+sowie die eigentlichen Audiodaten auslesen, um das Abspielen der Datei
+starten zu können. Für diese Aufgaben greifen wir hier auf das
+Python-Modul \ospcmd{wave} zurück. Es handelt sich um eine
+Standardmodul, das allen Python-Installationen beiliegt. Es extrahiert
+genau jene Eigenschaften, die wir zur Erzeugung eines Objekts der
+Klasse \ospcmd{QAudioFormat} benötigen. Außerdem erlaubt das Modul,
+die Audiodaten unabhängig davon auszulesen. Um die Audiodaten an das
+Gerät zu schicken, werden wir sie in einem Objekt der Klasse
+\ospcmd{QBuffer} speichern. Diese Qt-Klasse erlaubt es, die aus ihr
+erzeugten Objekte als Eingabe-/Ausgabegerät zu verwenden. Dazu erbt
+\ospcmd{QBuffer} von \ospcmd{QIODevice}. Ein genau davon erzeugtes
+Objekt erwartet dann die Klasse \ospcmd{QAudioOutput}, mit der wir die
+Audiodaten abspielen werden. Aber der Reihe nach.
+
+Zunächst benötigt man wieder den Python-Rahmen für eine
+Hauptanwendung. Wir müssen nun das Paket \ospcmd{QtMultimedia}
+importieren, neben den bisher schon verwendeten Paketen
+\ospcmd{QtCore} und \ospcmd{QtGui}. Außerdem importieren wir das Modul
+\ospcmd{wave}:
+
+\begin{osplisting}{Python}{Hauptanwendung des Audioplayers}{code:audioplayermain}
+import sys
+import wave
+from PyQt4 import QtCore, QtGui, QtMultimedia
+
+def main(argv):
+    app = QtGui.QApplication(argv)
+    main = MainWindow()
+    main.show()
+    sys.exit(app.exec_())
+
+if __name__ == "__main__":
+    main(sys.argv)
+\end{osplisting}
+
+Das Hauptfenster wird aus der Klasse \ospcmd{MainWindow} erzeugt,
+die im Folgenden implementiert wird. Der Kopf der Klasse besteht
+wieder aus den üblichen Methoden zur Erzeugung aller Objekte und
+Signal-Slot-Verbindungen:
+
+\begin{osplisting}{Python}{Kopf und Konstruktor des Hauptfensters}{code:audioplayermainwindow}
+class MainWindow(QtGui.QWidget):
+    
+    def __init__(self, *args):
+        QtGui.QWidget.__init__(self, *args)
+        
+        self.createComponents()
+        self.createLayout()
+        self.createConnects()
+        self.createAudioPlayer()
+        self.setWindowTitle("Audio Player")
+\end{osplisting}
+
+Die Klasse ist von \ospcmd{QWidget} abgeleitet, da das Hauptfenster
+sehr simpel gehalten ist und keine der Elemente eines
+\dqo{}richtigen\dqc{} Hauptfensters, wie Menü- oder Statusleiste,
+enthalten soll. Neben den Standardmethoden ruft der Konstruktor am
+Ende die Methode \ospcmd{createAudioPlayer()} auf, die die Audiodatei
+ausliest und gleich die nötigen Multimedia-Objekte sowie den Puffer
+für die Audiodaten erzeugt.
+
+Da die Oberfläche nur aus zwei Elementen besteht, die in einem
+einfachen vertikalen Layout organisiert sind, folgen hier gleich die
+ersten drei \ospcmd{create}-Methoden auf einmal:
+
+\begin{osplisting}{Python}{Erzeugung von Buttons, Layout und Signal-Slot-Verbindungen}{code:audioplayercreates}
+def createComponents(self):
+    self.buttonStart = QtGui.QPushButton(self.tr("Start"), self)
+    self.buttonStop = QtGui.QPushButton(self.tr("Stop"), self)
+
+def createLayout(self):
+    layoutCentral = QtGui.QHBoxLayout()
+
+    layoutCentral.addWidget(self.buttonStart)
+    layoutCentral.addWidget(self.buttonStop)
+
+    self.setLayout(layoutCentral)
+       
+def createConnects(self):
+    self.buttonStart.clicked.connect(self.play)
+    self.buttonStop.clicked.connect(self.stop)
+\end{osplisting}
+
+\index{wave!open()}%
+\index{wave!getparams()}%
+\index{Audio!WAV-Dateieigenschaften}%
+Die Slots zum Starten und Stoppen heißen demnach \ospcmd{start()} und
+\ospcmd{stop()} und werden gleich vorgestellt. Zunächst müssen wir
+aber den Audioplayer initialisieren. Dazu besitzt die
+Hauptfensterklasse die Methode \ospcmd{create\-AudioPlayer()}. Darin
+öffnen wir  die Audiodatei per \ospcmd{wave.open()}.
+Anschließend können alle Eigenschaften der Datei durch den Aufruf der
+Methode \ospcmd{getparams()} des erzeugten Audiodatei-Objekts als
+Tupel ausgelesen werden:
+
+\begin{osplisting}{Python}{Öffnen der Audiodatei und Auslesen der Eigenschaften}{code:audioplayeropenfile}
+    def createAudioPlayer(self):
+        sound = wave.open("test.wav")
+        (nchannels,
+         sampwidth,
+         framerate,
+         nframes,
+         _, _) = sound.getparams()
+\end{osplisting}
+
+Wenn Sie noch einmal in Listing \osplistingref{code:audioformat}
+nachschauen, werden Sie feststellen, dass das genau die Eigenschaften
+sind, die zur Erzeugung eines Objekts der Klasse \ospcmd{QAudioFormat}
+notwendig sind. Außerdem liefert \ospcmd{getparams()} zwei weitere
+Eigenschaften zurück, die wir hier nicht benötigen und darum per
+Unterstrich ignorieren. Nun kann aus den ausgelesenen Eigenschaften
+gleich das Audioformat-Objekt erzeugt werden:
+
+\osppagebreak
+
+\begin{osplisting}{Python}{Erzeugung des Audioformats aus den Eigenschaften der WAV-Datei}{code:audioplayerformat}
+format = QtMultimedia.QAudioFormat()
+format.setChannels(nchannels)
+format.setFrequency(framerate)
+format.setSampleSize(sampwidth * 8)
+format.setCodec("audio/pcm")
+format.setByteOrder(QtMultimedia.QAudioFormat.LittleEndian)
+format.setSampleType(QtMultimedia.QAudioFormat.SignedInt)
+\end{osplisting}
+
+\index{QAudioOutput}%
+Dieses Format ist nun wiederum Voraussetzung zur Erzeugung des
+Audioausgabe"=Objekts. Dieses erzeugen wir aus der Klasse
+\ospcmd{QAudioOutput}, dem Konstruktor übergeben wir das Objekt in
+\ospcmd{format}:
+
+\begin{ospsimplelisting}
+self.output = QtMultimedia.QAudioOutput(format)
+\end{ospsimplelisting}
+
+Das Objekt wird in diesem Fall automatisch auf das
+Standardausgabegerät zugreifen. Falls Sie nicht auf das Standardgerät
+ausgeben wollen, können Sie dem Konstruktor vor dem Parameter mit
+dem Format einen zusätzlichen Parameter mit einem Objekt der Klasse
+\ospcmd{QAudioDeviceInfo} übergeben. Dieser verweist dann auf das zum
+Abspielen zu verwendende Audiogerät.
+
+\index{QBuffer!setData()}%
+\index{wave!readframes()}%
+\index{Audio!WAV-Datei auslesen}%
+Zuletzt soll die Methode \ospcmd{createAudioPlayer()} nun noch den
+Puffer mit den Audiodaten aus der Datei initialisieren. Zugriff auf
+die Daten erhalten wir über die Methode \ospcmd{readframes()} des
+Audiodatei-Objekts in der lokalen Variable \ospcmd{sound}. Dieser
+Methode übergeben wir die Anzahl der zu lesenden Frames. In diesem
+Fall sind das alle vorhandenen, so dass die gesamten Audiodaten aus
+der Datei ausgelesen werden. Die Anzahl aller Frames der Datei steht
+schon in der Variablen \ospcmd{nframes} zur Verfügung, die oben in
+Listing \osplistingref{code:audioplayeropenfile} per
+\ospcmd{getparams()} gesetzt wurde. Den Puffer selbst erzeugen wir
+zunächst aus der Klasse \ospcmd{QBuffer}. Sie besitzt die Methode
+\ospcmd{setData()}, über die wir die Daten in den Puffer schreiben:
+
+\begin{ospsimplelisting}
+self.buffer = QtCore.QBuffer()
+self.buffer.setData(sound.readframes(nframes))
+\end{ospsimplelisting}
+
+Es sind nun alle Voraussetzungen zum Abspielen der Audiodaten erfüllt:
+Das Ausgabeobjekt ist erzeugt und der Puffer mit den Audiodaten
+gefüllt. Der Slot \ospcmd{play()} startet nun direkt die Ausgabe:
+
+\index{QIODevice!open()}%
+\index{QIODevice!seek()}%
+\index{QAudioOutput!start()}%
+\index{Audio!Ausgabe starten}%
+\begin{osplisting}{Python}{Starten der Audioausgabe}{code:audioplayerstart}
+@QtCore.pyqtSlot()
+def play(self):
+    self.stop()
+
+    self.buffer.open(QtCore.QIODevice.ReadOnly)
+    self.buffer.seek(0)
+    self.output.start(self.buffer)
+\end{osplisting}
+
+Zunächst wird dazu der Slot \ospcmd{stop()} aufgerufen, um eine
+eventuell schon laufende Ausgabe zu unterbrechen und den Puffer als
+Eingabe-/Ausgabe\-gerät zu schließen. Darauf kommen wir gleich zurück.
+Danach wird er Puffer per \ospcmd{open()} zum Lesen geöffnet und die
+aktuelle Position im Puffer per \ospcmd{seek(0)} auf Null gesetzt.
+Erst dann kann das Abspielen mit der Methode \ospcmd{start()} des
+Audioausgabe-Objekts gestartet werden. Die Methode erwartet einen
+Parameter vom Typ \ospcmd{QIODevice}, wobei unser Puffer-Objekt als
+davon abgeleitetes Objekt die entsprechende Schnittstelle unterstützt.
+Damit haben wir die Audioausgabe schon gestartet.
+
+Zum Stoppen der laufenden Ausgabe fehlt nun nur noch der Slot
+\ospcmd{stop()}. Er prüft, ob überhaupt eine Ausgabe läuft, und stoppt
+diese dann. Anschließend wird überprüft, ob der Puffer als
+Eingabe-/Ausgabegerät geöffnet ist, und dieser dann gegebenenfalls
+geschlossen:
+
+\index{QIODevice!close()}%
+\index{QIODevice!isOpen()}%
+\index{QAudioOutput!stop()}%
+\index{QAudioOutput!suspend()}%
+\index{Audio!Ausgabe stoppen}%
+\index{Audio!Ausgabe pausieren}%
+\begin{osplisting}{Python}{Stoppen der Audioausgabe}{code:audioplayerstop}
+@QtCore.pyqtSlot()
+def stop(self):
+    if self.output.state() == QtMultimedia.QAudio.ActiveState:
+        self.output.stop()
+        
+    if self.buffer.isOpen():
+        self.buffer.close()
+\end{osplisting}
+
+Analog zum Starten der Ausgabe werden dazu hier die Methode
+\ospcmd{stop()} des Audioausgabe-Objekts und die Methode
+\ospcmd{close()} des Puffer-Objekts aufgerufen. Den aktuellen Zustand
+der Ausgabe erfährt man über die Methode \ospcmd{state()}, die hier
+mit dem Wert \ospcmd{QtMultimedia.QAudio.ActiveState} abgeglichen
+wird. Außer dem \ospcmd{ActiveState} existieren noch die drei Zustände
+\ospcmd{StoppedState}, \ospcmd{SuspendedState} und \ospcmd{IdleState}.
+Der Idle-Zustand tritt genau dann ein, wenn alle Daten im Puffer
+abgespielt wurden, während der Suspend-Zustand ein per
+\ospcmd{suspend()} manuell gesetzter Pause-Modus ist.
+
+Die Implementierung des Hauptfensters ist nun vollständig; Sie können
+die Anwendung starten und das Abspielen der Testdatei ausprobieren. Im
+Moment ist das Abspielen und Aufnehmen von Audio und Video mit
+\emph{QtMultimedia} noch nicht besonders entwicklerfreundlich. Das
+liegt vor allem an der fehlenden Unterstützung von Audioformaten und
+-codecs. Trotzdem lässt sich schon jetzt damit plattformübergreifend
+Aufnehmen und Abspielen. Die QtMultimedia-Komponente macht damit das
+Qt-Framework noch wertvoller für den Python-Entwickler, da sonst nicht
+viele einfach zu programmierende Frameworks für Multimedia auf
+verschiedenen Betriebssystemen zur Verfügung stehen.  Die Entwicklung
+der Komponente erfolgt derart rasant, dass sich dem Python-Entwickler
+hier sicher bald zusätzliche Möglichkeiten eröffnen. Schauen Sie ab
+und an auf der Webseite des Qt-Projekts vorbei, um über aktuelle
+Entwicklungen dieser und anderer Komponenten auf dem Laufenden zu
+bleiben.
+
+
+\ospvacat
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "pyqt"
+%%% End:

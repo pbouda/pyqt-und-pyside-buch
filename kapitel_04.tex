@@ -1,0 +1,1526 @@
+\ospchapter{Projektstruktur und Paketerstellung}{Projektstruktur und Paketerstellung}{chap:projektsstruktur}
+
+\index{Anwendung}%
+\index{Anwendung!Paketerstellung}%
+Ist eine PyQt- oder PySide-Anwendung für den produktiven Einsatz
+fertig, möchte man sie natürlich auch Benutzern zur Verfügung stellen.
+Die Installation soll möglichst einfach sein, d.\,h.  so ablaufen, wie
+es der Benutzer von seinem Betriebssystem gewohnt ist. Die
+Unabhängigkeit vom Betriebssystem ist schließlich eine der Stärken von
+Qt, und dieser Vorteil soll beim Deployment nicht wieder
+verlorengehen.
+
+In diesem Kapitel geht es also darum, wie Sie Ihre Anwendung für den
+Vertrieb vorbereiten. Zunächst werden wir eine allgemeine
+Projektstruktur für PyQt- und PySide-Projekte definieren.
+Anschließend sehen Sie, wie Sie eine solche Anwendung in drei
+verschiedene Arten von Paketen verpacken können:
+
+\begin{osplist}
+\item ein Source-Paket zur Installation, falls schon Python und PyQt
+  bzw. PySide auf dem System des Benutzers vorhanden sind;
+
+\item Linux-Pakete für Debian-basierte Betriebssysteme sowie für
+  Distributionen, die RPM nutzen;
+
+\item eine kompilierte Windows-Version samt Installer.
+\end{osplist}
+
+Die Paketerstellung für Linux ist die komplexeste und kann hier nicht
+im Detail beschrieben werden, auch wenn das gezeigte Vorgehen
+installierbare Pakete liefert. Denn um diese in das Repository einer
+Linux-Distribution einzupflegen, sind weitere Voraussetzungen zu
+erfüllen. In Kapitel \ref{sec:linuxpakete} finden Sie Links mit
+weiterführenden Informationen zu diesem Thema.
+
+Als Beispiel nehmen wir die bisher entwickelte Beispielanwendung, wie
+wir sie am Ende von Kapitel \ref{chap:qttools} abgeschlossen haben.
+Die Anwendung enthält also sowohl Qt-Designer- als auch
+Übersetzungsdateien, die in einer Ressourcendatei verwaltet werden.
+Der Python-Quellcode des Projekts wird in der Beschreibung der
+Projektstruktur noch einmal kurz vorgestellt, so dass Sie dieses
+Kapitel auch ohne Rückgriff auf die vorhergehenden lesen können.
+
+\bigskip
+
+
+\ospsection{Projektstruktur für PyQt- und PySide-Anwendungen}{Projektstruktur für PyQt- und PySide-Anwendungen}{sec:strukturanwendung}
+
+\index{Setup}%
+\index{Anwendung!Template}%
+Wenn Sie schon intensiv mit Python gearbeitet haben, wissen Sie, dass
+Python-Projekte oft eine bestimmte Grundstruktur aufweisen: Im
+Hauptordner befindet sich neben \ospfile{README} und \ospfile{LICENSE}
+etwa die Datei \ospfile{setup.py} zur Installation der Anwendung oder
+Bibliothek in das systemweite Python-Verzeichnis; ein Ordner
+\ospfile{src} enthält die Python-Pakete und -Module des Projekts, und
+möglicherweise gibt es einen Ordner \ospfile{bin} mit der ausführbaren
+Hauptdatei des Projekts. 
+
+Schließlich gibt es häufig einen Ordner \ospfile{data} für binäre und
+zusätzliche Dateien wie Icons, Konfigurations-XML usw.  Ganz ähnlich
+sieht auch ein PyQt- bzw.  PySide-Projekt aus, nur dass wir für die
+Debian-Paketerstellung und die Windows-Installation einige weitere
+Dateien benötigen.  
+
+Abbildung \ospfigref{fig:projektstrukturfull} zeigt die Struktur eines
+typischen PyQt-Projekts, in diesem Fall enthält der Ordner
+\ospcmd{helloworld-1.0} alle Dateien unserer Beispielanwendung aus
+Kapitel \ref{chap:qttools} sowie die darüber hinaus zur
+Paketerstellung nötigen. Im Folgenden betrachten wir die einzelnen
+Dateien genauer, und zwar in der Reihenfolge der in der Abbildung
+gezeigten Ordner.
+
+\osppagebreak
+
+\ospfigure{0.45}{images/pyqt_projektstruktur_full}{Projektstruktur eines PyQt-Projekts}{fig:projektstrukturfull}
+
+\ospsubsection{Ordner und Dateien des Projekts}{Ordner und Dateien des Projekts}{sec:projektordnerdateien}
+
+Der Ordner \ospfile{bin} enthält die Hauptdatei der PyQt-Anwendung;
+hier heißt sie einfach \ospfile{helloworld}. Die Python-Endung
+\ospcmd{.py} entfällt, da wir die Anwendung später in das
+\ospfile{bin}-Verzeichnis eines Linux-Systems installieren wollen,
+also beispielsweise nach \ospfile{/usr/local/bin}.  Debian und darauf
+basierende Distributionen erlauben keine
+programmiersprachenspezifischen Dateiendungen. Die Idee dahinter ist, dass sich
+die Programmiersprache ändern kann, der Name der ausführbaren Datei
+aber gleich bleiben soll. Schließlich kann es sein, dass andere
+Anwendungen bzw.  Pakete diese Anwendung aufrufen. Die Datei
+\ospfile{helloworld} enthält den Anwendungsstarter; sie lädt unter
+anderem die Übersetzungsdateien, erzeugt das
+\ospcmd{QApplication}-Objekt und startet die Hauptereignisschleife.
+Kapitel \ref{sec:dateiensrcundbin} stellt diese Datei vor.
+
+\index{Ressourcen}%
+Der Ordner \ospfile{data} enthält sämtliche Ressourcen, also das in
+der Anwendung dargestellte Bild \ospfile{pyqt\_logo.jpg} sowie die
+Übersetzungsdateien. Zur besseren Übersicht sind diese Dateien jeweils
+in einem eigenen Unterordner abgelegt (\ospfile{images} und
+\ospfile{translations}). Eine weitere Datei ist noch hinzugekommen:
+\ospfile{hellworld.desktop}, die bei Linux-Paketen einen Menüeintrag
+im Anwendungsmenü erzeugt. Diese Datei sehen wir uns in Kapitel
+\ref{sec:sourcepakete} näher an.
+
+\index{Debian}%
+\index{Debian!Paketerstellung}%
+Der Ordner \ospfile{debian} enthält alle Dateien, die wir für die
+Debian"=Paketerstellung brauchen. Wir stellen sie in Kapitel
+\ref{sec:debpakete} vor.
+
+Der Ordner \ospfile{src} enthält ein Python-Paket \ospcmd{helloworld}
+sowie dessen Unterpaket \ospcmd{helloworld.ui}. Sie enthalten im
+Moment nur den Code für die Hauptfenster-Klasse. Das Unterpaket
+\ospcmd{helloworld.ui} wird später benutzt, um die automatisch
+generierten Python-Code-Dateien abzulegen, die die beiden Tools
+\ospcmd{rcc} und \ospcmd{uic} aus den Qt-Designer-Dateien und den
+Ressourcendateien erzeugen. Die Datei \ospfile{mainwindow.py} enthält
+die Definition der Hauptfenster-Klasse, wie sie bisher in unseren
+Beispielen deklariert wurde. Beachten Sie, dass wir den Code zum Start
+der Anwendung, also die Erzeugung des \ospcmd{QApplication}-Objekts,
+per \ospcmd{exec\_()} in \ospcmd{bin/helloworld} ausgelagert haben.
+Der Inhalt beider Dateien ist Thema von Kapitel
+\ref{sec:dateiensrcundbin}.
+
+\index{GUI}%
+Der letzte Unterordner des Projekts ist schließlich \ospfile{ui}, der
+alle Qt-Designer-Dateien des Projekts enthält. Es bietet sich an, alle
+diese Dateien an einem Ort zu sammeln, um einen einfachen und
+schnellen Zugriff darauf zu haben. In Kapitel
+\ref{sec:rccuicautomatisierung} zeigen wir, wie sich
+die Erzeugung der Python-Code-Dateien aus den \ospcmd{.ui}-Dateien
+weitgehend automatisieren lässt.
+
+\index{Projektverwaltung!Projektverwaltungsdatei}%
+Der Hauptordner des Projekts enthält neben der gewohnten
+Installationsdatei \ospfile{setup.py} eine Reihe weiterer Dateien.
+Zunächst liegen hier die beiden Qt-spezifischen Dateien
+\ospfile{helloworld.pro} (Projektverwaltungsdatei)\osplinebreak{} und
+\ospfile{helloworld.qrc} (Ressourcenverwaltungsdatei). Beide
+entsprechen jenen, die in Kapitel \ref{chap:qttools} erstellt wurden.
+Die Datei \ospfile{generate\_ui.py} enthält ein Skript zur Erzeugung
+von Python-Code aus \ospcmd{.ui}- und \ospcmd{.qrc}-Dateien und wird
+in Kapitel \ref{sec:rccuicautomatisierung} vorgestellt. 
+
+Die Dateien \ospfile{cxfreeze.bat} und \ospfile{helloworld.nsi} dienen
+der Kompilierung sowie Setup-Erstellung unter Windows. Beide Dateien
+werden in Kapitel \ref{sec:windowspakete} über die
+Windows-Paketerstellung besprochen. Schließlich ist die Datei
+\ospfile{MANIFEST.in} notwendig, um ein RPM-Paket zu erstellen; sie
+wird Thema in Kapitel \ref{sec:rpmpakete} sein.
+
+
+\ospsubsection{Die Dateien der Ordner bin und src}{Die Dateien der Ordner bin und src}{sec:dateiensrcundbin}
+
+\index{Anwendung!Template}%
+In den bisherigen Beispielanwendungen wurde der gesamte Code in eine
+Datei gespeichert, um die Darstellung und Erklärung zu erleichtern.
+Außerdem bestanden alle Beispiele aus nur einer oder zwei Klassen,
+dazu kam noch der Code zum Starten der Qt-Anwendung in der Funktion
+\ospcmd{main}. In \dqo{}richtigen\dqc{} Anwendungen wird man dagegen
+die Klassen auf je einzelne Python-Pakete und -Module aufteilen, um
+die Wartbarkeit des Codes zu verbessern. Und schließlich wollen wir
+den Code zum Start der Anwendung in ein eigenes Skript auslagern, das
+der Benutzer dann als Hauptanwendung startet. Dieses Skript lädt
+dann das Hauptfenster aus einem der ausgelagerten Module. Genau dies
+ist Sinn und Zweck der im vorhergehenden Kapitel vorgestellten
+Aufteilung in einen \ospfile{bin}- und einen \ospfile{src}-Ordner.
+
+Der \ospfile{bin}-Ordner enthält ein oder mehrere Dateien, die je
+einer Anwendung entsprechen. In unserem Fall besteht das Projekt nur
+aus einer Anwendung, in anderen Fällen kann ein Projekt aber durchaus
+auch mehrere Anwendungen bereitstellen. Um später einfacher ein
+Debian-Paket zu erstellen, sollten diese Anwendungsskripte keine
+Endung wie \ospcmd{.py} haben. In unserem Fall heißt das Skript
+einfach \ospfile{helloworld}.
+
+Neben dem Start der Anwendung und der Darstellung des Hauptfensters
+kümmert sich das Skript zunächst einmal um die Einrichtung der Pfade
+zu Daten und zu den eigenen Paketen sowie um das Laden der
+Übersetzungsdateien. Ersteres ist wichtig, da die Anwendung nun ja aus
+verschiedenen Verzeichnissen gestartet werden könnte: Der Entwickler
+startet die Anwendung direkt aus dem Quelltext-Verzeichnis, ein
+Linux-Anwender etwa von \ospfile{/usr/bin} und ein Windows-Anwender
+wiederum aus einem Unterordner von \ospfile{C:\textbackslash{}Program
+  Files (x86)\textbackslash{}}. Da wir unter Linux und Windows
+anwendungsspezifischen Klassen, Module und Pakete (wie z.\,B. die
+Hauptfensterklasse) zentral installieren, muss dazu kein eigener Pfad
+angegeben werden. Unsere Anwendung wird diese Klassen später
+automatisch finden. Startet der Entwickler das Projekt jedoch aus dem
+Quelltextverzeichnis, dann muss der Ordner \ospfile{src} zu den
+Python-Pfaden hinzugefügt werden, in denen nach Modulen und Paketen
+gesucht wird. Ein Aufruf von \ospcmd{sys.path.append()} mit dem Pfad
+zum Ordner \ospfile{src} erledigt dies.
+
+Außerdem wechselt man am besten gleich zu Beginn der Anwendung in den
+\ospfile{data}-Ordner. Das ist vor allem dann sinnvoll, wenn nicht
+alle Dateien als Ressourcen vorliegen, beispielsweise wenn man ein
+Icon oder Bild aus dem Verzeichnis \ospfile{data/images} laden möchte.
+Wir werden diese Dateien später unter Linux in ein systemweites
+\ospfile{share}-Verzeichnis installieren (beispielsweise nach
+\ospfile{/usr/share} unter Ubuntu), unter Windows jedoch in das
+Programmverzeichnis unter \ospfile{C:\textbackslash{}Program Files
+  (x86)\textbackslash{}helloworld}. Als dritte Möglichkeit wurde die
+Anwendung direkt aus dem Quelltextverzeichnis gestartet; in diesem
+Fall wollen wir den Unterordner \ospfile{data} im Quelltextverzeichnis
+verwenden. Wenn man nun gleich beim Start der Anwendung in das
+entsprechende \ospfile{data}-Verzeichnis wechselt, kann die Anwendung
+später an jeder Stelle im Code die Dateien mit einem relativen Pfad
+laden (z.\,B. aus \ospfile{images/pyqt\_logo.jpg}). In unserem Fall
+könnten wir uns das im Prinzip sparen, da wir ausschließlich Dateien
+aus den in Python-Code umgewandelten Ressourcen laden. Wir greifen
+also in unserem Beispiel nie direkt auf das Dateisystem zu, da die
+Dateien als Python-Code direkt in die Anwendung geladen werden. Der
+Vollständigkeit halber wechseln wir in unserem Beispiel aber trotzdem
+nach \ospfile{data}, damit Sie später mit demselben Code auch Dateien
+laden können, die Sie nicht in Ressourcen verpacken möchten.
+
+\index{Anwendung!Plattformunabhängigkeit}%
+Der erste Teil der Datei \ospfile{helloworld} im Ordner \ospfile{bin}
+sieht also folgendermaßen aus:
+
+\begin{osplisting}{Python}{Erster Teil des Hauptanwendungsskripts}{code:mainapp1}
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import sys, os, re
+from PyQt4 import QtCore, QtGui
+
+def main(argv):
+    helloworld_script = sys.argv[0]
+    if os.path.islink(helloworld_script):
+        helloworld_script = os.readlink(helloworld_script)
+    helloworld_dir = os.path.join(os.path.dirname(helloworld_script), '..')
+    prefix = os.path.abspath(os.path.normpath(helloworld_dir))
+
+    src_dir = os.path.join(prefix, 'src')
+    data_dir = os.path.join(prefix, 'data')
+    share_dir = os.path.join(prefix, 'share', 'helloworld')
+
+    if re.match(r"(?i)c:\\program", prefix):
+    # Gestartet unter Windows, installiert
+        print >>sys.stderr, 'Using resources from', data_dir
+    elif os.path.exists(src_dir) and os.path.exists(
+        data_dir) and not prefix.startswith("/usr"):
+        # Gestartet vom lokalen Ordner, nicht installiert
+        print >>sys.stderr, 'Using modules from', src_dir
+        sys.path.insert(0, src_dir)
+        print >>sys.stderr, 'Using resources from', data_dir
+    else:
+        # Gestartet unter *nix, installiert
+        data_dir = share_dir
+        print >>sys.stderr, 'Using resources from', data_dir
+
+    from helloworld.mainwindow import MyMainWindow
+    
+    if os.path.exists(data_dir):
+        os.chdir(data_dir)
+\end{osplisting}
+
+Die Logik des Ganzen findet sich in der \ospcmd{if}-Verzweigung: Das
+erste \ospcmd{if} prüft auf einen Windows-Pfad, das zweite
+\ospcmd{elif} entscheidet, ob es sich um das Quelltext-Verzeichnis
+handelt (in diesem Fall existieren \ospcmd{src} und \ospcmd{data},
+aber es ist \emph{kein} Unterverzeichnis von \ospfile{/usr}), und für
+das abschließende \ospcmd{else} bleibt schließlich nur der Fall, dass
+die Anwendung unter einem Unix installiert wurde. Es gibt sicher
+exotische Fälle, in denen diese Verzweigung nicht das macht, was sie
+soll. Es handelt sich um die einfachste Art einer solchen
+Betriebssystem-Weiche, die zumindest für die großen
+Linux-Distributionen, Windows und für die meisten Entwickler
+funktionieren sollte. Falls Sie in Ihrem Fall eine andere
+Konfiguration benötigen, lässt sich die Verzweigung aber auch sicher
+leicht an diesen Fall anpassen. Beachten Sie auch, dass die
+Hauptfensterklasse erst importiert werden kann, wenn der Pfad auch in
+den Python-Suchpfaden eingetragen ist, also nach einem eventuellen
+\ospcmd{sys.path.append()}.
+
+Der Rest des Skriptes ist dann das schon Gewohnte und wird so
+verwendet, wie bisher implementiert. Es wird ein Objekt der Klasse
+\ospcmd{QApplication} erzeugt, die Übersetzungsdateien werden aus den
+Ressourcen geladen, und anschließend werden das Hauptfenster angezeigt
+und die Hauptereignisschleife gestartet:
+
+\begin{osplisting}{Python}{Zweiter Teil des Hauptanwendungsskripts}{code:mainapp2}
+    app = QtGui.QApplication(argv)
+
+    language = unicode(QtCore.QLocale.system().name())
+
+    qtTranslator = QtCore.QTranslator()
+    qtTranslator.load("qt_{0}".format(language),
+        QtCore.QLibraryInfo.location(QtCore.QLibraryInfo.TranslationsPath))
+    app.installTranslator(qtTranslator)
+
+    myappTranslator = QtCore.QTranslator()
+    myappTranslator.load(":/translations/helloworld_{0}".format(language))
+    app.installTranslator(myappTranslator)
+
+    mainwindow = MyMainWindow()
+    mainwindow.show()
+    
+    sys.exit(app.exec_())
+
+if __name__ == "__main__":
+
+    main(sys.argv)
+\end{osplisting}
+
+Somit ist die Anwendung gestartet. Wie aber sieht nun 
+\ospfile{mainwindow.py} unter \ospfile{src/helloworld} aus? Sie
+enthält jetzt ausschließlich den Code der Hauptfensterklasse, also den
+Rest der bisherigen Implementierung. Der Vollständigkeit halber sei
+der gesamte Code noch einmal aufgelistet:
+
+\begin{osplisting}{Python}{Hauptfensterklasse in mainwindow.py}{code:mainwindowproject}
+# -*- coding: utf-8 -*-
+
+from PyQt4 import QtCore, QtGui
+from ui.ui_helloworld import Ui_MainWindow
+
+class MyMainWindow(QtGui.QMainWindow):
+
+    def __init__(self, *args):
+        QtGui.QMainWindow.__init__(self, *args)
+        self.ui = Ui_MainWindow()
+        self.ui.setupUi(self)
+        self.createConnects()
+        scene = QtGui.QGraphicsScene()
+        item = QtGui.QGraphicsPixmapItem(
+            QtGui.QPixmap(":/images/pyqt_logo.png"))
+        scene.addItem(item)
+        self.ui.graphicsView.setScene(scene)
+
+    def createConnects(self):
+        self.ui.pushButton.clicked.connect(self.textAktualisieren)
+        self.ui.lineEdit.textChanged.connect(self.ui.label.setText)
+    
+    @QtCore.pyqtSlot()
+    def textAktualisieren(self):
+        self.ui.label.setText(self.ui.lineEdit.text())
+\end{osplisting}
+
+
+
+Der einzige Unterschied ist der \ospcmd{import} der aus der
+Qt-Designer-Datei erzeugten UI-Klasse: Sie liegt später im
+Unterverzeichnis \ospfile{ui}, wird also aus dem Paket \ospcmd{ui}
+geladen. Im Moment ist diese Datei aber noch nicht vorhanden, die
+Anwendung würde also nicht starten. Wie Sie die Datei am besten
+erzeugen, zeigt Kapitel \ref{sec:rccuicautomatisierung}.
+
+Die Dateien \ospfile{\_\_init\_\_.py} unter
+\ospfile{src/helloworld} und \ospfile{src/hellworld/ui} sind leer. Sie
+weisen Python lediglich darauf hin, dass es sich bei den
+Verzeichnissen um Python-Pakete handelt.
+
+
+\ospsection{Automatisierung von rcc und uic}{Automatisierung von rcc und uic}{sec:rccuicautomatisierung}
+
+\index{rcc}%
+\index{uic}%
+\index{Projektverwaltung}%
+\index{Projektverwaltung!Automatisierung}%
+In der Projektstruktur finden sich bisher zwar die Dateien
+\ospfile{helloworld.ui} und \ospfile{helloworld.qrc} für die GUI und
+die Ressourcen, allerdings müssen diese noch mit den Tools
+\ospcmd{uic} und \ospcmd{rcc} in Python-Code umgewandelt werden (s.
+Kapitel \ref{chap:qttools}). Erst dann kann die Hauptfensterklasse die
+GUI und das Bild aus den Ressourcen laden. Nun kann man beispielsweise
+weiterhin \ospcmd{pyuic4} und \ospcmd{pyrcc4} für jede einzelne UI-
+und Ressourcendatei von Hand aufrufen. Bei nur zwei Dateien in unserem
+Beispielprojekt ist das kein Problem.  Bei häufigen Änderungen in
+diesen Dateien wird aber selbst das auf Dauer mühsam; wenn dann noch
+weitere Dateien hinzukommen, wird man sich schnell eine alternative
+Lösung wünschen.
+
+Unter C++ übernimmt diese Arbeit weitgehend der Qt Creator, der anhand
+der Projektdatei alle GUI- und Ressourcendateien automatisch in C++
+wandelt und im Hintergrund die Tools startet. Unter Python kann man
+sich eine vergleichbare Lösung per Shell-Skript oder
+Windows-Batch-Skript zusammenstellen. Ähnlich arbeitet die hier
+präsentierte Lösung, allerdings auf Basis eines Python-Skripts, so
+dass die Entwicklung plattformunabhängig bleibt: Man ruft einfach das
+Skript auf, und schon ist der Code wieder auf dem aktuellen Stand.
+
+In diesem Fall ist es das Ziel, die so erzeugten Dateien in
+\ospfile{src/hellworld/ui} abzulegen. Das folgende Skript
+\ospfile{generate\_ui.py} übernimmt das:
+
+\begin{osplisting}{Python}{Erzeugung von Python-Code für GUI und Ressourcen}{code:generateui}
+# -*- coding: utf-8 -*-
+
+import sys, os
+from subprocess import call
+
+if sys.platform == "win32":
+    bindir = "c:/Python27/Lib/site-packages/PyQt4/bin"
+else:
+    bindir = "/usr/bin"
+
+uic_path = os.path.join(bindir, "pyuic4")
+rcc_path = os.path.join(bindir, "pyrcc4")
+    
+ui_path = "ui"
+rc_path = ""
+
+out_path = "src/helloworld/ui"
+
+ui_files = { "helloworld.ui": "ui_helloworld.py" }
+rc_files = { "helloworld.qrc": "helloworld_rc.py" }
+
+for file in ui_files:
+    file_path = os.path.join(ui_path, file)
+    out_file_path = os.path.join(out_path, ui_files[file])
+    call([uic_path, file_path, "-o", out_file_path])
+    
+for file in rc_files:
+    file_path = os.path.join(rc_path, file)
+    out_file_path = os.path.join(out_path, rc_files[file])
+    call([rcc_path, file_path, "-o", out_file_path])
+\end{osplisting}
+
+Zunächst definiert das Skript die Pfade zu den beiden Tools
+\ospcmd{pyuic4} und \ospcmd{pyrcc4}. Je nach Betriebssystem liegen
+diese schon einmal in einem anderen Verzeichnis. Falls Sie eine andere
+Python-Version oder PySide statt PyQt verwenden, müssen Sie die Pfade
+in der Variablen \ospcmd{bindir} bzw. die aufzurufenden Tools in
+\ospcmd{uic\_path} und \ospcmd{rcc\_path} anpassen.  Danach erfolgt
+die Deklaration der Eingabe- und Ausgabepfade. In diesem Fall liegen
+alle GUI-Dateien im Verzeichnis \ospfile{ui}, die Ressourcendatei
+liegt im Hauptordner des Projekts. Die beiden Variablen
+\ospcmd{ui\_path} und \ospcmd{rc\_path} verweisen auf diese Pfade.
+Alle Ausgabedateien sollen schließlich im Verzeichnis
+\ospfile{src/helloworld/ui} abgelegt werden, das in der Variablen
+\ospcmd{out\_path} definiert wird.
+
+Anschließend folgt die Deklaration zweier \ospcmd{dict()} Variablen:
+\ospcmd{ui\_files} und \ospcmd{rc\_files}. Sie enthalten eine Liste
+aller Eingabedateien, jeweils mit einem Namen der Ausgabedatei als
+Wert. Die Datei \ospfile{helloworld.ui} wird also hier per
+\ospcmd{pyuic4} in eine Datei \ospfile{ui\_helloworld.py} umgewandelt
+und im Ausgabeordner abgelegt. Die beiden \ospcmd{dict()} werden dann
+in den beiden Schleifen durchlaufen und somit jede der definierten
+Dateien bearbeitet und umgewandelt. Starten Sie dieses Skript bei
+jeder Änderung an den \ospcmd{.ui}- und \ospcmd{.qrc}-Dateien des
+Projekts. Wenn Sie neue Dateien hinzufügen, sollten Sie nicht
+vergessen, das Skript zu aktualisieren und die neuen Dateien
+einzutragen.
+
+Das Skript lässt sich in Sachen Komfort sicher noch verbessern. So
+könnten z.\,B. die \ospcmd{.ui}-Dateien automatisch aus dem
+Verzeichnis \ospfile{ui} ausgelesen werden, auch die Namen der
+Ausgabedateien lassen sich automatisch bestimmen. Gleiches gilt für
+Ressourcendateien. Sie müssten dann nicht die Liste mit den Dateinamen
+pflegen -- das Skript sucht sie sich automatisch.
+
+
+\ospsection{Erstellung von Quelltext-Paketen}{Erstellung von Quelltext-Paketen}{sec:sourcepakete}
+
+\index{Anwendung!Paketerstellung}%
+\index{Paketerstellung}%
+\index{Paketerstellung!Quelltext-Paket}%
+\index{Paketerstellung!Paket installieren}%
+Aus der bisherigen Beispielanwendung wollen wir nun ein
+Quellcode-Paket erstellen, z.\,B. um es als Download im Internet
+anzubieten oder zum Python Package
+Index\ospfootnote{fn:pypi}{\ospurl{http://pypi.python.org/pypi}}, dem
+globalen Repository für Python-Bibliotheken, hinzuzufügen. Dabei wird
+der gesamte Quellcode in ein komprimiertes Archiv gepackt. Den
+Kompressor bestimmt der Entwickler; standardmäßig wird unter Linux ein
+\ospfile{.tar.gz}-Archiv erzeugt, unter Windows hingegen ein
+\ospfile{.zip}-Archiv. Ein Anwender, der ein solches Paket
+herunterlädt, kann es unter Linux dann mit den folgenden Befehlen auf
+seinem Rechner installieren und starten:
+
+\begin{ospsimplelisting}
+$ <bf>tar xzf hellworld-1.0.tar.gz</bf>
+$ <bf>cd helloworld-1.0</bf>
+$ <bf>python setup.py install</bf>
+$ <bf>helloworld</bf>
+\end{ospsimplelisting}
+
+Hier sollen alle anwendungsspezifischen Module und Pakete in das
+systemweite Python-Modul-Verzeichnis installiert werden, die
+ausführbare Anwendung wird bei Source-Paketen normalerweise in das
+Verzeichnis \ospfile{scripts} der Python-Installation kopiert. Die
+Pfade variieren je nach Betriebssystem und Python-Version. Unter
+Ubuntu befindet sich das Paket-Verzeichnis von Python 2.6 etwa unter
+\ospfile{/usr/local/lib/python2.6/dist-packages/}.\osplinebreak{}
+Skripte werden nach \ospfile{/usr/local/bin} installiert. Unter
+Windows gibt es meist ein Verzeichnis \ospfile{lib/site-packages} für
+Pakete und ein Verzeichnis \ospfile{scripts} für ausführbare Skripte
+direkt im Verzeichnis der Python"=Installation (etwa
+\ospfile{C:\textbackslash{}Python26}).
+
+\label{setuppy}
+\index{Setup}%
+Um nun das Source-Paket erzeugen zu können, benötigt man eine Datei
+\ospfile{setup.py}. Sie nutzt die sogenannten \emph{Python Distutils}
+zur Erzeugung distributionsfähiger Pakete. Alle weiteren Pakete für
+Linux und Windows werden später auch auf Basis der Angaben in
+\ospfile{setup.py} erstellt, so dass diese Datei zwingend notwendig
+ist, auch wenn Sie kein Quelltext-Paket anbieten wollen. Das
+vollständige Skript ist nicht besonders lang und enthält neben Namen
+und Beschreibung von Anwendung und Autor nur die Angaben zu den zu
+installierenden Paketen und Skripten:
+
+\begin{osplisting}{Python}{Die Datei setup.py}{code:setuppyproject}
+# -*- coding: utf-8 -*-
+
+from distutils.core import setup
+
+setup(
+    name             = "helloworld",
+    version          = "1.0",
+    description      = "Hello World Software",
+    author           = "Peter Bouda",
+    author_email     = "pbouda@dasskript.com",
+    url              = "http://www.dasskript.com",
+    package_dir      = { "":"src" },
+    packages         = [ "helloworld', "helloworld.ui" ],
+    scripts          = [ "bin/helloworld" ],
+    long_description = "Hello World is a software that greets the world ...",
+)
+\end{osplisting}
+
+Die Versionsnummer sollte natürlich nach jeder Veröffentlichung
+angepasst werden. Für die Installation der Anwendung sind hier
+folgende drei Variablen wichtig:
+
+\begin{ospdeflist}
+  \ospdefitem{\ospcmd{package\_dir}}{Bei uns liegen die
+    Python-Pakete \ospcmd{helloworld} und \ospcmd{helloworld.ui} in
+    einem Unterverzeichnis \ospfile{src}. Die Angabe in
+    \ospcmd{package\_dir} teilt den distutils mit, dass die Pakete aus
+    \ospfile{src} direkt in das Python-Pakete-Verzeichnis installiert
+    werden sollen (darum der leere String als dict-Schlüssel) und
+    nicht in ein Unterverzeichnis. Ohne diese Angabe würde im
+    Python-Pakete-Verzeichnis auch ein Unterverzeichnis \ospfile{src}
+    angelegt.}
+
+  \ospdefitem{\ospcmd{packages}}{Diese Variable enthält eine Liste
+    aller zu installierenden Pakete, in unserem Fall nur die beiden
+    Pakete \ospcmd{helloworld} und \ospcmd{helloworld.ui}.}
+
+  \ospdefitem{\ospcmd{scripts}}{Eine Liste aller ausführbaren Skripte,
+    also die eigentlichen Anwendungsstarter. In unserem Fall ist das
+    nur die Datei \ospfile{bin/helloworld}.}
+\end{ospdeflist}
+
+Das Quelltext-Paket generieren Sie nun mit einem einfachen Befehl. Sie
+müssen sich dazu im Hauptverzeichnis der Anwendung befinden:
+
+\begin{ospsimplelisting}
+$ <bf>python setup.py sdist</bf>
+\end{ospsimplelisting}
+
+Es folgen eine Reihe von Ausgaben des Prozesses in der Konsole. Das
+fertige Paket wird im Verzeichnis \ospfile{dist} abgelegt, je nach
+Betriebssystem (also Kompressor) mit einer anderen Dateiendung.  In
+unserem Fall liegt unter Linux dort die Datei
+\ospfile{helloworld-1.0.tar.gz}, die mit den oben genannten Befehlen
+installiert werden kann. Die Verwendung alternativer
+Kompressionsverfahren und anderer Einstellungen beschreibt die
+Dokumentationsseite der Python-Distribution.\ospfootnote{fn:pydoku}{Für Python
+  2.7 z.\,B.
+  \ospurl{http://docs.python.org/distutils/sourcedist.html}.}
+
+Beachten Sie, dass das Quelltext-Paket nur die
+Python-Quellcode-Dateien enthält, also weder die \ospfile{.ui}-Dateien
+des Qt Designer noch die Ressourcendatei. Das Paket eignet sich also
+\emph{nicht} zur Weiterentwicklung der Anwendung, sondern erlaubt es
+dem Anwender lediglich, die Quelltext-Version auf seinem Rechner zu
+installieren und zu benutzen. Natürlich können die ausgelieferten
+Quelltext-Dateien beliebig editiert und betrachtet werden, aber gerade
+die automatisch erzeugten Dateien des Pakets \ospcmd{helloworld.ui}
+eignen sich kaum zur weiteren Code-Pflege. Der Anwender bekommt eben
+alles, was er zum Start der Anwendung braucht -- und nicht mehr.
+
+
+\ospsection{Erstellung von Linux-Paketen}{Erstellung von Linux-Paketen}{sec:linuxpakete}
+
+\index{Paketerstellung!Linux}%
+Die wichtigsten Vorbereitungen für die Erstellung eines Linux-Pakets
+wurden mit dem Quelltext-Paket schon getroffen. Wenn Sie ein
+Quelltext-Paket installieren und Ihre Anwendung starten können, ist
+der Weg zu einem \ospcmd{.rpm}- oder \ospcmd{.deb}-Paket für die
+gängigen Linux-Distributionen nicht mehr weit. Neben der
+Installationsmöglichkeit soll unter Linux aber noch ein Eintrag im
+Anwendungsmenü entstehen.
+
+Ein solcher Eintrag erfordert unter den meisten Distributionen bzw.
+Fenster-Managern eine sogenannten Desktop-Datei. In der oben
+beschriebenen Projektstruktur liegt eine solche als
+\ospfile{helloworld.desktop} im Unterverzeichnis \ospfile{data}. Die
+Datei beschreibt den Menüeintrag und kann lokalisierte Strings für
+verschiedene Oberflächensprachen enthalten. In unserem Beispiel sieht
+die Datei folgendermaßen aus:
+
+\begin{ospsimplelisting}
+[Desktop Entry]
+Name=Hello World
+Name[de]=Hallo Welt
+Comment=Hello World is a software that greets the ...
+Comment[de]=Hallo Welt ist eine Software, die die ...
+Exec=helloworld
+Terminal=false
+Type=Application
+Categories=Utility;Qt
+Encoding=UTF-8
+Version=1.0
+\end{ospsimplelisting}
+
+Der Eintrag \ospcmd{Exec} ist die ausführbare Datei, die in unserer
+Projektstruktur unter \ospfile{bin/helloworld} liegt. Sie muss im
+\ospcmd{PATH} auffindbar sein. Unter Ubuntu installieren wir die
+Anwendung später unter \ospcmd{/usr/bin}, so dass die Anwendung mit
+dieser Desktop-Datei gestartet werden kann. Als Anwendungstyp
+definieren wir \ospcmd{Application}, die Kategorien sind hier etwas
+willkürlich als \ospcmd{Utility} und \ospcmd{Qt} gesetzt, da unsere
+Anwendung ja im Prinzip nichts tut. Auch bei dieser Datei sollten Sie
+später nicht vergessen, die Versionsnummer in Ihrer eigenen Anwendung
+immer aktuell zu halten.
+
+Neben den hier aufgeführten Angaben sollte man in den meisten Fällen
+noch ein Icon für die Anwendung installieren. Es muss als Grafikdatei
+vorliegen und entsprechend zum Paket hinzugefügt werden. Die
+Beschreibung des Icons und aller anderen möglichen Angaben in einer
+Desktop-Datei finden Sie bei
+freedesktop.org.\ospfootnote{fn:freedesktop}{\ospurl{http://standards.freedesktop.org/desktop-entry-spec/desktop-entry"=spec-latest.html}}
+
+Die Existenz einer Desktop-Datei in der Projektstruktur reicht noch
+nicht aus; wir müssen den distutils mitteilen, wohin diese Datei zu
+installieren ist. Die Free Desktop
+Initiative\ospfootnote{fn:freedesktopurl}{\ospurl{http://www.freedesktop.org/wiki/}}
+sieht vor, dass die Desktop-Dateien für das Anwendungsmenü unter
+\ospfile{/usr[/local]/share/applications} liegen, und die meisten
+Distributionen unterstützen mittlerweile diesen Standard. Um unsere
+Setup-Datei entsprechend anzupassen, fügen Sie folgenden Code nach den
+\ospcmd{import}-Anweisungen und vor dem Aufruf von \ospcmd{setup()}
+ein:
+
+\begin{ospsimplelisting}
+import os
+
+target_dir = "share"
+data_files = []
+
+data_files += [
+    (os.path.join(target_dir, "applications"), ["data/helloworld.desktop"])]
+\end{ospsimplelisting}
+
+Die zusätzlich zu installierenden Dateien sind in einer Liste
+\ospcmd{data\_files} hinterlegt. So können wir später weitere Dateien
+hinzufügen (z.\,B. das Icon für den Menüeintrag), indem wir die Liste
+erweitern. Jeder Eintrag der Liste besteht aus einem Tupel: Der erste
+Teil ist das Zielverzeichnis (in unserem Fall
+\ospfile{share/applications} -- das \ospcmd{/usr} oder
+\ospcmd{/usr/local} wird distributionsspezifisch beim Erstellen des
+Pakets ergänzt). Der zweite Teil des Tupels ist eine Liste von
+Dateien, die in dieses Zielverzeichnis installiert werden sollen, in
+unserem Fall ist das nur die Desktop-Datei. Schließlich müssen Sie dem
+Aufruf von \ospcmd{setup()} einen Parameter \ospcmd{data\_files}
+hinzufügen, beispielsweise in der Zeile nach
+\ospcmd{long\_description}:
+
+\begin{ospsimplelisting}
+    data_files       = data_files
+\end{ospsimplelisting}
+
+\index{Lokalisierung!Übersetzungsdateien installieren}%
+Alle Pakete werden dann auch die Dateien in \ospcmd{data\_files}
+enthalten und bei der Installation in die entsprechenden
+Zielverzeichnisse installieren. Über unterschiedliche Inhalte der
+Variablen \ospcmd{data\_files} lassen sich sehr elegant auch
+unterschiedliche Installationspakete für unterschiedliche
+Betriebssysteme verwirklichen. Sie fragen beispielsweise die aktuelle
+Plattform ab und setzen dann je nach Ergebnis einen anderen Zielpfad
+für die Installation eines Icons. Ein anderes Beispiel ist die
+Installation der Übersetzungsdateien, falls Sie diese nicht in die
+Ressourcen aufnehmen wollen (weil beispielsweise mehrere Anwendungen
+darauf zugreifen sollen und die Dateien sehr groß sind). Sie können in
+diesem Fall mit folgenden Befehlen die Übersetzungsdateien in ein
+eigenes Share-Verzeichnis, in diesem Fall unter
+\ospfile{/usr/share/hellworld/locale}, installieren:
+
+\begin{ospsimplelisting}
+for qmfile in glob.glob("data/locale/*.qm"):
+    qmdir = os.path.dirname(qmfile).replace(
+        "data", target_dir + "/helloworld")
+    data_files.append((qmdir, [qmfile]))
+\end{ospsimplelisting}
+
+Unser Hauptanwendungsskript ist schon auf diesen Pfad vorbereitet.
+Wenn Sie noch einmal das Skript von Seite
+\pageref{code:mainapp1} durchgehen, sehen Sie, dass unter Linux
+-- falls die Anwendung installiert wurde -- schon ein \ospcmd{chdir()}
+in das \ospfile{share}-Verzeichnis erfolgt ist. Sie können also die
+Übersetzungsdateien (oder andere Dateien, wie Bilder usw.)  bequem aus
+dem Dateisystem laden, indem Sie beispielsweise als Pfad
+\ospfile{locale/helloworld\_\{0\}} statt dem Ressourcenzugriff
+eintragen.
+
+
+\ospsubsection{RPM-Pakete}{RPM-Pakete}{sec:rpmpakete}
+
+\index{Paketerstellung!RPM}%
+Die Erstellung von RPM-Paketen schließt sich nahtlos an die Erstellung
+von Quelltext-Paketen an. Es werden immer zwei RPM-Pakete generiert:
+Eines entspricht dem Quelltext-Paket in Struktur und Inhalt, das
+zweite enthält die Pfade und Dateien, die bei einer Installation des
+Quelltext-Pakets angelegt und kopiert würden. Das bedeutet, dass der
+Inhalt des Pakets genau die Dateien und Verzeichnisse sind, die man
+auf dem aktuellen System bei der Ausführung von \ospcmd{python
+  setup.py install} in das lokale Betriebssystem installieren würde.
+Unter Ubuntu enthält das RPM-Paket demnach Dateien für den Pfad
+\ospcmd{/usr/local/}, wie oben beschrieben.
+
+\index{Paketerstellung!MANIFEST}%
+Weitere Voraussetzung für die Paketerstellung ist eine Datei
+\ospfile{MANIFEST.in}. Sie enthält eine Liste aller Dateien, die neben
+dem Python-Code installiert werden sollen. Das entspricht in den
+meisten Fällen den Dateien, die schon in \ospfile{setup.py} in der
+Variablen \ospcmd{data\_files} eingetragen sind. In unserem Fall
+enthält die Datei nur eine einzige Zeile:
+
+\begin{ospsimplelisting}
+include data/helloworld.desktop
+\end{ospsimplelisting}
+
+Aus der Datei generiert distutils die Datei \ospfile{MANIFEST} zur
+Erzeugung der beiden RPM-Pakete, die eine vollständige Dateiliste,
+also samt Python-Code-Dateien, enthält. Diese Datei wird jedes Mal neu
+generiert. Für die Dateinamen des \ospcmd{include}-Befehls können Sie
+auch Wildcards verwenden, um auf mehrere Dateien zu verweisen. Mit
+\ospcmd{recursive-include} können Sie das Ganze rekursiv
+erweitern.\ospfootnote{fn:sourcedistmanifest}{Siehe wiederum
+  \ospurl{http://docs.python.org/distutils/sourcedist.html}.}
+
+Falls Sie ein Linux nutzen, das nicht mit RPM-Repositories arbeitet,
+muss das entsprechende Paket zur Erstellung und Verwaltung von
+\ospfile{.rpm}-Dateien installiert sein.  Unter Ubuntu heißt es
+schlicht \ospfile{rpm} und kann wie gewohnt über die Paketverwaltung
+installiert werden.
+
+Unter jeder Distribution rufen Sie zur Erstellung eines RPM-Pakets das
+Skript \ospcmd{setup.py} mit folgenden Parametern auf:
+
+\begin{ospsimplelisting}
+$ <bf>python setup.py bdist_rpm</bf>
+\end{ospsimplelisting}
+
+Wiederum finden Sie die erzeugten Pakete im Unterverzeichnis
+\ospfile{dist}. Für unsere Beispielanwendung enthält dieser Ordner
+anschließend zwei Dateien: \ospfile{helloworld-1.0-1.src.rpm} enthält
+die Dateien des Quelltext-Pakets,
+\ospfile{helloworld-1.0-1.noarch.rpm} die Dateien zur
+Installation der Anwendung in das Ziel-Linux-System.
+
+
+\ospsubsection{Debian-Pakete}{Debian-Pakete}{sec:debpakete}
+
+\index{Paketerstellung!Debian}%
+Gegenüber der Erstellung eines RPM-Pakets ist die Erzeugung von
+Debian-Paketen zwar deutlich komplizierter, dennoch stellen wir hier
+einen ersten Ansatz vor. Die so erzeugten Pakete eignen sich dann
+zwar, um für die meisten Benutzer schnell einmal ein Download-Paket
+der Anwendung zu erzeugen. Um das Paket später aber in einer der
+Distributionen unterzubringen, ist aber noch weitere Arbeit notwendig.
+Am Ende dieses Kapitels gehen wir darauf noch einmal ein.
+
+Für die Debian-Paketerstellung benötigt man zunächst einige
+zusätzliche Pakete aus dem Repository der eingesetzten
+Linux-Distribution, sofern diese nicht schon installiert sind. Für das
+hier vorgestellte Beispiel verwenden wir das \emph{Common Debian Build
+System}, das, grob gesagt, eine Schnittstelle zwischen den
+debhelper-Werkzeugen und den Python distutils zur
+Verfügung stellt. Somit basiert die Installation im Endeffekt wieder
+auf den Angaben in \ospfile{setup.py}, aus denen der Inhalt des
+Debian-Pakets zusammengestellt wird. Darüber hinaus benötigen Sie 
+die zum Kompilieren von Anwendungen nötigen Tools wie \ospcmd{make},
+die meist in einem eigenen Paket zusammengefasst sind. Unter Ubuntu
+müssen Sie beispielsweise die folgenden drei Pakete installieren:
+
+\begin{osplist}
+\item \ospcmd{devscripts}
+\item \ospcmd{build-essential}
+\item \ospcmd{cdbs}
+\end{osplist}
+
+Alles Weitere befindet sich dann im Unterverzeichnis \ospfile{debian}
+unserer Anwendung. Das Verzeichnis enthält vier Dateien -- sie sind
+die Mindestanforderung für das Paket. Dazu gehört zunächst
+\ospfile{changelog}; darin sind alle Änderungen in den Quelltexten
+kurz dokumentiert. Für die Bereitstellung in den gängigen Repositories
+ist eine durchgängige Änderungshistorie zwingend erforderlich, sogar
+für das erste Einstellen einer Anwendung muss mindestens ein Ticket
+geschlossen werden. Im einfachsten Fall und ohne Kompatibilität zu
+einem Repository enthält diese Datei nur einen Eintrag für das
+\emph{Initial Release}:
+
+\begin{ospsimplelisting}
+helloworld (1.0-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Peter Bouda <pbouda@dasskript.com>  Mon, 9 Aug 2011 16:54:26 +0000
+\end{ospsimplelisting}
+
+Der Aufbau der Einträge ist immer gleich, wobei die einzelnen Einträge
+mit einer Leerzeile voneinander getrennt sind. Die Versionsnummern
+müssen laufend fortgeführt werden, und alle Änderungen werden mit
+Sternchen aufgelistet. Auch das Datum jedes Eintrags sollte immer das
+bei der Erstellung des Pakets aktuelle sein.
+
+Darüber hinaus enthält das \ospfile{debian}-Verzeichnis die Datei
+\ospfile{control}, die die Anwendung und ihre Abhängigkeiten näher
+beschreiben:
+
+\begin{ospsimplelisting}
+Source: helloworld
+Maintainer: Peter Bouda <pbouda@dasskript.com>
+Section: misc
+Priority: optional
+Build-Depends: cdbs (>= 0.4.49), debhelper (>= 7), python (>= 2.6),
+  python-support, python-qt4
+XS-Python-Version: >= 2.6
+Standards-Version: 3.8.4
+Homepage: http://www.dasskript.com
+
+Package: helloworld
+Architecture: any
+Depends: ${misc:Depends}, python, python-qt4, ${python:Depends}
+Description: Hello World is a software
+ that greets the world in a unique way.
+\end{ospsimplelisting}
+
+Für Python, PyQt und PySide sind die Einträge unter
+\ospcmd{Build-Depends} und \ospcmd{Depends} wichtig und müssen
+gegebenenfalls angepasst werden. Hier stehen alle Debian-Pakete, die
+für das Bauen bzw. Starten der Anwendung notwendig sein. Falls es auf
+eine Versionsnummer ankommt, steht diese hinter dem Paketnamen in
+Klammern. Der Eintrag \ospcmd{XS-Python-Version} existiert nur für
+Python-Anwendungen und entspricht der Python-Versionsnummer, die für
+das Starten der Anwendung Voraussetzung ist. In unserem Fall benötigt
+die Anwendung mindestens die Python-Version 2.6 und das Paket
+\ospfile{python-qt4}, um gestartet werden zu können. Für die
+Paketerstellung sind außerdem die weiteren in \ospcmd{Build-Depends}
+gelisteten Pakete erforderlich.
+
+Als \ospcmd{Architecture} lassen wir es schlicht bei \ospcmd{any}, da
+die Anwendung dank Python und PyQt ja plattformunabhängig ist. Der
+Eintrag \ospcmd{Section} ist für die Verwalter des Repositorys
+wichtig, da er die Anwendung einem Themengebiet zuordnet. Die Liste
+der Gebiete ist lang und kann unter dem unten angegebenen Link zur
+Python-Debian-Paketerstellung abgerufen werden. Die Angabe
+\ospcmd{Standards-Version} beschreibt, nach welcher Version des
+Debian-Paket-Standards die Anwendung und die Paketierungsanweisungen
+aufgebaut sind. Schauen Sie im Zweifelsfall im Internet nach, welche
+die aktuelle Versionsnummer ist. Der Name und die Beschreibung der
+Anwendung runden die Angaben ab.
+
+Die Datei \ospfile{copyright} im \ospfile{debian}-Ordner
+enthält eine Beschreibung der Lizenz der Anwendung in einem
+maschinenlesbaren Format, kann aber auch erst einmal leer bleiben.
+Relevant wird der Inhalt dieser Datei erst dann, wenn Sie das Paket in
+ein Repository hochladen.
+
+\index{Make-Datei}%
+Schließlich enthält das Verzeichnis die Datei \ospfile{rules}, die die
+eigentlichen Anweisungen zum Bau des Pakets umfasst. Es entspricht
+etwa einer Make\-file-Datei, nur eben für die Paketerstellung. Hier
+steht, welche Schritte\osplinebreak{} durchgeführt werden müssen, um
+die Anwendung zu kompilieren, zu bereinigen, usw. Für eine
+C++-Anwendung auf Basis von Qt würde hier unter anderem der Aufruf von
+\ospcmd{qmake} stehen. In unserem Fall nimmt uns das \emph{Common
+  Debian Build System} die meiste Arbeit ab; die Datei \ospcmd{rules}
+beschränkt sich darum mehr oder weniger auf das Einbinden der zur
+Verfügung gestellten \ospfile{make}-Skripte:
+
+\begin{ospsimplelisting}
+#!/usr/bin/make -f
+
+DEB_PYTHON_SYSTEM=pysupport
+
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/python-distutils.mk
+\end{ospsimplelisting}
+
+\index{python-support}%
+Die Variable \ospcmd{DEB\_PYTHON\_SYSTEM} verweist auf
+\ospcmd{pysupport}. Das bedeutet, dass das Paket
+\ospcmd{python-support} zur Erstellung unseres Pakets verwendet wird.
+Als Alternative existiert das Paket \ospcmd{python-central}, das die
+gleiche Aufgabe übernimmt. Hier müsste die Variable den Wert
+\ospcmd{pycentral} haben. 
+
+\index{debuild}%
+\index{lintian}%
+Ist die Projektstruktur vervollständigt, dient nun \ospcmd{debutil}
+der Erstellung des Debian-Pakets. Dazu rufen Sie im Hauptverzeichnis
+der Anwendung  folgenden Befehl auf, um ein unsigniertes,
+binäres Paket zu bauen und gleich vom Tool \ospcmd{lintian} auf
+Kompatibilität zum Debian-Repository überprüfen zu lassen:
+
+\begin{ospsimplelisting}
+$ <bf>debuild -i -us -uc -b</bf>
+\end{ospsimplelisting}
+
+Der Parameter \ospcmd{-b} erzeugt das binäre Paket (das aber dennoch
+den Python-Code enthält, analog zum RPM-Installationspaket), die
+beiden \ospcmd{-u}"=Parameter verhindern das Signieren von
+Quelltext-Paketen und binären Paketen (schließlich haben wir keinen
+Schlüssel generiert), der Parameter \ospcmd{-i} ruft schließlich
+\ospcmd{lintian} nach erfolgreicher Paketerstellung auf. Bei
+\ospcmd{lintian} handelt es sich um ein Tool, das das Paket schon
+einmal auf alle formalen Bedingungen für das Hochladen in ein
+Repository untersucht.  Grundsätzlich werden dabei Verstöße gegen die
+Debian Policy gemeldet, so dass der Entwickler diese formalen Fehler
+schon vor dem Einreichen des Pakets beheben kann. Wir werden gleich
+noch auf die formalen Fehler in unserem Paket zurückkommen.
+
+Nach Aufruf von \ospcmd{debuild} folgt eine Reihe von Ausgaben in der
+Konsole; anschließend werden nach erfolgreicher Paketerstellung im
+übergeordneten Verzeichnis drei Dateien abgelegt:
+
+\begin{osplist}
+\item \ospfile{helloworld\_1.0-1\_amd64.deb}
+\item \ospfile{helloworld\_1.0-1\_amd64.changes}
+\item \ospfile{helloworld\_1.0-1\_amd64.build}
+\end{osplist}
+
+Alle drei Dateien haben in diesem Fall das Suffix \ospfile{\_amd64} im
+Dateinamen, da sie auf einem 64-Bit-Linux erzeugt wurden. Die
+\ospfile{.build}-Datei ist eine Log-Datei mit der Ausgabe während der
+Paketerstellung. \ospfile{helloworld\_1.0-1\_""amd64.changes} enthält
+den \ospcmd{changelog} samt einer Checksummme und Angaben zum Paket.
+\ospfile{helloworld\_1.0-1\_amd64.deb} ist schließlich das fertige und
+installierbare Debian-Paket, das Sie unmittelbar auf Ihrem Rechner
+installieren können:
+
+\begin{ospsimplelisting}
+$ <bf>dpkg -i helloworld_1.0-1_amd64.deb</bf>
+\end{ospsimplelisting}
+
+Sie sollten dann auch gleich einen entsprechenden Eintrag in Ihrem
+Anwendungsmenü finden. Zum Deinstallieren reicht ein:
+
+\begin{ospsimplelisting}
+$ <bf>dpkg -r helloworld</bf>
+\end{ospsimplelisting}
+
+Ein solches Paket kann, wie gesagt, noch nicht direkt in ein
+Repository aufgenommen werden; dazu fehlen einige
+Mindestvoraussetzungen.  Da wir das Tool \ospcmd{debuild} mit der
+Option \ospcmd{-i} aufgerufen haben, liefert \ospcmd{lintian} am Ende
+der Paketerstellung gleich erste Hinweise auf
+Verbesserungsmöglichkeiten:
+
+\begin{ospsimplelisting}
+Now running lintian...
+W: helloworld: copyright-without-copyright-notice
+W: helloworld: new-package-should-close-itp-bug
+W: helloworld: binary-without-manpage usr/bin/helloworld
+W: helloworld: zero-byte-file-in-doc-directory \
+usr/share/doc/helloworld/copyright
+Finished running lintian.
+\end{ospsimplelisting}
+
+\index{ITP-Bug}%
+Es sollten also mindestens die Copyright-Datei gefüllt und eine
+Dokumentationsseite (man page) hinzugefügt werden. Auch das Changelog
+erfüllt nicht die notwendigen Voraussetzungen, da kein \emph{ITP-Bug}
+(Intent To Package) als geschlossen beschrieben ist. Auf all diese
+Dinge kann und soll hier nicht näher eingegangen werden. Unter den
+beiden folgenden Links finden Sie wichtige Informationen zur
+Erstellung von Ubuntu-Paketen sowie die vollständige Spezifikation zur
+Erstellung von Debian-Paketen aus Python-Anwendungen:
+
+\begin{ospsimplelisting}
+https://wiki.edubuntu.org/PackagingGuide/Python  
+http://www.debian.org/doc/packaging-manuals/python-policy/index.html
+\end{ospsimplelisting}
+
+Mit Hilfe dieser Beschreibungen können Sie Ihre Anwendung vollständig
+auf die Veröffentlichung in Debian und darauf basierenden
+Linux"=Distributionen vorbereiten. Übrigens: Ubuntus
+Launchpad\ospfootnote{fn:launchpad}{\ospurl{https://launchpad.net/}}
+stellt eine immer beliebter werdende Plattform für Python-Anwendungen
+unter Ubuntu dar. Mit einem eigenen \emph{Personal Package Archive}
+(PPA) ist die eigene PyQt- oder PySide-Anwendung auch schnell an den
+(Ubuntu-)Benutzer gebracht, der dann automatisch über die gewohnte
+Softwareaktualisierung mit Updates versorgt wird.
+
+
+\ospsubsection{Debian-Paketerstellung mit PySide-Assistant}{Alternative Debian-Paketerstellung mit PySide-Assistant}{sec:pysideassistant}
+
+\index{PyQt vs. PySide}%
+\index{PySide Assistant}%
+\index{Paketerstellung!Debian}%
+Schon den kurzen Ausführungen ist zu entnehmen, dass die
+Debian"=Paketerstellung zunächst aufwendiger ist als die von Source-
+und RPM-Paketen. Das haben sich auch die Entwickler des
+PySide-Projekts gedacht und mit dem \emph{PySide Assistant} ein Tool
+entwickelt, das die Paketerstellung für debianbasierte Systeme enorm
+vereinfacht. Ursprünglich entwickelt wurde der Assistant für das
+Betriebssystem MeeGo bzw. dessen Nokia-Vorfahren Harmattan. MeeGo
+sollte eigentlich das neue Smartphone-Betriebssystem für alle
+Nokia-Telefone werden und wurde in Zusammenarbeit mit Intel initiiert
+und entwickelt. Nach dem Umstieg von Nokia auf Windows Phone blieb es
+jedoch bisher bei einem einzigen veröffentlichten MeeGo-Gerät, dem
+Nokia N9. Python sollte neben C++ als zweite Entwicklungssprache für
+Mobiltelefon-Anwendungen dienen. Da PyQt aber nur unter einer
+kommerziellen Lizenz oder der GPL angeboten wurde, hat Nokia die
+Entwicklung von PySide gestartet und finanziert diese bis jetzt. Da
+unter Harmattan nur Debian-Pakete installiert werden können -- im
+Gegensatz zu MeeGo, dessen Paketverwaltung auf RPM basiert --, fehlte
+nach Fertigstellung der ersten finalen PySide-Version aber noch eine
+einfache Möglichkeit, aus PySide-Anwendungen Debian-Pakete zu
+erstellen. Der PySide Assistant entstand genau aus diesem Mangel. Als
+kleines Schmankerl können Sie die so erzeugten PySide-Debian-Pakete
+nicht nur unter Ubuntu und anderen Desktop-Linux-Systemen
+installieren: Die Anwendungen laufen auch einwandfrei auf dem Nokia N9
+und dessen Vorgänger N900.
+
+Bereitgestellt wird die Anwendung entweder per
+Ubuntu-PPA,\ospfootnote{fn:pysideppa}{\ospurl{https://launchpad.net/\~{}pyside/+archive/ppa}}
+oder Quelltext"=Paket\ospfootnote{fn:pysidesource}{Der Quelltext ist
+  auf github verfügbar:
+  \ospfootnote{https://github.com/PySide/PySideAssistant}. Eine
+  Anleitung zur Installation des PySide Assistant finden Sie im im
+  MeeGo-Wiki: \ospurl{http://wiki.meego.com/Python/""pyside-assistant}.}
+das der Entwickler selbst kompilieren muss. Installieren Sie also
+zunächst den PySide Assistant auf Ihrem Entwicklungssystem. Die
+Hauptanwendung des Tools heißt \ospcmd{psa} und sollte nach
+Installation in einer Shell aufrufbar sein. Über den Aufruf dieses
+Kommandos mit verschiedenen Parametern erfolgen alle weiteren
+Schritte.
+
+\index{Paketerstellung!Template}%
+Der erste Schritt zur Erzeugung eines Debian-Pakets ist die Erstellung
+eines PySide-Projekts. Der PySide Assistant stellt dazu mehrere
+Projekttemplates zur Verfügung, die ein einfaches PySide-Projekt
+erzeugen und auf Basis dessen man eine PySide-Anwendung entwickelt. In
+unserem Fall haben wir aber schon eine komplette Projektstruktur. Wir
+werden letztlich nur drei Dateien aus dem PySide-Basisprojekt
+entnehmen und in unser Projekthauptverzeichnis kopieren. Die gesamte
+Projektstruktur des bisherigen Beispielprojekts ist also weiter
+verwendbar.
+
+\index{Qt Quick}%
+Das Kommando \ospcmd{psa list} liefert alle verfügbaren
+Projekttemplates aus: \ospcmd{fremantle}, \ospcmd{harmattan},
+\ospcmd{ubuntu-qtgui}, \ospcmd{ubuntu-qml}. Letzteres erzeugt ein
+QML"=Projekt; mit Qt Quick und QML wird sich Kapitel
+\ref{chap:qtquick} befassen. Die ersten beiden Templates sind für
+Maemo- (Codename: Fremantle, auf dem Nokia N900) und
+Harmattan-Projekte gedacht. Wir werden hier nur ein Projekt auf Basis
+von \ospcmd{ubuntu-qtgui} erstellen, das eine einfache Anwendung mit
+Qt-Gui und Qt-Widgets für Ubuntu erzeugt. Mit dem Befehl \ospcmd{psa
+  init} erzeugt man nun die Projektstruktur:
+
+\begin{ospsimplelisting}
+$ <bf>psa init helloworld ubuntu-qtgui</bf>
+\end{ospsimplelisting}
+
+Mit diesem Befehl erzeugen wir ein Projekt mit dem Namen
+\ospcmd{helloworld} auf Basis des Templates \ospcmd{ubuntu-qtgui}. Der
+Befehl erzeugt folgende Dateien in einem Unterverzeichnis
+\ospfile{helloworld}:
+
+\begin{ospdeflist}
+  \ospdefitem{\ospfile{helloworld}}{das Haupt-Skript, in unserer
+    Struktur unter \ospfile{bin}}
+
+  \ospdefitem{\ospfile{helloworld.desktop}}{Desktop-Datei, in unserer
+    Struktur unter \ospfile{data}}
+
+  \ospdefitem{\ospfile{helloworld.longdesc}}{Beschreibung der
+  Anwendung, bei uns in \ospfile{setup.py}}
+
+
+\ospdefitem{\ospfile{helloworld.png}}{Icon für die Anwendung, bei uns
+  nicht vorhanden}
+
+\ospdefitem{\ospfile{helloworld.psa}}{Einstellungen für den PySide Assistant}
+
+\ospdefitem{\ospfile{MANIFEST.in}}{zusätzlich zu installierende Dateien}
+
+\ospdefitem{\ospfile{README.assistant}}{README des PySide Assistant}
+
+\ospdefitem{\ospfile{setup.py}}{vgl. Seite \pageref{setuppy}}
+
+\ospdefitem{\ospfile{stdeb.cfg}}{Konfigurationsdatei für Debian-Paketerstellung}
+\end{ospdeflist}
+
+Schauen Sie sich den Inhalt aller Dateien ruhig einmal in Ruhe an, das
+meiste sollte Ihnen bekannt vorkommen. Drei der Dateien sind jedoch
+neu: \ospfile{helloworld.png}, \ospfile{helloworld.psa} und
+\ospfile{stdeb.cfg}. Das sind nun auch genau die drei Dateien, die Sie
+aus dem erzeugten PySide-Projekt für das weitere Vorgehen in die
+Projektstruktur unserer Beispielanwendung übernehmen müssen. Die erste
+ist ein Icon, das später im System der Anwendung zugeordnet wird,
+z.\,B. für Desktop-Verknüpfungen oder im Anwendungsmenü. Das
+Default-Icon ist ein blaues Rechteck und sollte durch ein eigenes Icon
+ersetzt werden. Um das Debian-Paket mit dem Assistant bauen zu können,
+ist die Datei aber zwingend erforderlich.  \ospfile{helloworld.psa}
+beschreibt die Einstellungen für den PySide Assistant und hat in
+unserem Fall folgenden Inhalt:
+
+\begin{ospsimplelisting}
+[Project]
+category = Development
+maintainer = Peter Bouda
+appname = Hello World
+section = misc
+pyversion = 2.6
+project = helloworld
+template = ubuntu-qtgui
+email = pbouda@dasskript.com
+desc = Hello World Software
+\end{ospsimplelisting}
+
+Hier wurden bereits die Variablen \ospcmd{project}, \ospcmd{email},
+\ospcmd{section} und \ospcmd{desc} editiert, so dass sie zum
+Hallo-Welt-Projekt passen. Die Datei \ospfile{stdeb.cfg} enthält
+schließlich eine Art Kurzfassung der Datei \ospfile{debian/control}:
+
+\begin{ospsimplelisting}
+[DEFAULT]
+XS-Python-Version: 2.6
+Package: helloworld
+Section: misc
+Depends: python-qt4
+\end{ospsimplelisting}
+
+Auch hier passen die Einstellungen bereits zu unserem Projekt,
+insbesondere sind die Abhängigkeiten in \ospcmd{Depends} reduziert, da
+der Assistant standardmäßig auch das Qt-OpenGL- und das
+Declarative-Modul in die Liste einträgt. Beide sind aber nur für
+QML-basierte Anwendungen notwendig und können in unserem Fall entfernt
+werden. Außerdem stand in der ursprünglichen Datei eine Abhängigkeit
+von \ospcmd{python-pyside.qtgui}. Da es sich bei unserem Projekt aber
+um eine PyQt-Anwendung handelt, ist das entsprechend geändert. Der
+Assistant unterstützt also in diesem Fall sowohl PySide- als auch
+PyQt-Anwendungen und sogar jedes beliebige andere Python-Projekt.
+
+Wenn Sie die drei Dateien also nun aus dem PySide-Basisprojekt in das
+Hauptverzeichnis unserer Projektstruktur kopiert haben,  kann das
+Debian-Paket mit einem einfachen Befehl direkt erstellt werden (Sie
+müssen dazu in das Hauptverzeichnis der Projektstruktur wechseln):
+
+\begin{ospsimplelisting}
+$ <bf>psa build-deb</bf>
+\end{ospsimplelisting}
+
+Das fertige Debian-Paket liegt jetzt im Verzeichnis
+\ospfile{deb\_dist}. Sie können es testweise mit dem Befehl
+\ospcmd{dpkg -i helloworld\_1.0-1\_all.deb} unter Ubuntu installieren.
+Ein Aufruf von \ospcmd{dpkg -r helloworld} entfernt das Paket wieder.
+Wie gesagt: Falls Sie das Projekttemplate \ospcmd{harmattan} verwendet
+hätten, könnten Sie die Anwendung jetzt direkt auf ein Nokia N9
+installieren und dort starten und die Anwendung sogar in den Nokia
+Store einstellen und dort verkaufen.  Eigentlich schade, dass Nokia
+die Weiterentwicklung der Harmattan/MeeGo-Plattform de facto
+eingestellt hat!
+
+\ospsection{Erstellung einer Windows-Version samt Installer}{Erstellung einer Windows-Version samt Installer}{sec:windowspakete}
+
+\index{Paketerstellung!Windows}%
+\index{Windows}%
+Ebenso wie die Linux- beruht auch die
+Windows"=Paketerstellung auf der in Kapitel \ref{sec:strukturanwendung}
+vorgestellten Projektstruktur samt \ospfile{setup.py}. Letztere
+definiert auch für eine Windows-Version, welche Dateien letztlich für
+das Ausführen der Anwendung notwendig sind und folglich in ein Paket
+aufgenommen werden müssen. Im Gegensatz zu den Linux-Paketen wird die
+Windows-Version aber am Ende keinen Quelltext mehr ausliefern;
+stattdessen wird sämtlicher Code kompiliert. Außerdem werden alle
+Abhängigkeiten wie z.\,B. Python-Systembibliotheken und
+Qt-Bibliotheken in einer binären Version mit in das Paket aufgenommen.
+Für die Qt-Bibliotheken müssen dazu pro verwendetem Modul zwei Dateien
+aufgenommen werden: Zum einen die Windows-DLL des Moduls (z.\,B.
+\ospfile{QtCore4.dll}), zum anderen die binäre Version des
+Python-Moduls (z.\,B.  \ospfile{PyQt4.QtCore.pyd}). Glücklicherweise
+lässt sich dieser Prozess automatisieren, so dass alle Py\-thon-Module
+und DLLs automatisch in das Paket aufgenommen werden.  Die Anwendung
+selbst liegt schließlich als \ospfile{.exe}-Datei vor, die die
+Python-Windows-DLL (z.\,B.  \ospfile{python27.dll}) einbindet und so
+den Code unserer Anwendung ausführt.  Aus den kompilierten, binären
+Dateien soll außerdem gleich ein Installationspaket erzeugt werden, so
+dass der Anwender wie gewohnt eine \ospfile{setup.exe} erhält, die die
+Anwendung auf dem System installiert und einen Startmenü-Eintrag
+erzeugt. Auf dem System des Anwenders ist dann kein Python oder
+anderes nötig, alle Bibliotheken befinden sich nach der Installation
+im Anwendungsverzeichnis.
+
+
+\ospsubsection{Kompilierung der Anwendung}{Kompilierung der Anwendung}{sec:appcompilation}
+
+\index{Windows!Kompilierung}%
+\index{cx\_freeze}%
+Um die Anwendung in eine binäre Version zu kompilieren, gibt es unter
+Windows drei gängige Werkzeuge, die aus Python-Code
+Windows"=Anwendungen und -Bibliotheken erzeugen: py2exe, PyInstaller
+und cx\_freeze. Die beiden letzten funktionieren plattformunabhängig
+und erzeugen damit auch kompilierte Pakete unter Linux und Mac OS. Nur
+cx\_freeze stellt auf seiner
+Projekt-Website\ospfootnote{fn:cxfreezeurl}{\ospurl{http://cx-freeze.sourceforge.net/}}
+installierbare Pakete für zahlreiche Python-Versionen und
+64-Bit-Windows-Systeme bereit, so dass wir uns hier auf das Vorgehen
+für diese Lösung beschränken. Die Erzeugung einer ausführbaren
+Qt-Anwendung aus Python-Code ist aber auch mit den anderen Paketen
+nicht viel aufwendiger.
+
+Laden Sie das passende Installationspaket von der Website
+des cx\_freeze-Projektes herunter und installieren Sie es auf Ihr
+System. Das Paket installiert u.\,a. eine Batch-Datei in den
+\ospfile{Scripts}-Ordner der Python-Installation, beispielsweise unter
+\ospfile{C:\textbackslash{}Python27\textbackslash{}Scripts\textbackslash{}}.
+Ein Aufruf dieses Skripts mit den passenden Parametern kompiliert dann
+die PyQt- bzw. PySide"=Anwendung.
+
+Voraussetzung ist, wie gesagt, die oben definierte Projektstruktur.
+Starten Sie eine Windows-Kommandozeile (cmd) und wechseln Sie in
+das Hauptverzeichnis des Projekts. Um eine kompilierte Anwendung im
+Verzeichnis \ospfile{dist\_win} zu erzeugen, reicht dann folgender
+Aufruf von \ospfile{cxfreeze.bat}:
+
+\begin{ospsimplelisting}
+<bf>c:\Python27\Scripts\cxfreeze.bat --base-name=Win32GUI \
+    --include-path="src" --target-dir=dist_win/bin bin\helloworld</bf>
+\end{ospsimplelisting}
+
+Der erste Parameter \ospcmd{-{}-base-name} gibt an, dass es sich um
+eine GUI"=Anwendung handelt. Beim Start der \ospfile{.exe}-Datei würde
+andernfalls zuerst ein Windows-cmd gestartet und in diesem dann der
+Python-Prozess. Dies ist beispielsweise zu Testzwecken nützlich, falls
+man Ausgaben der Anwendung direkt sichtbar machen will. Der zweite
+Parameter \ospcmd{-{}-include-path} nimmt das Verzeichnis
+\ospfile{src} in die Suchpfade von Python mit auf. Nur so findet
+cx\_freeze das Modul \ospcmd{helloworld} und die Python-UI-Dateien und
+nimmt sie in die kompilierte Anwendung mit auf. Schließlich
+beschreibt der Parameter \ospcmd{-{}-target-dir}, in welches
+Verzeichnis das Ergebnis der Kompilierung abgelegt werden soll. Wir
+verwenden hier außer \ospfile{dist\_win} noch ein weiteres
+Unterverzeichnis \ospfile{bin}.  Das ist dann notwendig, wenn wir
+außer den binären Dateien beispielsweise ein
+\ospfile{data}-Verzechnis mit Bildern, Icons usw.  installieren
+wollen. 
+
+Schauen Sie noch einmal in das Python-Skript \ospfile{helloworld}:
+Auch unter Windows wechselt es in diesem Fall gleich nach dem Start in
+das Verzeichnis \ospfile{data}.  Dateien können so in der gesamten
+Anwendung immer aus denselben Pfaden geladen werden, solange Sie im
+\ospfile{data}-Verzeichnis liegen. Zuletzt wird dem Skript
+\ospfile{cxfreeze.bat} noch die Hauptdatei übergeben, deren Name dann
+auch die Basis für den Namen der \ospfile{.exe}-Datei ist. In diesem
+Fall heißt die Hauptanwendung schließlich \ospfile{helloworld.exe}.
+
+Nach erfolgreicher Kompilierung schauen Sie gleich einmal in das
+Verzeichnis \ospfile{dist\_win/bin}, dort liegen jetzt folgende
+Dateien:
+
+\begin{ospitemlist}
+\item \ospfile{bz2.pyd}
+\item \ospfile{helloworld.exe}
+\item \ospfile{PyQt4.QtCore.pyd}
+\item \ospfile{PyQt4.QtGui.pyd}
+\item \ospfile{python27.dll}
+\item \ospfile{QtCore4.dll}
+\item \ospfile{QtGui4.dll}
+\item \ospfile{sip.pyd}
+\item \ospfile{unicodedata.pyd}
+\end{ospitemlist}
+
+Bei den \ospfile{pyd}-Dateien handelt es sich um Python-Module, die in
+der Anwendung verwendet werden. Bei komplexeren Anwendung kann da
+durchaus noch eine ansehnliche Liste an Dateien hinzukommen.
+Normalerweise löst cx\_freeze alle Modul-Abhängigkeiten
+zufriedenstellend auf, so dass kein weiterer Eingriff notwendig ist.
+In Einzelfällen kann es aber schon einmal passieren, dass die 
+kompilierte Anwendung nicht starten will und ein fehlendes Modul
+meldet. In diesem Fall können Sie dem Skript \ospcmd{cxfreeze.bat}
+noch einen Parameter wie
+
+\begin{ospsimplelisting}
+--include-modules="lxml._elementpath"  
+\end{ospsimplelisting}
+
+hinzufügen, der die fehlenden Module (in diesem Fall
+\ospcmd{lxml.\_elementpath}) in die Anwendung aufnimmt.  Mehrere
+Module lassen sich kommagetrennt angeben.
+
+Es bietet sich an, den fertigen Aufruf des Skriptes mit allen
+Parametern lokal in der Projektstruktur zu speichern. In der oben
+definierten Struktur existiert dazu die Datei \ospfile{cxfreeze.bat},
+die einfach den Aufruf des Skripts mit allen Parametern enthält. Die
+Anwendung ist so jeweils mit einem einfachen Aufruf der Batch-Datei
+zu kompilieren.
+
+Um die kompilierte Anwendung zu starten, führen Sie
+\ospfile{helloworld.exe} aus. Die Anwendung findet alle benötigten
+Module und Bibliotheken im selben Verzeichnis, so dass Sie die
+Anwendung auch auf andere Windows-Systeme kopieren und dort starten
+können. Für den Endanwender ist das Installationspaket aber natürlich
+deutlich komfortabler. Wir wollen es daher im nächsten Schritt
+erstellen.
+
+
+\ospsubsection{Erstellung des Installationspakets}{Erstellung des Installationspakets}{sec:buildinstaller}
+
+\index{Windows!Setup-Datei erstellen}%
+\index{Setup}%
+\index{NSIS}%
+Für die Erstellung von Windows-Installationspaketen gibt es zahlreiche
+freie und kommerzielle Pakete und Anwendungen. Eines der besten freien
+Systeme ist das \emph{Nullsoft Scriptable Install System}
+(NSIS).\ospfootnote{fn:nsisurl}{\ospurl{http://nsis.sourceforge.net/}}
+Laden Sie die aktuelle Version von der Website herunter und
+installieren Sie es auf Ihrem Windows. Die Installation erzeugt einen
+Startmenüeintrag für die NSIS-Kompilierung sowie eine
+Kontextmenü-Erweiterung für NSIS-Skripte.
+
+Das System benutzt eine eigene, skriptbasierte Sprache zur
+Beschreibung der Pakete, die dann am einfachsten über das Kontextmenü
+(also per Klick mit der rechten Maustaste auf die NSIS-Datei und Klick
+auf \ospmenu{Compile NSIS Script}) gestartet werden. Die Skripte
+haben die Dateiendung \ospfile{.nsi}. Als Ergebnis erhält man ein
+Installationspaket (beispielsweise \ospfile{setup.exe}), das Benutzer
+auf gewohnte  Weise unter Windows installieren.
+
+NSIS-Skripte können erstaunlich komplex werden, da alle möglichen
+Setup-Funktionen von Windows unterstützt werden. Im Fall einer PyQt-
+oder Py\-Side-Anwendung ist das Skript aber noch recht übersichtlich, es
+handelt sich um den Standardfall einer Windows-Anwendung samt
+Startmenü"=Eintrag und Möglichkeit zur Deinstallation der Anwendung.
+Das hier vorgestellte Skript basiert auf dem Beispiel-Skript
+\ospfile{example2.nsi}, das der NSIS-Installation beiliegt.
+
+Zunächst definieren wir im Skript einige allgemeine Angaben zu Name,
+Zielverzeichnis und den Registry-Einträgen der Anwendung. Außerdem
+definiert man gleich am Anfang des Skripts, welche \dqo{}Seiten\dqc{}
+das fertige Installationspaket anbietet. Dabei handelt es sich um die
+bei Windows"=Anwendungen gewohnten Schritte bei Ausführung einer
+\ospfile{setup.exe}, also Auswahl der zu installierenden Komponenten,
+ob ein Startmenü-Eintrag installiert werden soll, Auswahl des
+Zielverzeichnisses usw. Diese Seiten müssen für die
+Installation wie für die Deinstallation definiert werden. Der
+Header des NSIS-Skriptes \ospfile{helloworld.nsi} sieht dann
+folgendermaßen aus:
+
+\begin{osplisting}{NSIS}{Header des Skriptes zur Installer-Erzeugung}{code:nsisheader}
+; Name des Installationspakets
+Name "Hello World"
+
+; Name der Ausgabedatei
+OutFile "setup-helloworld.exe"
+
+; Standard-Installationsverzeichnis
+InstallDir $PROGRAMFILES\HelloWorld
+
+; Registry-Key mit Verzeichnis
+InstallDirRegKey HKLM "Software\PB_HelloWorld" "Install_Dir"
+
+; Pages
+
+Page components
+Page directory
+Page instfiles
+
+UninstPage uninstConfirm
+UninstPage instfiles
+\end{osplisting}
+
+In diesem Fall heißt die Anwendung also \dqo{}Hello World\dqc{}, als
+Ausgabe erhalten wir am Ende eine Datei
+\ospfile{setup-helloworld.exe}. Installiert wird die Anwendung in den
+Standard-Programme-Ordner (also beispielsweise
+\ospfile{C:\textbackslash{}Program Files\textbackslash{}HelloWorld}).
+Das Installationsverzeichnis wird außerdem in der Registry unter dem
+angegebenen Key vermerkt. Die Installation hat in unserem Fall drei
+Seiten (Auswahl der Komponenten, Auswahl des Zielverzeichnisses und
+eine Seite für die Installation samt Fortschrittsanzeige) -- die
+Deinstallation nur zwei (Bestätigung der Deinstallation,
+De\-installation mit Fortschrittsanzeige).
+
+Abbildung \ospfigref{fig:windowssetupfirstpage} zeigt die erste Seite
+der Installation, nachdem das Installationspaket gestartet wurde, also
+die Auswahl der Komponenten. Diese Komponenten müssen wir nun im
+Skript definieren. Die Komponenten bestehen jeweils aus einer
+Reihe von Anweisungen, welche Dateien kopiert, welche
+Registry-Einträge erzeugt werden usw. In unserem Fall gibt es
+genau zwei solcher Komponenten: die Installation der eigentlichen
+Anwendung und die Erzeugung eines Startmenüeintrags. Letzteres ist
+für den Benutzer optional.
+
+\osppagebreak
+
+\ospfigure{0.7}{images/windowssetupfirstpage}{Erste Seite des Windows-Setup, Auswahl der Komponenten}{fig:windowssetupfirstpage}
+
+Die Angaben zur Installation der Anwendung umfassen die zu kopierenden
+Dateien sowie die zu erzeugenden Registry-Einträge. Wir verwenden für
+das erste einfach den kompletten Inhalt des Verzeichnisses
+\ospfile{dist\_win}, in dem die kompilierte Anwendung aus dem
+vorhergehenden Kapitel liegt. Die Registry-Einträge ergeben sich aus
+den Standardeinträgen für Windows-Anwendungen. Mit diesen Einträgen
+erscheint die Anwendung dann später auch in der Liste der Anwendungen,
+die über die Funktion \ospmenu{Programm deinstallieren} der
+Systemsteuerung verwaltet werden können. Alles zusammen wird im
+NSIS-Skript in einem \ospcmd{Section}-Abschnitt definiert:
+
+\begin{osplisting}{NSIS}{Die Komponente zur Installation der Anwendung}{code:nsisinstallationmain}
+Section "HelloWorld (required)"
+
+  SectionIn RO
+  
+  SetOutPath $INSTDIR
+  
+  ; Alle Dateien des Pakets liegen hier
+  File /r "dist_win\*"
+  
+  ; Installationspfad in die Registry schreiben
+  WriteRegStr HKLM SOFTWARE\PB_HelloWorld "Install_Dir" "$INSTDIR"
+  
+  ; Keys für Uninstall
+  WriteRegStr HKLM \
+    "Software\Microsoft\Windows\CurrentVersion\Uninstall\HelloWorld" \
+    "DisplayName" "HelloWorld"
+  WriteRegStr HKLM \
+    "Software\Microsoft\Windows\CurrentVersion\Uninstall\HelloWorld" \
+    "UninstallString" '"$INSTDIR\uninstall.exe"'
+  WriteRegDWORD HKLM \
+    "Software\Microsoft\Windows\CurrentVersion\Uninstall\HelloWorld" \
+    "NoModify" 1
+  WriteRegDWORD HKLM \
+    "Software\Microsoft\Windows\CurrentVersion\Uninstall\HelloWorld" \
+    "NoRepair" 1
+  WriteUninstaller "uninstall.exe"
+  
+SectionEnd
+\end{osplisting}
+
+In diesem Fall werden alle Dateien unter \ospfile{dist\_win} rekursiv
+in das Verzeichnis \ospcmd{\$INSTDIR} kopiert, eine Variable, die
+standardmäßig den von uns im Header des Skriptes definierten Pfad
+enthält, aber auch vom Benutzer im zweiten Schritt der Installation
+geändert werden kann. Anschließend erfolgt die Angabe der zu
+schreibenden Registry-Einträge. Es wird der Installationspfad der
+Anwendung vermerkt, außerdem die Angaben zur Deinstallation. Die
+Anweisung \ospcmd{WriteUninstaller} am Ende des Abschnitts schreibt
+automatisch die Deinstallationsdatei \ospfile{uninstall.exe} in das
+Programmverzeichnis. Diese Funktion und die \ospfile{uninstall.exe}
+stellt NSIS zur Verfügung.
+
+\index{Windows!Startmenü-Eintrag}%
+Die Komponente für die Erzeugung des Startmenüeintrags ist wesentlich
+kompakter, und erzeugt nur ein Unterverzeichnis im
+Startmenü-Verzeichnis sowie die Verknüpfungen zu unserer
+Hauptanwendung sowie zur Deinstallationsdatei:
+
+\begin{osplisting}{NSIS}{Die Komponente zur Erzeugung eines Eintrags im Startmenü}{code:nsisstartmenuentry}
+Section "Start Menu Shortcuts"
+
+  CreateDirectory "$SMPROGRAMS\HelloWorld"
+  CreateShortCut "$SMPROGRAMS\HelloWorld\Uninstall.lnk" \
+    "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
+  CreateShortCut "$SMPROGRAMS\HelloWorld\HelloWorld.lnk" \
+    "$INSTDIR\bin\helloworld.exe" "" "$INSTDIR\bin\helloworld.exe" 0
+  
+SectionEnd
+\end{osplisting}
+
+Schließlich müssen wir festlegen, was bei der Deinstallation der
+Anwendung passiert. In unserem Fall beschränkt sich das auf das
+Löschen aller angelegten Registry-Einträge sowie aller Dateien im
+Startmenü und im Programme-Verzeichnis:
+
+\begin{osplisting}{NSIS}{Die Komponente zur Deinstallation}{code:nsisuninstall}
+Section "Uninstall"
+  
+  ; Registry-Keys löschen
+  DeleteRegKey HKLM \
+    "Software\Microsoft\Windows\CurrentVersion\Uninstall\HelloWorld"
+  DeleteRegKey HKLM SOFTWARE\PB_HelloWorld
+
+  ; Dateien löschen
+  Delete $INSTDIR\bin\*.*
+  Delete $INSTDIR\*
+
+  ; Shortcuts löschen
+  Delete "$SMPROGRAMS\HelloWorld\*.*"
+
+  ; Verzeichnisse löschen
+  RMDir "$SMPROGRAMS\HelloWorld"
+  RMDir "$INSTDIR\bin"
+  RMDir "$INSTDIR"
+
+SectionEnd
+\end{osplisting}
+
+Wichtig ist, dass an dieser Stelle zuerst alle Dateien gelöscht werden
+(dazu verwenden wir hier Wildcards wie \ospcmd{*.*}) und dann erst die
+Verzeichnisse. Falls die Verzeichnisse noch Dateien enthalten, werden
+sie nicht gelöscht. Das lässt sich zwar ausnutzen, um vom Benutzer
+geänderte Konfigurationsdateien noch im System zu hinterlassen,
+allerdings sollte auch nicht zu viel Müll im Programme-Verzeichnis
+verbleiben. Unsere Deinstallation hinterlässt keine Spuren und
+bereinigt das System vollständig von allen Änderungen, die bei der
+Installation durchgeführt wurden.
+
+Wenn Sie das Skript nun in der Datei \ospcmd{helloworld.nsi}
+gespeichert haben, können Sie das Ganze per rechter Maustaste oder
+über den NSIS-Compiler starten. Erzeugt wird eine Datei
+\ospcmd{setup-helloworld.exe} im selben Verzeichnis, in dem das
+NSIS-Skript liegt. Windows-Benutzer können mit dieser Datei die PyQt-
+oder PySide-Anwendung bequem auf Ihrem Rechner installieren, benutzen
+und auch wieder entfernen, so, wie Sie es von anderen
+Windows-Anwendungen gewohnt sind.
+
+
+\ospvacat
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "pyqt"
+%%% End: 

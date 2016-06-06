@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.47 r22583"
+   sodipodi:docname="qml_signalslot_dia.svg">
+  <defs
+     id="defs4">
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lend"
+       style="overflow:visible;">
+      <path
+         id="path3642"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         transform="scale(0.8) rotate(180) translate(12.5,0)" />
+    </marker>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <inkscape:perspective
+       id="perspective3607"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.69863281"
+     inkscape:cx="279.51718"
+     inkscape:cy="520"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:snap-to-guides="false"
+     inkscape:snap-grids="false"
+     inkscape:window-width="1280"
+     inkscape:window-height="738"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3632" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g3594"
+       transform="matrix(1,0,0,0.88681294,32.686607,47.697499)"
+       inkscape:export-filename="C:\Users\pbouda\Projects\svn-oss\pyqt\pyqt_de_1ed\images\qml_signalslot_dia.png"
+       inkscape:export-xdpi="200.17877"
+       inkscape:export-ydpi="200.17877">
+      <rect
+         y="320.93362"
+         x="87.313393"
+         height="251.92061"
+         width="60.117416"
+         id="rect2816"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-opacity:1" />
+      <text
+         id="text3590"
+         y="353.85504"
+         x="117.3721"
+         style="font-size:24px;font-style:normal;font-weight:normal;writing-mode:tb-rl;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
+         xml:space="preserve"><tspan
+           style="font-size:28px"
+           y="117.3721"
+           x="353.85504"
+           id="tspan3592"
+           sodipodi:role="line">PYTHON</tspan></text>
+    </g>
+    <g
+       transform="matrix(1,0,0,0.88115358,412.56919,49.510947)"
+       id="g3594-1"
+       inkscape:export-filename="C:\Users\pbouda\Projects\svn-oss\pyqt\pyqt_de_1ed\images\qml_signalslot_dia.png"
+       inkscape:export-xdpi="200.17877"
+       inkscape:export-ydpi="200.17877">
+      <rect
+         y="320.93362"
+         x="87.313393"
+         height="251.92061"
+         width="60.117416"
+         id="rect2816-7"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-opacity:1" />
+      <text
+         id="text3590-4"
+         y="353.85504"
+         x="117.3721"
+         style="font-size:24px;font-style:normal;font-weight:normal;writing-mode:tb-rl;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
+         xml:space="preserve"><tspan
+           style="font-size:28px"
+           y="117.3721"
+           x="353.85504"
+           id="tspan3592-0"
+           sodipodi:role="line">QML</tspan></text>
+    </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Lend)"
+       d="M 178.92088,371.03146 500,372.36218 l 0,0"
+       id="path3634"
+       inkscape:export-filename="C:\Users\pbouda\Projects\svn-oss\pyqt\pyqt_de_1ed\images\qml_signalslot_dia.png"
+       inkscape:export-xdpi="200.17877"
+       inkscape:export-ydpi="200.17877" />
+    <text
+       xml:space="preserve"
+       style="font-size:24px;font-style:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
+       x="188.5882"
+       y="358.08765"
+       id="text4084"
+       inkscape:export-filename="C:\Users\pbouda\Projects\svn-oss\pyqt\pyqt_de_1ed\images\qml_signalslot_dia.png"
+       inkscape:export-xdpi="200.17877"
+       inkscape:export-ydpi="200.17877"><tspan
+         sodipodi:role="line"
+         id="tspan4086"
+         x="188.5882"
+         y="358.08765">updateMessage(&quot;Hallo Welt!&quot;)</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-mid:none;marker-end:url(#Arrow1Lend)"
+       d="m 500,432.36218 -320,0"
+       id="path4276"
+       inkscape:export-filename="C:\Users\pbouda\Projects\svn-oss\pyqt\pyqt_de_1ed\images\qml_signalslot_dia.png"
+       inkscape:export-xdpi="200.17877"
+       inkscape:export-ydpi="200.17877" />
+    <text
+       xml:space="preserve"
+       style="font-size:18px;font-style:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
+       x="220.03914"
+       y="425.20535"
+       id="text4646"
+       inkscape:export-filename="C:\Users\pbouda\Projects\svn-oss\pyqt\pyqt_de_1ed\images\qml_signalslot_dia.png"
+       inkscape:export-xdpi="200.17877"
+       inkscape:export-ydpi="200.17877"><tspan
+         sodipodi:role="line"
+         id="tspan4648"
+         x="220.03914"
+         y="425.20535"
+         style="font-size:18px">Button: Signal messageRequested(),</tspan><tspan
+         sodipodi:role="line"
+         x="220.03914"
+         y="447.70535"
+         style="font-size:18px"
+         id="tspan4842">Slot  emit_message()</tspan></text>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow1Lend)"
+       d="m 180,512.36218 320,0"
+       id="path4650"
+       inkscape:export-filename="C:\Users\pbouda\Projects\svn-oss\pyqt\pyqt_de_1ed\images\qml_signalslot_dia.png"
+       inkscape:export-xdpi="200.17877"
+       inkscape:export-ydpi="200.17877" />
+    <text
+       xml:space="preserve"
+       style="font-size:18px;font-style:normal;font-weight:normal;writing-mode:lr-tb;fill:#000000;fill-opacity:1;stroke:none;font-family:Times New Roman;-inkscape-font-specification:Times New Roman"
+       x="221.86189"
+       y="505.57996"
+       id="text4836"
+       inkscape:export-filename="C:\Users\pbouda\Projects\svn-oss\pyqt\pyqt_de_1ed\images\qml_signalslot_dia.png"
+       inkscape:export-xdpi="200.17877"
+       inkscape:export-ydpi="200.17877"><tspan
+         sodipodi:role="line"
+         id="tspan4838"
+         x="221.86189"
+         y="505.57996"
+         style="font-size:18px">emit_message(): Signal message(), </tspan><tspan
+         sodipodi:role="line"
+         x="221.86189"
+         y="528.07996"
+         style="font-size:18px"
+         id="tspan4840">Slot updateMessage()</tspan></text>
+  </g>
+</svg>

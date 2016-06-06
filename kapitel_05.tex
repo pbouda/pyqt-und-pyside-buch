@@ -1,0 +1,2081 @@
+\ospchapter{Qt Quick und QML}{Qt Quick und QML}{chap:qtquick}
+
+\index{Qt Quick}%
+Mit Qt Quick hat Nokia 2009 ein Framework vorgestellt, das die
+zentrale Rolle bei der Erstellung von Qt-GUIs einnehmen soll. Die
+Programmierung erfolgt deklarativ: Statt wie bei der imperativen
+Programmierung den Ablauf bzw. Algorithmus in Code zu implementieren,
+beschreibt der Entwickler lediglich Zustände, Zustandsübergänge,
+Ereignisse usw. unabhängig von einer bestimmten
+Implementierungslogik. 
+
+Die deklarative Sprache, QML, stellt dem Entwickler Bausteine zur
+Verfügung, die durch eigene Kombinationen und im Zusammenspiel mit C++
+(oder Python) den GUI-Entwurf weitgehend von der Programmlogik
+abkoppelt.  Das ist auch die Idee von Qt Quick: GUI und Programm so
+weit wie möglich voneinander zu trennen, um in größeren Projekten die
+GUI-Designer unabhängig von den Code-Entwicklern zu machen oder auch
+einfach nur den Code der gesamten Anwendung besser wartbar zu halten.
+
+Zu Beginn der Entwicklung kam hinzu, dass die vorhandenen Qt Widgets
+nicht zu den mobilen Nokia- und Intel-Geräten passten.  Die
+deklarative Erstellung der GUIs per QML erlaubt die Unterstützung von
+Gesten, Multitouch und Ähnlichem zur Steuerung der Oberfläche.
+
+Trotz der Einstellung von MeeGo und dem Rückschlag für die
+Qt"=Entwicklung für mobile Geräte ist Qt Quick nach wie vor die Zukunft
+von Qt. Auch wenn sich einige Anforderungen geändert haben,
+Touch-Interfaces werden Tastatur und Maus weitgehend ablösen, auch auf
+den schon bestehenden Qt-Plattformen. Während diese Zeilen geschrieben
+wurden, ist schon mehr oder weniger beschlossen, dass die Qt Widgets
+ab Qt Version 5 nicht mehr weiter entwickelt werden.  Zwar werden
+weiterhin Bugs mit bestimmten Prioritäten behoben, eine
+Weiterentwicklung von GUI-Komponenten wird aber nur noch auf Basis von
+Qt Quick stattfinden.  Zwar gibt es derzeit noch einige Lücken bei der
+Erstellung von Desktop-Anwendungen mit Qt Quick.  Dennoch soll dieses
+Kapitel schon einmal so weit in die Programmierung mit QML einführen,
+dass Sie erste Schritte bei der Erstellung von Oberflächen der
+nächsten Qt-Generation machen können.  Zunächst geben wir einen groben
+Überblick über die Architektur sowie fertige und noch in Entwicklung
+befindliche Tools von Qt Quick.  Anschließend gehen wir näher auf die
+Programmierung mit QML ein, bevor es um die Anschlussmöglichkeiten von
+QML-GUIs an Python-Code unter PyQt und PySide geht.
+
+
+\ospsection{Überblick über Qt Quick}{Überblick über Qt Quick}{sec:qtquickoverview}
+
+\index{Qt Quick!UI Runtime}%
+\index{Qt Designer}%
+\index{QML}%
+\index{QML!QML-Viewer}%
+Auch wenn das Qt-Quick-Framework noch häufigen Veränderungen
+unterliegt, steht die Architektur, und es lassen sich schon jetzt mit
+Qt Quick Anwendungen entwickeln. Das Framework besteht aus drei
+Komponenten: der Programmiersprache QML für deklaratives
+Programmieren, der Qt Quick UI Runtime zum Ausführen und Darstellen
+von QML-Programmen und zur Interaktion mit anderen Programmiersprachen
+wie C++ und Python sowie den IDEs und Gestaltungswerkzeugen Qt Creator
+und Qt Designer. Da der Qt Creator derzeit vor allem für die
+Entwicklung von C++-Anwendungen vorgesehen ist, soll er hier nicht
+weiter besprochen werden. Als bisher einzige IDE bietet er zwar
+Syntax-Highlighting und Code-Vervollständigung für QML, fügt sich aber
+nur schlecht in die Abläufe der PyQt- oder PySide-Projektentwicklung
+ein.
+
+Wir werfen stattdessen zunächst einen Blick auf das deklarative
+Programmieren mit QML. Anschließend stellen wir mit dem QML Viewer
+eine wichtige Komponente der Runtime vor. Er erlaubt die Ausführung
+reiner QML-Anwendungen ohne C++ oder Python.  Damit lassen sich GUIs
+schon einmal testen und schnell Prototypen entwickeln. Schließlich
+wird mit dem Qt Quick Designer derzeit ein grafisches Werkzeug für die
+Erstellung von QML-Oberflächen entwickelt und aktuell als Teil des
+Qt-SDKs vertrieben. Gerade hierbei handelt es sich aber noch um eine
+große Baustelle, so dass wir im Weiteren auf die Beschreibung und den
+Einsatz des Qt Designers für die QML-Code-Erstellung verzichten.
+
+
+\ospsubsection{Deklaratives Programmieren mit QML}{Deklaratives Programmieren mit QML}{sec:declarativeprogramming}
+
+\index{QML}%
+\index{Deklaratives Programmieren}%
+\index{GUI}%
+Deklaratives Programmieren lässt sich als Pendant zum imperativen
+Programmieren auffassen. Beim imperativen Programmieren in einer
+Programmiersprache wie Python wird die Aufgabe des Programms
+algorithmisch beschrieben, d.\,h. der Entwickler stellt mit den
+Mitteln der Programmiersprache die Logik des Programmablaufs dar und
+nutzt dazu Schleifen, Variablen, Funktionen usw. 
+
+Im Gegensatz dazu \emph{deklariert} der Entwickler beim deklarativen
+Programmieren einzelne Zustände oder Zustandsübergange eines
+Programms. Die Übergänge werden nicht algorithmisch beschrieben, es
+werden lediglich deren Eigenschaften definiert. Die eigentliche
+\emph{Implementierung} zur Darstellung von Zuständen und Änderungen
+ist vollkommen unabhängig von deren Deklaration und wird
+beispielsweise von einer Runtime-Umgebung zur Verfügung gestellt.
+
+Die Qt-Entwickler haben sich für die Zukunft von Qt zu einem
+deklarativen Ansatz bei der Erstellung von GUIs entschieden, um deren
+Entwicklung unabhängiger von der Implementierung der eigentlichen
+Programmlogik zu machen. Das macht Qt-Quick-Projekte generell besser
+wartbar und den Oberflächen-Design-Prozess unabhängiger vom
+Entwickler. So kann ein Grafiker beispielsweise schon das GUI
+inklusive Interaktion mit dem Anwender vollständig als Prototyp
+entwerfen, ohne dass dazu auch nur eine Codezeile aus der
+Entwicklungsabteilung notwendig ist. Ähnliche Ansätze verfolgen auch
+Microsoft in der Silverlight-Entwicklung oder Adobe mit Flash und AIR.
+Qt Quick hängt diesen Frameworks noch deutlich hinterher: Vor allem
+die Design-Werkzeuge können es noch nicht mit der Konkurrenz
+aufnehmen, auch wenn beispielsweise schon Export-Möglichkeiten aus
+Photoshop zur Erzeugung von Qt-Quick-Komponenten bestehen.
+
+Da die Möglichkeiten einer rein deklarativen Programmierung stark von
+der Runtime abhängig sind, hat man sich bei Qt Quick zu einem hybriden
+Ansatz entschieden: So lassen sich QML-Anwendungen mit Javascript
+mischen, um dann doch auch Teile der Oberfläche mit einer imperativen
+Logik zu versehen. Javascript war eine naheliegende Wahl, da sich
+diese Programmiersprache durch den Einsatz in Webbrowsern massiv
+verbreitet hat und sich rasant weiterentwickelt hat. Außerdem hat sich
+diese Sprache gerade auch im Zusammenspiel mit HTML, das ja auch im
+weitesten Sinne als \dqo{}deklarativ\dqc{} bezeichnet werden kann,
+entwickelt, so dass den Javascript-Entwickler beim Ansprechen von
+QML-Objekten per Javascript kein größerer Lernprozess erwartet. Im
+Gegensatz zu HTML ist QML jedoch deutlich grafischer orientiert und
+stellt eine Reihe von grafischen Primitiven bereit.  Hinzu kommen
+Zustände und Zustandsübergänge als grundlegende Sprachelemente.
+
+Wie aber sieht nun das \dqo{}deklarative Programmieren\dqc{} in Qt
+Quick genau aus? Da es sich um eine Sprache für Oberflächen handelt,
+gibt es zunächst einmal eine Reihe  grafischer Objekte, die
+miteinander kombiniert und verschachtelt werden können. Die Definition
+eines blauen Rechtecks sieht beispielsweise so aus:
+
+\index{QML!Rectangle}%
+\index{Hauptfenster}%
+\index{QML!Hauptfenster}%
+\begin{osplisting}{QML}{Ein blaues Rechteck}{code:qmlbluerectangle}
+import Qt 4.7
+
+Rectangle {
+    id: mainScreen
+
+    width: 200
+    height: 200
+
+    color: "blue"
+}
+\end{osplisting}
+
+Zunächst bindet man per \ospcmd{import} die in der Datei benutzten
+Module ein. Die grundlegenden Sprachelemente befinden sich in unserem
+Beispiel im Modul \ospcmd{Qt}, das wir in Version 4.7 einbinden.
+Modulname und Version haben sich in neueren Qt-Quick-Paketen geändert.
+Falls die oben verwendete Zeile also bei Ihnen nicht funktioniert,
+dann ersetzen Sie diese einfach durch:
+
+\begin{ospsimplelisting}
+import QtQuick 1.0
+\end{ospsimplelisting}
+
+Auch die Versionsnummer kann bei Ihnen schon höher sein, zum
+Erscheinen dieses Buches steht die Veröffentlichung von
+\ospcmd{QtQuick 2.0} bevor. Es gibt leider keine einfache automatische
+oder auch nur manuelle Möglichkeit, die ausgelieferte Qt-Quick-Version
+unter PyQt oder PySide zu erkennen. Am einfachsten ist es derzeit, die
+verschiedenen Versionsnummern in einer einfachen QML-Datei
+auszuprobieren bis das Modul erfolgreich eingebunden werden kann.
+Darüber hinaus wurden im Beispiel lediglich Größe und Farbe des
+Rechtecks deklariert. Außerdem kann jedem QML-Element eine ID
+zugewiesen werden. Über diese ID werden die Elemente später aus
+anderen QML-Elementen oder aus Javascript-Code heraus angesprochen.
+Allgemein erinnert die QML-Syntax an die \emph{JavaScript Object
+  Notation} (JSON), die auch Pate bei der Entwicklung von QML stand.
+Zeilen können, aber müssen nicht mit Semikolon abgeschlossen werden.
+Wenn man aber mehrere Deklarationen in eine Zeile schreiben möchte, ist
+das Semikolon obligatorisch:
+
+\begin{ospsimplelisting}
+    width: 100; height: 100;
+\end{ospsimplelisting}
+
+\index{QML!Elemente verschachteln}%
+In das blaue Rechtecke hinein lässt sich nun einfach ein zweites,
+kleineres und grünes Rechteck zeichnen:
+
+\begin{osplisting}{QML}{Ein grünes Rechteck im blauen}{code:qmlgreenrectangle}
+import Qt 4.7
+
+Rectangle {
+    id: mainScreen
+
+    width: 200
+    height: 200
+
+    color: "blue"
+
+    Rectangle {
+        anchors.fill: parent
+        anchors.margins: 50
+    
+        color: "green"
+    }
+
+}
+\end{osplisting}
+
+\index{QML!Anker}%
+Dieses Verschachteln von Elementen und das Ausrichten an
+Elternelementen wird uns in QML noch häufiger begegnen und auch noch
+ausführlicher besprochen. Wichtigstes Gestaltungsmittel für Layouts
+sind die sogenannten \emph{Anker} (\emph{Anchor}).  Jede Seite eines
+Elements sowie Mittelpunkt in der Vertikalen und Horizontalen stellen
+Ankerpunkte dar, die sich an den Ankerpunkten anderer Elemente
+ausrichten lassen. Für HTML-Profis ist das zumindest am Anfang eine
+Herausforderung, da die Ausrichtung in QML oft ganz anders
+funktioniert als in HTML. Nach einer Eingewöhnungszeit mit viel
+Herumprobieren erweist sich die Ausrichtung in QML aber als deutlich
+logischer und konsequenter definiert als in HTML, so dass man später
+jedes gewünschte Layout schnell in QML abbildet. In unserem Fall
+richten wir alle Ankerpunkte zunächst am Elternelement aus
+(\ospcmd{anchors.fill: parent}), bevor wir für alle Seiten einen
+Abstand von 50 Pixeln angeben (\ospcmd{anchors.margins: 50}). Damit
+liegt das grüne Rechteck genau mittig im Blauen und ist 100 mal 100
+Pixel groß.
+
+\index{QML!MouseArea}%
+\index{QML!Signale und Slots}%
+Neben den Angaben zum Aussehen gibt es in QML auch Elemente, die eine
+Interaktion mit dem Benutzer ermöglichen. Eines davon ist die
+\ospcmd{MouseArea}, mit der Sie Eingaben mit der Maus abfragen.  Um
+beispielsweise das grüne Rechteck rot zu färben, sobald der Benutzer
+darauf klickt, kann der bisherige Code einfach folgendermaßen
+erweitert werden:
+
+\begin{osplisting}{QML}{Farbe zuweisen nach Mausklick}{code:qmlredrectangle}
+import Qt 4.7
+
+Rectangle {
+    id: mainScreen
+
+    width: 200; height: 200;
+
+    color: "blue"
+
+    Rectangle {
+        anchors.fill: parent
+        anchors.margins: 50
+    
+        color: "green"
+        
+        MouseArea {
+            anchors.fill: parent
+            onClicked: { parent.color="red"; }
+        }
+    }
+
+}
+\end{osplisting}
+
+Wieder werden die Elemente verschachtelt, wobei die \ospcmd{MouseArea}
+jetzt ein Kindelement des grünen Rechtecks ist.  Per
+\ospcmd{anchors.fill: parent} wird ihm die gesamte Rechteckfläche
+zugewiesen, so dass der Benutzer irgendwo ins grüne Rechteck klicken
+kann. Der \ospcmd{onClicked}-Handler beschreibt schließlich, was beim
+Klick passiert. Solche Event-Handler bestehen aus einer Art anonymer
+Javascript-Funktion, die bei Ereignis aufgerufen wird. Im Hintergrund
+arbeitet hier allerdings der Signal-Slot-Mechanismus in Qt, wobei das
+\ospcmd{onClicked}-Element hier auf das Signal \ospcmd{clicked}
+reagiert (Näheres zu Signalen und Slots dann in Kapitel
+\ref{sec:createcustomqmlelements}). In unserem Fall setzen wir die
+Farbe des Elternelements auf rot. Allgemein können diese Funktionen
+beliebig komplex werden, so dass versierte Javascript-Entwickler
+durchaus eine vollständige Anwendungslogik entwickeln können. Den
+meisten Handlern werden außerdem die Daten zum Ereignis als Parameter
+mitgegeben. In unserem Fall haben wir in der Javascript-Funktion
+Zugriff auf eine Variable \ospcmd{mouse}, die Angaben zu Mausbutton
+und Position des Mauszeigers enthält. Per Kommando
+\ospcmd{console.log()} können wir beispielsweise die X-Position des
+Mauszeigers ausgeben lassen:
+
+\begin{ospsimplelisting}
+            onClicked: { parent.color="red"; console.log(mouse.x); }
+\end{ospsimplelisting}
+
+Diese Ausgabemöglichkeit ist übrigens derzeit die einzig mögliche
+Debugging"=Funktion. Hier merkt man noch deutlich, dass Qt Quick ein
+Framework in Entwicklung ist. 
+
+Starten wir nun aber die QML-Anwendung. Dazu bedarf es keines weiteren
+Programm-Codes, wir können den von Qt ausgelieferten QML Viewer
+verwenden.
+
+
+\ospsubsection{Der QML Viewer}{Der QML Viewer}{sec:qmlviewer}
+
+\index{QML!QML Viewer}%
+Der QML Viewer ist eine kleine Anwendung zur Darstellung einer
+QML-Datei. Dazu wird ein Hauptfenster erstellt, das einen
+Anzeigebereich für die QML-Datei enthält. Der QML Viewer ist bisher
+nicht Teil einer PyQt- oder PySide-Installation, sondern steht nach
+der Installation des Qt-SDK bzw. des entsprechenden Pakets unter
+Linux zur Verfügung (unter Ubuntu installieren Sie dazu das Paket
+\ospfile{qt4-qmlviewer}). Erst dann steht Ihnen eine ausführbare
+Datei \ospfile{qmlviewer(.exe)} zur Verfügung.
+
+\osppagebreak
+
+Um nun die QML-Beispiele des vorhergehenden Kapitels zu starten,
+speichern Sie diese in einer Datei und rufen dann den QML Viewer mit
+dem Dateinamen als Argument auf:
+
+\begin{ospsimplelisting}
+$ <bf>qmlviewer beispiel.qml</bf>
+\end{ospsimplelisting}
+
+Mit der Option \ospcmd{-h} erhalten Sie eine Liste aller Optionen für
+den Viewer, z.\,B. können Sie die Anwendung im Vollbildmodus starten
+oder bestimmen, dass sie immer im Vordergrund läuft. Wie wir noch
+sehen werden, können QML-Dateien andere QML-Dateien einbinden,
+beispielsweise um einzelne GUI-Elemente an mehreren Stellen einer
+Anwendung wiederzuverwenden. Diese eingebetteten QML-Dateien werden
+immer automatisch aus demselben Verzeichnis der einbettenden QML-Datei
+geladen, so dass Sie dem QML Viewer nur die Haupt-QML-Datei übergeben.
+Nachdem nun die grundlegenden Eigenschaften von Qt Quick und QML
+vorgestellt wurden, wollen wir im nächsten Kapitel eine kleine
+Beispielanwendung entwickeln, und zwar in reinem QML, also erst einmal
+ohne Python-Code.
+
+
+\ospsection{QML-Anwendungen}{QML-Anwendungen}{sec:pureqmlapplications}
+
+\index{RSS}%
+Die Anwendung beschränkt sich darauf, die Beiträge eines Blogs in
+einer Liste anzuzeigen. Bei Klick auf einen Eintrag der Liste wird die
+Webseite des Beitrags in einem Web-View geladen. In diesem Fall
+verwenden wir eine feste Adresse für den Blog, zurückgegriffen wird
+auf das RSS des Blog des
+Autors.\ospfootnote{fn:dasskript}{\ospurl{http://www.dasskript.com}}
+Abbildung \ospfigref{fig:qml_rssviewer1} zeigt die laufende Anwendung
+unter Ubuntu.
+
+\ospfigure{0.32}{images/qml_rssviewer1}{RSS-Viewer in QML}{fig:qml_rssviewer1}
+
+
+\ospsubsection{Ein erster View in QML}{Ein erster View in QML}{sec:firstqmlview}
+
+\index{WebKit}%
+\index{QML!WebKit}%
+Die Anwendung wird später aus nur zwei Views bestehen: die Liste der
+Blog-Einträge und ein Webkit-View zum Anzeigen der Blog-Webseite.
+Dazu definiert man zunächst das Hauptfenster als \ospcmd{Rectangle}
+mit den Werten für die Größe des Fensters. Da in diesem Fall eine
+Liste von Blogeinträgen dargestellt werden soll, bietet es sich an,
+das Fenster in der Vertikalen größer zu machen als in der
+Horizontalen. In diesem Fall wählen wir eine Größe von 360 mal 640
+Pixeln\ospfootnote{fn:qmlsymbian}{Was mehr oder weniger zufällig der
+  Auflösung eines Symbian-Handys entspricht. Der RSS-Viewer lässt sich
+  damit auch wunderbar auf einem Mobiltelefon mit Symbian, Maemo oder
+  MeeGo starten.}:
+
+\begin{osplisting}{QML}{Hauptfenster der QML-Anwendung}{code:qmlmainwindow}
+import Qt 4.7
+import QtWebKit 1.0
+
+Rectangle {
+    id: mainScreen
+
+    property int currentIndex: 0
+
+    width: 360
+    height: 640
+
+    color: "white"
+
+    ListView {
+        id: listviewRss
+        anchors.fill: parent
+        focus: true
+        orientation: ListView.Vertical
+    }
+
+}
+\end{osplisting}
+
+Das Hauptfenster enthält also ein Rechteck der Größe 360 mal 640
+Pixeln und hat eine weiße Hintergrundfarbe (\ospcmd{white}). Wir
+definieren außerdem gleich ein \ospcmd{property} namens
+\ospcmd{currentIndex} als Integer, das später die ID des aktuell
+ausgewählten Blogeintrags enthält. Ganz am Anfang binden wir neben dem
+Qt-Modul per \ospcmd{import QtWebKit 1.0} außerdem das
+QML-WebKit-Modul ein. Speichern Sie diesen Code beispielsweise in
+einer Datei \ospfile{main.qml}, sie wird die Hauptdatei unserer
+QML-Anwendung.
+
+\index{Modelle und Views}%
+\index{QML!Modelle und Views}%
+\index{QML!ListView}%
+Schließlich wird innerhalb des Rechtecks das erste GUI-Element
+definiert: ein \ospcmd{ListView}. In QML schachtelt man zueinander
+gehörende GUI-Elemente ineinander; wir stellen gleich noch eine Reihe
+weiterer Elemente vor. Innerhalb des \ospcmd{ListView} definieren wir
+per \ospcmd{anchors.fill}, dass die Liste alle Layout-Angaben von
+seinem Elternelement (also vom Rechteck mit der ID
+\ospcmd{mainScreen}) erben soll. Außerdem erhält die Liste sofort den
+Fokus für Tastatureingaben und soll schließlich eine vertikale Liste
+sein. Wo kommt aber nun der Inhalt der Liste her? QML greift hier auf
+das unter Qt oft verwendete Model-View-Konzept zurück, für das Qt
+schon seit längerer Zeit eine Reihe von Widget- und Modell-Klassen
+bereitstellt. Während der View für die Darstellung der Liste zuständig
+ist, liefert das Modell die eigentlichen Daten, in diesem Fall die
+Einträge eines RSS-Streams.
+
+
+\ospsubsection{Die Daten als Modell}{Die Daten als Modell}{sec:qmldatamodels}
+
+\index{XML}%
+\index{QML!XML}%
+\index{QML!XmlListModel}%
+QML stellt dem Entwickler drei Modelltypen zur Verfügung. Dazu besitzt
+QML die drei folgenden Datentypen:
+
+\begin{ospdeflist}
+
+  \ospdefitem{\ospcmd{ListModel}}{eine einfache Hierarchie von
+    QML-Elementen. Jeder Eintrag in diesem Modell wird durch ein
+    \ospcmd{ListElement} definiert. Die eigentlichen Daten werden also
+    direkt in QML kodiert.}
+
+  \ospdefitem{\ospcmd{XmlListModel}}{erzeugt ein Datenmodell aus einer
+    XML-Datei. Die Datei kann lokal oder aus dem Netzwerk geladen
+    werden, z.\,B. von einem Webserver.}
+
+  \ospdefitem{\ospcmd{VisualItemModel}}{funktioniert ähnlich wie
+    \ospcmd{ListMode}, allerdings können hier beliebige QML-Elemente
+    als Dateneinträge dienen, nicht nur \ospcmd{ListElement}.}
+
+\end{ospdeflist}
+
+Weitere Modelle können vom Entwickler in Python entwickelt und per
+Python"=Datentypen an den QML-View übergeben werden, darauf werden wir
+in Kapitel \ref{sec:pythondatainqmlviews} noch zurückkommen. Für
+unsere Zwecke benötigen wir ein XML-Modell, da die Daten des Blog-RSS
+in diesem Format gespeichert sind. Glücklicherweise stellt QML eben
+mit \ospcmd{XmlListModel} genau einen solchen Typ bereit. Diesem
+übergeben wir lediglich eine URL zur RSS-XML-Datei sowie einen
+Query-String, der beschreibt, welche Daten aus dem XML wir abfragen
+wollen. Dazu fügen wir einfach folgenden Code innerhalb des oben
+implementierten \ospcmd{Rectangle}-Blocks ein:
+
+\begin{osplisting}{QML}{XML-Listen-Modell}{code:qmlxmllistmodel}
+    XmlListModel {
+        id: xmlModel
+        source: "http://www.dasskript.com/blogposts.rss"
+        query: "/rss/channel/item"
+
+        XmlRole { name: "title"; query: "title/string()" }
+        XmlRole { name: "guid"; query: "guid/string()" }
+        XmlRole { name: "link"; query: "link/string()" }
+        XmlRole { name: "pubDate"; query: "pubDate/string()" }
+    }
+\end{osplisting}
+
+Die zusätzlichen \ospcmd{XmlRole}-Definitionen geben an, welches
+Element wir auf welche Variable abbilden. Diese Rollen müssen auch bei
+einem \ospcmd{ListModel} definiert werden, sie entsprechen in etwa dem
+Spaltennamen in einer Datenbanktabelle. Jeder Modelleintrag entspräche
+dann einer Datenbankzeile. In unserem Fall stellt der \ospcmd{query}
+des \ospcmd{XmlListModel} die Daten zur Verfügung, in einem
+\ospcmd{ListModel} definiert man eine Reihe von
+\ospcmd{ListElement}-Unterelementen. Der String innerhalb der
+\ospcmd{title}-Tags im XML wird also innerhalb des Views als Variable
+\ospcmd{title} verfügbar sein usw. Zur Verdeutlichung hier ein
+Beispieleintrag im RSS-XML:
+
+\begin{osplisting}{XML}{Auszug aus dem RSS-Stream des Blogs}{code:qmlblogrss}
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+  <channel>
+    [...]
+    <item>
+      <title>Processing in Javascript in QML in Python @ dasskript.com</title>
+      <description>Es gibt gute [...]</description>
+      <pubDate>Mon, 05 Sep 2011 12:31:18 +0200</pubDate>
+      <guid isPermaLink="false">www.dasskript.com:95</guid>
+      <author>pbouda</author>
+      <link>http://www.dasskript.com/blogposts/95</link>
+    </item>
+    <item>
+        [...]
+    </item>
+  </channel>
+</rss>
+\end{osplisting}
+
+Der \ospcmd{query} liest also alle \ospcmd{item}-Einträge in das
+Modell, die Rollen verweisen auf den Inhalt der Unterelemente, die
+später im View angezeigt werden sollen. Damit ist die Hauptarbeit
+bereits erledigt. Wir müssen nun noch dem View mitteilen, dass er
+genau dieses Modell für die Anzeige von Daten verwenden soll.  Dazu
+fügen wir dem \ospcmd{ListView}-Element folgende Zeile hinzu:
+
+\begin{ospsimplelisting}
+        model: xmlModel
+\end{ospsimplelisting}
+
+\index{QML!Delegates}%
+\index{QML!Text}%
+Im Prinzip greift der View nun auf das Modell zu.  Wenn man die
+Anwendung jetzt startet, bleibt der Bildschirm dennoch leer. Wir
+müssen dem View noch mitteilen, wie er die einzelnen Elemente des
+Modells darzustellen hat. Dazu dienen in QML die sogenannten
+\emph{Delegates}. Ein Delegate besteht aus einem oder mehreren
+GUI-Elementen, die Zugriff auf die im Modell definierten Variablen
+bzw.  Rollen haben. Um eine Liste aller RSS-Elemente anzuzeigen,
+genügt zunächst einmal ein einfaches Textelement. Dazu fügt man in den
+\ospcmd{ListView} folgende Zeile eine:
+
+\begin{ospsimplelisting}
+        delegate: Text { text: pubDate + ": " + title }
+\end{ospsimplelisting}
+
+Das QML-Element \ospcmd{Text} ist eines der Standard-QML-Elemente und
+erhält hier genau ein Attribut \ospcmd{text}, das den anzuzeigenden
+Text definiert. Hier können wir jetzt auf die Rollen des XML-Modells
+zugreifen. Wenn man die Anwendung nun startet, sieht man schon einmal
+die Elemente in einer Liste. Schön sieht das aber noch nicht aus.
+Außerdem soll ja ein Klick auf einen der Einträge später auch eine
+Aktion auslösen. Dazu implementieren wir im nächsten Schritt unser
+eigenes, aus QML-Primitiven aufgebautes GUI-Element.
+
+
+\ospsubsection{Eigene GUI-Elemente komponieren}{Eigene GUI-Elemente komponieren}{sec:createcustomqmlelements}
+
+Um ein \ospcmd{item}-Element des RSS anzuzeigen, werden wir nun unser
+eigenes Widget implementieren. Es soll einigermaßen ansehnlich sein
+und bei einem Klick-Event (per Touch oder Maus) ein Signal aussenden,
+das wir dann später weiterverarbeiten. Für die Gestaltung setzen wir
+das Element einfach aus einigen Primitiven wie einem Rechteck und
+Textelementen zusammen.
+
+\index{QML!Externe Datei laden}%
+Zunächst wollen wir aber das Element in einer eigenen QML-Datei
+implementieren. Erzeugen Sie eine  Datei im Ordner, in
+dem auch die Datei \ospfile{main.qml} liegt (im Beispielprojekt ist es
+das Hauptverzeichnis der Anwendung). Nur dann können wir das
+neue GUI-Element ohne Umwege in \ospfile{main.qml} verwenden. Als
+Dateiname verwenden wir \ospfile{RssListItem.qml}.  In diesem Fall ist
+der Dateiname wichtig, da er gleichzeitig den Namen des QML-Elements
+festlegt. In \ospfile{main.qml} kann ein Element \ospcmd{RssListItem}
+definiert werden, Qt lädt dann automatisch den gesamten Code aus
+unserer neu erzeugten QML-Datei.
+
+Zunächst definieren wir darin das Aussehen unseres Elements sowie
+einige Felder für den Textinhalt, die wir später mit den Variablen des
+Modells füllen. Der Code dazu sieht folgendermaßen aus:
+
+\begin{osplisting}{QML}{Ein eigenes QML-Element für die RSS-Listeneinträge}{code:customqmlcomponent}
+import Qt 4.7
+
+Item {
+    id: rssItem
+
+    property alias text: itemText.text
+    property alias date: itemDate.text
+    property alias backgroundcolor: rectBackground.color
+
+    signal clicked
+
+    height: itemDate.height + itemText.height + 20
+    width: parent.width
+
+    Rectangle {
+        id: rectBackground
+        anchors.fill: parent
+        color: "lightgrey"
+        border.color: "darkgrey"
+        border.width: 2
+
+        Item {
+            Text {
+                id: itemDate
+                font.pixelSize: 16
+            }
+
+            Text {
+                id: itemText
+                anchors.margins: 10
+                anchors.top: itemDate.bottom
+                font.pixelSize: 20
+                width: 360
+                wrapMode: Text.WordWrap
+            }
+        }
+    }
+}
+\end{osplisting}
+
+\index{QML!Item}%
+Zu Beginn definieren wir, nach der üblichen \ospcmd{import}-Anweisung,
+ein \ospcmd{Item}-Element. Items dienen in QML meist dazu, andere
+GUI-Elemente zu gruppieren. So lassen sich mehreren Elementen
+gemeinsame Layout-Angaben oder aktive Flächen für Mausklicks und
+Gesten zuweisen. In unserem Fall benötigen wir beides. Im Gegensatz zu
+\ospcmd{Rectangle}-Elementen haben Items aber \emph{kein} eigenes
+Aussehen, d.\,h. es sind keine Angaben wie Hintergrundfarbe, Rahmen,
+usw. möglich. Es handelt sich um quasi um die unsichtbare Variante eines
+\ospcmd{Rectangle}. Nach der \ospcmd{id} definieren wir die
+sogenannten \ospcmd{property} unseres Elements.  Wir wollen später
+für jeden einzelnen Eintrag die Texte für das Veröffentlichungsdatum,
+den Titel des RSS-Eintrags sowie eine Hintergrundfarbe setzen können.
+Damit können wir dem gerade aktiven Element eine andere
+Hintergrundfarbe geben als den anderen Elementen der Liste. 
+
+Die \ospcmd{property} sind alle als \ospcmd{alias} definiert.  Das
+heißt, sie verweisen lediglich auf bestimmte Werte in Unterelementen,
+in diesem Fall auf das Unterelement \ospcmd{Rectangle} sowie die
+beiden \ospcmd{Text}-Elemente. Verweise auf Elemente erfolgen in QML,
+ähnlich wie in HTML und Javascript, grundsätzlich über die \ospcmd{id}
+der Elemente. Die Angabe \ospcmd{itemText.text} verweist also auf den
+Wert des \ospcmd{text}-Felds innerhalb des Elements mit der ID
+\ospcmd{itemText}. Da es sich dabei um ein Element des Typs
+\ospcmd{Text} handelt, ist der Wert des \ospcmd{text}-Felds genau der
+Text, der auf dem Bildschirm angezeigt wird.
+
+\index{Signale und Slots}%
+\index{Signale und Slots!QML}%
+\index{QML!Signale und Slots}%
+Nach den Properties definieren wir noch ein Signal \ospcmd{clicked},
+das ausgesendet wird, sobald ein Mausklick auf das Element erfolgt.
+Die Verarbeitung der Signale folgt dem Signal-Slot-Konzept, das in Qt
+die zentrale Rolle bei der Ablaufsteuerung von Anwendungen einnimmt
+und das in Kapitel \ref{sec:signalslot} beschrieben wurde.  QML fügt
+sich also an dieser Stelle nahtlos in das Qt-Framework ein.
+
+\osppagebreak
+
+\index{QML!Abstände}%
+\index{QML!Anker}%
+Anschließend definieren wir Höhe und Breite des Listen-Elements sowie
+seine Unterelemente. Normalerweise verlangt jedes Element genaue
+Angaben zum Layout; in QML ist das einmal die Größe, zum anderen die
+sogenannten \emph{Anker} (\ospcmd{anchors}), die die Positionierung
+des Elements im Layout bestimmen. Das Element lässt sich dazu an allen
+anderen sichtbaren Elementen ausrichten; zudem gibt es die Möglichkeit
+der absoluten Positionierung. Häufig muss man, gerade beim Einstieg in
+QML, mit diesen Angaben herumspielen, bis die Anwendung so aussieht,
+wie man es sich vorstellt. Ein erster Ansatzpunkt ist meist die Angabe
+\ospcmd{anchors.fill: parent}. Damit erbt das Element alle Layout- und
+Positionsangaben von seinem Elternelement. Anschließend kann man die
+einzelnen Angaben, wie beispielsweise Abstand nach links oder rechts,
+noch einmal speziell für dieses Element verfeinern. In unserem Fall
+erbt das Rechteck alle Angaben von seinem Elternelement \ospcmd{Item},
+wobei dessen Größe von uns definiert wurde und der \ospcmd{ListView}
+daraus die Positionierung des \ospcmd{Item} innerhalb der Liste
+ableitet. Die Textelemente ordnen wir innerhalb des Rechtecks
+untereinander an, indem wir dem zweiten Textelement (der Überschrift)
+die Angabe \ospcmd{anchors.top: itemDate.bottom} übergeben. Die
+Oberseite der Überschrift beginnt damit an der Unterseite des Datums,
+mit einem Abstand von 10 Pixeln (\ospcmd{anchors.margins: 10}).
+
+Dem Textelement für die Überschrift müssen wir zudem eine feste
+Breite zuweisen, damit die Angabe für den Zeilenumbruch greift
+(\ospcmd{wrapMode: Text.WordWrap}).
+
+Wer mit HTML und CSS gearbeitet hat, wird mit den meisten Angaben
+schnell zurechtkommen. Genau wie bei Webseiten muss man aber ein
+genaues Verständnis des Layout-Mechanismus haben, um auf Anhieb das
+gewünschte Aussehen zu erreichen. Hier hilft eigentlich nur Erfahrung.
+Im Qt Designer gibt es zwar schon einen rudimentären WYSIWYG-Editor
+für QML, allerdings hat man eben wie auch bei HTML und CSS nur dann
+die größtmögliche Kontrolle, wenn man direkt im Code arbeitet.
+
+Nun wollen wir unser eigenes Element aber auch als Delegate im
+\ospcmd{ListView} verwenden. Dazu wechselt man zunächst zurück in die
+Datei \ospfile{main.qml} und passt den Code des
+\ospcmd{delegate}-Attributs folgendermaßen an:
+
+\begin{ospsimplelisting}
+delegate: RssListItem {
+    text: title
+    date: pubDate
+    backgroundcolor: mainScreen.currentIndex == index ? "#9bf" : "lightgrey"
+}
+\end{ospsimplelisting}
+
+\ospcmd{text}, \ospcmd{date} und \ospcmd{backgroundcolor} entsprechen
+den \ospcmd{property} unseres\osplinebreak{}
+\ospcmd{RssListItem}-Elements, die wiederum, wie oben beschrieben, auf
+die entsprechenden Attribute der Unterelemente verweisen. Dem gerade
+aktiven Element der Liste weisen wir eine andere Hintergrundfarbe zu,
+indem wir den zentral gespeicherten Wert
+\ospcmd{mainScreen.currentIndex} mit dem aktuellen \ospcmd{index}-Wert
+des \ospcmd{ListView} vergleichen. Innerhalb des
+\ospcmd{delegate}-Attributs steht uns in dieser Variable der Index des
+gerade zu zeichnenden Listenelements zur Verfügung -- ein klassisches
+Beispiel für deklaratives Programmieren.
+
+Beachten Sie wieder: In einer QML-Datei stehen grundsätzlich alle
+Elemente in QML-Dateien desselben Ordners zur Verfügung, man braucht
+also keinen zusätzlichen Import für das \ospcmd{RssListItem}.
+
+Wird die Anwendung jetzt gestartet, wird schon das selbst entworfene
+GUI-Element für die Liste verwendet, so wie es Abbildung
+\ospfigref{fig:qml_rssviewer1} zeigt. Was nun noch fehlt, ist die
+Aktion: Bei Klick auf eines der Elemente soll die Webseite des
+Eintrags in einem \ospcmd{WebView}-Element angezeigt werden.
+
+
+\ospsubsection{Signale und Zustände}{Signale und Zustände}{sec:qmlsignalsandstates}
+
+\index{QML!Zustände}%
+\index{QML!Signale}%
+Der erste Schritt für die Benutzereingabe ist es, diejenigen Flächen
+zu deklarieren, in denen auf Eingaben reagiert werden soll. Dazu dient
+beispielsweise das QML-Element \ospcmd{MouseArea}, das wir in unserem
+Fall dem Rechteck unseres \ospcmd{RssListItem} hinzufügen. Dazu öffnet
+man wieder die Datei \ospcmd{RssListIten.qml} im Editor und fügt dem
+\ospcmd{Rectangle}-Element am Ende folgenden Code hinzu:
+
+\begin{ospsimplelisting}
+        MouseArea {
+            id: mouseRegion
+            anchors.fill: parent
+            onPressed: rssItem.state = 'Pressed'
+            onReleased: rssItem.state = 'Default'
+            onClicked: { rssItem.clicked(); }
+        }
+\end{ospsimplelisting}
+
+Der Mausklick-Bereich erhält eine ID und übernimmt per
+\ospcmd{anchors.fill} Größe und Position des Rechtecks. Die letzte
+Zeile löst das von uns definierte Signal \ospcmd{clicked()} aus,
+sobald die \ospcmd{MouseArea} angeklickt wurde. Die zusätzlichen
+Angaben für \ospcmd{onPressed} und \ospcmd{onReleased} werden wir für
+einen netten Effekt verwenden: Sobald das Element angeklickt wurde,
+wird der Text-Stil des Elements geändert, solange die Maustaste
+gedrückt wird. Auch dieses Verhalten definieren wir deklarativ, in
+diesem Fall über Zustände. Wir können dazu für jedes Element beliebig
+viele Zustände ad hoc definieren. In unserem Fall hat unser Element
+schon einmal die beiden Zustände \ospcmd{Pressed} und
+\ospcmd{Default}, die Namen der Zustände sind frei gewählt und können
+beliebig geändert werden.
+
+\index{QML!Zustandsübergänge}%
+\index{QML!PropertyChanges}%
+Wir müssen dem \ospcmd{RssListItem} nun nur noch mitteilen, welchen
+Zustand eine Aktion auslöst. Hier soll ein Wechsel des Zustands nach
+\ospcmd{Pressed} den Stil des Textelements \ospcmd{itemText} ändern.
+Dazu definiert man in QML ein Array \ospcmd{states}, das die Angaben
+für die einzelnen Zustände und Zustandsänderungen enthält. Um das
+Textelement bei Mausklick zu ändern, fügt man  folgenden Code
+an das Ende des äußeren \ospcmd{Item}-Elements mit der ID
+\ospcmd{rssItem} hinzu:
+
+\begin{ospsimplelisting}
+    states:[
+        State {
+            name: "Pressed"
+            when: mouseRegion.pressed == true
+            PropertyChanges {
+                target: itemText
+                style: Text.Sunken
+                color: "white"
+            }
+        }
+    ]
+}
+\end{ospsimplelisting}
+
+Der Text wird bei Klick auf ein Listenelement nun weiß und erhält den
+Stil \ospcmd{Text.Sunken}. Wenn die Anwendung jetzt per QML Viewer
+gestartet wird, kann man dieses Verhalten gleich ausprobieren. Unser
+Element kümmert sich also ganz allein um die Änderung des Text-Stils,
+in der Datei \ospfile{main.qml} sind dazu keine Änderungen notwendig.
+
+Nun soll aber auch das Hauptfenster auf den Klick reagieren. Das
+Signal \ospcmd{clicked()} haben wir ja schon ausgelöst, jetzt müssen
+wir nur noch in \ospfile{main.qml} darauf reagieren. Zunächst
+beschränken wir uns darauf, nach einem Klick das aktuelle Element mit
+der Hintergrundfarbe zu markieren. Dazu reicht es aus, in
+\ospfile{main.qml} dem \ospcmd{delegate}-Attribut des
+\ospcmd{RssListItem} noch ein Attribut \ospcmd{onClicked}
+hinzuzufügen. Das gesamte Delegate sieht dann so aus:
+
+\begin{ospsimplelisting}
+        delegate: RssListItem {
+            text: title
+            date: pubDate
+            backgroundcolor: mainScreen.currentIndex == index ? "#9bf" : "lightgrey"
+            onClicked: mainScreen.currentIndex = index
+        }
+\end{ospsimplelisting}
+
+Man reagiert also auf eigene Signale genauso wie oben auf die
+eingebauten Signale der \ospcmd{MouseArea}. Dazu fügt man dem Element
+ein Attribut mit dem Signal samt Präfix \ospcmd{on} hinzu. In unserem
+Fall wechseln wir einfach den zentralen \ospcmd{currentIndex} auf den
+neuen \ospcmd{index}, sobald wir das Signal empfangen. Besser gesagt:
+Wir \dqo{}deklarieren\dqc{} die Zuweisung der Eigenschaft
+\ospcmd{mainScreen.currentIndex} für dasjenige Attribut, das den
+Empfang des Signals beschreibt.
+
+Das reicht auch schon aus: Wenn man die Anwendung nun startet,
+reagiert nicht nur der Text auf den Mausklick. Nach Loslassen der
+Maustaste wird außerdem das gewählte Element mit einer anderen
+Hintergrundfarbe gekennzeichnet.
+
+
+\ospsubsection{Zustandsänderungen und View-Wechsel}{Zustandsänderungen und View-Wechsel}{sec:qmlchangestateandview}
+
+\index{QML!WebView}%
+\index{QML!WebKit}%
+\index{WebKit}%
+\index{QML!Zustandsübergänge}%
+Grundsätzlich erfolgt die Anzeige der Webseite zu einem der
+Listeneinträge auf dieselbe Weise wie der Wechsel des
+Text-Stils im Listeneintrag: Ein Klick auf einen Eintrag weist dem
+Hauptelement \ospcmd{mainScreen} zunächst einen neuen Zustand zu.
+Dieser neue Zustand wiederum löst einen Wechsel des aktuellen Views
+aus: Statt dem \ospcmd{ListView} zeigen wir einfach einen
+\ospcmd{WebView} an. Dieser Wechsel lässt sich darüber hinaus
+animieren, so dass schließlich zwischen Liste und Webseite eine
+butterweiche Überblendung stattfindet.
+
+Zunächst definieren wir dazu in \ospfile{main.qml} innerhalb des
+\ospcmd{Recangle}"=Elements mit der ID \ospcmd{mainScreen} einen
+weiteren View, dieses Mal ein \ospcmd{WebView}-Element:
+
+\begin{osplisting}{QML}{Der Webview zur Anzeige der RSS-Inhalte}{code:qmlwebviewforrss}
+    WebView {
+        id: webview
+        opacity: 0
+        anchors.fill: parent
+        MouseArea {
+            anchors.fill: parent
+            onClicked: mainScreen.state = "Rsslist"
+        }
+    }
+\end{osplisting}
+
+Der \ospcmd{WebView} stellt Webseiten dar, gerendert wird der gesamte
+Inhalt der Seite von einer WebKit-Komponente. Dazu muss am Anfang der
+Datei das Qt-WebKit-Modul per \ospcmd{import QtWebKit 1.0} geladen
+werden. Das hatten wir aber oben schon erledigt.
+
+Der View bleibt zunächst unsichtbar, da wir das Attribut
+\ospcmd{opacitity}, also die Deckkraft des Elements, auf \ospcmd{0}
+(Null) gesetzt haben. Per \ospcmd{anchors.fill} weisen wir dem Element
+seine Position zu, der \ospcmd{WebView} liegt damit an exakt derselben
+Stelle wir der \ospcmd{ListView}, ist aber absolut durchsichtig. Bei
+Klick auf den View wollen wir zunächst zurück in die Liste wechseln.
+Die Webansicht ist also zunächst unbrauchbar, man gelangt von der
+Liste zwar dorthin, aber dann bei Klick gleich wieder zurück. Das
+liegt daran, dass der \ospcmd{WebView} in QML zunächst keine
+Funktionalität außer der Anzeige der Webseite bereitstellt.  Weder
+kann man Scrollen noch Zoomen noch irgendetwas anderes. Für
+Demonstrationszwecke ist das zunächst ausreichend. Wenn man die
+Anwendung weiterentwickeln möchte, müssten zumindest einige Funktionen
+für den Web-View bereitgestellt werden, damit der Benutzer auch etwas
+mit der dargestellten Webseite anfangen kann.
+
+Einen Zustand namens \ospcmd{RssList} haben wir also schon einmal
+benannt. Er wird gesetzt, sobald auf den \ospcmd{WebView} geklickt
+wird. Umgekehrt soll aber ein Klick auf ein RSS-Listenelement den
+Zustand für die Anzeige der Webseite setzen und am besten auch gleich
+die URL der Webseite im \ospcmd{WebView} laden. Dazu fügen wir dem
+\ospcmd{onClicked}-Attribut des \ospcmd{delegate} im \ospcmd{ListView}
+noch zwei Zeilen hinzu, so dass das Attribut folgendermaßen aussieht:
+
+\begin{ospsimplelisting}
+            onClicked: mainScreen.currentIndex = index,
+                       webview.url = xmlModel.get(index).link,
+                       mainScreen.state = "Webview"
+\end{ospsimplelisting}
+
+Die zwei zusätzlichen Zeilen laden die Webseite, in dem die Variable
+\ospcmd{link} für den aktuellen Eintrag aus dem Modell geladen und dem
+\ospcmd{WebView} als URL zugewiesen wird. Außerdem setzen wir den
+Zustand namens \ospcmd{Webview} im Hauptfenster.
+
+Was noch fehlt, ist die Definition der Zustandsübergänge. Beim
+Übergang zum Zustand \ospcmd{Webview} soll das
+\ospcmd{WebView}-Element angezeigt, beim Übergang nach
+\ospcmd{Rsslist} ausgeblendet werden. Wiederum definieren wir dazu ein
+Array \ospcmd{states}, dieses Mal in \ospfile{main.qml} am Ende des
+\ospcmd{Rectangle}-Elements:
+
+\begin{osplisting}{QML}{Definition der Zustandsübergange zwischen List- und Web-View}{code:qmltransitiondef}
+    states: [
+        State{
+            name: "Webview"
+            PropertyChanges{
+                target: webview
+                opacity: 1
+                focus: true
+            }
+            PropertyChanges {
+                target: listviewRss
+                opacity: 0
+            }
+        },
+        State {
+            name: "Rsslist"
+            PropertyChanges{
+                target: webview
+                opacity: 0
+                focus: false
+            }
+            PropertyChanges {
+                target: listviewRss
+                opacity: 1
+            }
+        }
+    ]
+\end{osplisting}
+
+Die Übergange zwischen den Zuständen setzen jeweils den Wert
+\ospcmd{opacity} der beiden Elemente: Eines davon wird durchsichtig
+gemacht, das andere angezeigt. Startet man die Anwendung nun, kann man
+schon einmal die Listenelemente auswählen und bekommt die
+entsprechende Webseite angezeigt. Klickt man dann auf die Webseite,
+gelangt man zurück in den \ospcmd{ListView}.
+
+\index{QML!Animationen}%
+\index{QML!PropertyAnimation}%
+\index{Animationen}%
+Das Ganze lässt sich nun auf einfache Weise verschönern.  Dazu
+definiert man für den Übergang von einer \ospcmd{opacity}-Einstellung
+zu einer anderen einfach eine Animation.  Wiederum erfolgt die Angabe
+deklarativ, und zwar innerhalb eines Array \ospcmd{transitions}.
+Dieses Array definiert man parallel zu \ospcmd{states} am Ende des
+\ospcmd{Rectangle}-Elements in \ospfile{main.qml}:
+
+\begin{ospsimplelisting}
+    transitions: [
+        Transition {
+            PropertyAnimation{
+                properties: "opacity"
+                duration: 1000
+                easing.type: "OutCubic"
+            }
+        }
+    ]
+\end{ospsimplelisting}
+
+Wenn sich also die Durchlässigkeit eines Elements unseres
+Hauptfensters ändert, wird nicht einfach der Wert gesetzt.
+Stattdessen wird innerhalb von 1000 Millisekunden
+(\ospcmd{duration}-Attribut) der Wert kubisch angenähert
+(\ospcmd{easing.type}-Attribut). Das war's auch schon -- die
+Überblendung zwischen unseren Views erfolgt jetzt durch sanfte Ein-
+und Ausblendung des Web-Views.
+
+Der nächste logische Schritt wäre nun, die Anzeige der Webseite
+brauchbar zu gestalten, also zumindest ein Zoomen und Scrollen zu
+erlauben. Dies soll nicht mehr Teil dieses Kapitels sein, aber ein
+Hinweis sei gegeben: Nokia stellt bei den deklarativen Qt-Demos einen
+QML-Webbrowser zur
+Verfügung,\ospfootnote{fn:declbrowser}{\ospurl{http://doc.qt.nokia.com/4.7/demos-declarative-webbrowser.html}}
+dessen QML-Elemente sich in unserer Anwendung nutzen lassen. Der erste
+Schritt wäre, die einzelnen QML-Dateien des Beispiels in das
+Verzeichnis unserer Anwendung zu kopieren und dann statt dem
+Standard-WebView den \ospcmd{FlickableWebView} des Demos zu verwenden.
+
+
+\ospsection{Vordefinierte QML-Elemente}{Vordefinierte QML-Elemente}{sec:qtcomponents}
+
+\index{QML!Elemente}%
+\index{Qt Components}%
+\index{QML!Qt Components}%
+Bevor wir näher auf die Integration von QML-Views in Python eingehen,
+widem wir uns zunächst den von Qt derzeit zur Verfügung gestellten
+QML-Elementen. Die meisten stellen basale geometrische oder logische
+Strukturen dar, wie die bereits vorgestellten \ospcmd{Rectangle} oder
+\ospcmd{Item}.  Wenn man diese mit den in Kapitel
+\ref{chap:einfuehrung} besprochenen Qt-Widgets vergleicht, kann man
+sich wohl nur schwer vorstellen, wie man in reinem QML eine
+Desktop-GUI mit Menü, Buttons und den übrigen Standardelementen
+aufbauen soll. Zumindest ist dazu viel Handarbeit notwendig.
+Selbstverständlich soll der bisherige Stand auch nicht die Basis für
+Desktop-Anwendungen sein. Bisher standen durch die Übernahme von
+Trolltech durch Nokia eben Touch-Oberflächen für relativ kleine
+Display-Oberflächen im Vordergrund, für die ein ausgereiftes
+Widget-System zwar auch notwendig ist, das vom Umfang her aber
+deutlich reduzierter ausfallen kann. Für Symbian und MeeGo wurde darum
+zunächst das
+\emph{Qt-Components-Projekt}\ospfootnote{fn:qtcomponents}{Sourcecode
+  unter \ospurl{http://qt.gitorious.org/qt-components}.} ins Leben
+gerufen. Es entwickelt eine Reihe von Widgets speziell für
+Touch-Interfaces.  Selbst hier gibt es einige Unterschiede zwischen
+den Elementen für Symbian und MeeGo, für Desktop-Anwendungen ist im
+Prinzip eine Parallelentwicklung notwendig. Auch diese wurde gestartet
+und soll letztlich das bisherige Widget-System in Qt
+ablösen.\ospfootnote{fn:qtdesktopcomponents}{Den Sourcecode dieses
+  Projekts finden Sie ebenfalls unter der Web-Adresse des
+  Qt-Component-Projekts:
+  \ospurl{http://qt.gitorious.org/qt-components/desktop}.} Für alle Qt
+Components existiert aber bisher weder eine vernünftige Dokumentation,
+noch lässt sich das Desktop-Projekt ohne Umstände auf einem beliebigen
+System kompilieren und ausprobieren. Wir verzichten hier darum auf
+eine weitere Beschreibung der Qt Components. Schauen Sie jedoch ab und
+an einmal auf die Projektwebseite: Mit Sicherheit wird es in
+absehbarer Zukunft auch einfacher zu installierende Pakete geben, mit
+denen Sie die zukünftigen Qt-Widgets einmal ausprobieren können.
+
+Wie die Qt-Klassen bilden auch die basalen QML-Elemente eine
+Hierarchie, wobei allgemeine Elemente wie \ospcmd{Item} ihre
+Eigenschaften an speziellere Elemente wie \ospcmd{Rectangle} vererben.
+Gleichzeitig lassen sich die Qt-Elemente grob in zehn Kategorien
+einteilen. Die folgende Liste verdeutlicht diese Einteilung und gibt
+für jede Kategorie ein oder mehrere Beispielelemente:
+
+\begin{ospdeflist}
+  \ospdefitem{Visuelle Elemente (Beispiele: \ospcmd{Item},
+    \ospcmd{Rectangle}, \ospcmd{Text})}{Die Elemente definieren immer
+    einen sichtbaren Bereich des Fensters und haben Eigenschaften zu
+    Form, Farbe, Positionierung usw.}
+
+  \ospdefitem{Interaktionselemente (Beispiele: \ospcmd{MouseArea},
+    \ospcmd{Flickable})}{dienen der Interaktion des Anwenders mit der
+    Anwendung, definieren z.\,B. Bereiche für Mausklicks und Gesten,
+    Bereiche, in denen gescrollt werden kann, usw.}
+
+  \ospdefitem{Zustände (Beispiele: \ospcmd{State},
+    \ospcmd{PropertyChanges})}{Mit diesen Elementen kann der
+    Entwickler Zustände definieren und festlegen, welche
+    Eigenschaftsänderungen der Zustand auslösen soll.}
+
+  \ospdefitem{Animationen und Zustandsübergange (Beispiele:
+    \ospcmd{Transition},}
+  \ospadditem{\ospcmd{PorpertyAnimation},
+    \ospcmd{RotationAnimation})}{definieren Übergange zwischen
+    Zuständen und stellen Animationen für bestimmte Änderungen an
+    anderen (sichtbaren und unsichtbaren) QML-Elementen zur Verfügung.}
+
+  \ospdefitem{Datenelemente (Beispiele: \ospcmd{ListModel},
+    \ospcmd{ListElement}, \ospcmd{XmlListModel})}{dienen der
+    Verwaltung von Daten, zur Ansicht oder zum Bearbeiten.  Zu jedem
+    Datenmodell gehört immer ein View.}
+
+  \ospdefitem{Views (Beispiele: \ospcmd{ListView}, \ospcmd{GridView},
+    \ospcmd{PathView})}{Zeigen Daten aus Modellen an. Mit diesen Views
+    definiert man also das Layout, in dem die Daten dargestellt werden
+    sollen, z.\,B. in einer Liste, in einem Gitter, entlang eines
+    Pfades usw.}
+
+  \ospdefitem{Positionierungselemente (Beispiele: \ospcmd{Column},
+    \ospcmd{Row}, \ospcmd{Grid})}{definiert einen Anzeigebereich, in
+    dem alle Unterlemente auf eine bestimmte Weise in Bezug
+    auf alle anderen Unterelemente positioniert werden, z.\,B. in einer
+    Spalte, einer Zeile oder in einem Gitter.}
+
+  \ospdefitem{Hilfselemente (Beispiele: \ospcmd{Connections},
+    \ospcmd{Qt}, \ospcmd{Timer})}{dienen meist der Kommunikation mit
+    oder dem Aufruf von Qt"=Klassen. Dadurch erhält der Entwickler
+    Zugriff auf Qt-Funktionen, die reiner QML- oder Javascript-Code
+    nicht zur Verfügung stellt, z.\,B. Verknüpfung von Signalen und
+    Slots zwischen QML und Python.}
+
+  \ospdefitem{Transformationen (Beispiele: \ospcmd{Scale},
+    \ospcmd{Rotation})}{basale Transformationen für sichtbare
+    QML-Elemente. Damit lassen sich beispielsweise spezifische
+    Animationen verwirklichen, die durch die Basis-Animationsklassen
+    nicht abgedeckt werden.}
+
+  \ospdefitem{Effekte (Beispiele: \ospcmd{Particles},
+    \ospcmd{ParticleMotionLinear})}{Elemente für visuelle Effekte.
+    Bisher nur Partikeleffekte; diese sind als experimentell
+    ausgezeichnet.}
+
+\end{ospdeflist}
+
+Einige dieser Elemente wurden in den bisherigen Beispielen schon
+vorgestellt, einige weitere werden wir in den folgenden Kapiteln
+kennenlernen. Wir beschränken uns hier auf die wichtigsten, anhand
+derer wir alltägliche Problemstellungen beschreiben. Eine vollständige
+Übersicht finden Sie auf der QML-Dokumentationsseite des
+Qt-Projekts.\ospfootnote{fn:qmlelementsdocumentation}{\ospurl{http://doc.qt.nokia.com/4.7/qdeclarativeelements.html}}
+
+Um die Elemente in eigenem QML-Code verwenden zu können, ist, wie
+schon erwähnt, immer eine \ospcmd{import}-Anweisung notwendig.
+Sämtliche Basiselemente können Sie per \ospcmd{import Qt 4.7} (in
+Zukunft \ospcmd{import QtQuick x.x}) einbinden. Spezielle Imports sind
+etwa für den \ospcmd{WebView} (\ospcmd{import\osplinebreak{} QtWebKit
+  1.0}) und Partikeleffekte (\ospcmd{import Qt.labs.particles
+  1.0})\osplinebreak{} notwendig. Mit der zunehmenden Modularisierung
+von Qt und damit auch Qt Quick werden in Zukunft sicher weitere
+Importanweisungen entstehen.  Auch die schon angesprochenen Qt
+Components werden wohl für jede Plattform per Import eingebunden
+werden müssen.
+
+Da wir nun die QML-Grundlagen kennen, gehen wir in den nächsten
+Kapiteln verstärkt auf das Zusammenspiel zwischen Python und den
+deklarativen UI-Teilen einer Anwendung ein. Dabei werden Sie weitere
+QML-Elemente kennenlernen, die Ihnen helfen, die GUI Ihrer Anwendung
+an die Bedürfnisse des Anwenders anzupassen.
+
+
+\ospsection{QML und Python}{QML und Python}{sec:qmlandpython}
+
+\index{QML!Integration in Python-Code}%
+Bisher ließen sich alle Beispiele einwandfrei mit dem QML Viewer
+starten und ausprobieren, da wir noch keinen Python-Code für die
+Anwendung benutzen mussten. Mit Javascript steht eben in QML eine
+alternative Programmiersprache zur Verfügung, deren zunehmende
+Popularität und Verbreitung dazu geführt hat, dass sich damit auch
+komplexe Anwendungen entwickeln lassen. Nun war die Unterstützung von
+Javascript in QML aber nicht zur Anwendungsentwicklung gedacht;
+vielmehr sollten per QML die Oberfläche und die Programmlogik einer
+Anwendung möglichst strikt voneinander getrennt werden. Für die
+Programmlogik ist in Qt natürlich zunächst C++ vorgesehen. Dank PyQt
+und PySide lassen sich QML-Oberflächen aber auch hervorragend für
+Python-Anwendungen nutzen. Neben der Integration des QML-Codes in die
+Anwendung ist darüber hinaus eine Möglichkeit zum Datenaustausch
+notwendig.  Irgendwie müssen also Daten zwischen der QML-Oberfläche
+und der Python-Anwendung ausgetauscht werden. Darüber hinaus bietet
+der Signal-Slot-Mechanismus die Möglichkeit, auch aus QML heraus
+Python-Code aufzurufen und umgekehrt. Auf all diese Möglichkeiten
+werden wir in diesem Kapitel zu sprechen kommen.
+
+\ospsubsection{QML-Views in Python-Anwendungen einbetten}{QML-Views in Python-Anwendungen einbetten}{sec:embedqmlinpython}
+
+\index{Anwendung!Template}%
+\index{QDeclarativeView}%
+\index{QDeclarativeView!setSource()}%
+\index{QDeclarativeView!setResizeMode()}%
+Zunächst soll die QML-Datei im Python-Code geladen und angezeigt
+werden. Dazu dient die Qt-Klasse \ospcmd{QDeclarativeView}, die eine
+Reihe von Methoden zum Umgang mit QML und seinen Elementen und Daten
+bereitstellt, unter anderem eben auch für die Anzeige von QML-Inhalten
+innerhalb der Qt-Anwendung. Bei \ospcmd{QDeclarativeView} handelt es
+sich um ein Standard-Widget, das sich wie alle anderen Qt-Widgets
+innerhalb eines Hauptfensters einbinden lässt und beliebig mit anderen
+Widgets in Layouts kombiniert werden kann. Somit lässt sich der View
+auch selbst als Hauptfenster verwenden, dessen einzige Aufgabe es dann
+ist, eine QML-Datei anzuzeigen. Insofern geht das folgende Beispiel
+kaum über die Funktionalität des QML Viewers hinaus:
+
+\begin{osplisting}{Python}{QDeclarativeView als Hauptfenster}{code:qdeclarativeview1}
+import sys, os, traceback
+from PyQt4 import QtCore, QtGui, QtDeclarative
+
+def main(argv):
+    app = QtGui.QApplication(argv)
+    view = QtDeclarative.QDeclarativeView()
+    view.setSource(QtCore.QUrl("main.qml"))
+    view.setResizeMode(QtDeclarative.QDeclarativeView.SizeViewToRootObject)
+    view.show()
+    app.exec_()
+
+if __name__ == "__main__":
+    main(sys.argv)
+\end{osplisting}
+
+Der Code lädt die QML-Datei über die Methode \ospcmd{setSource} und
+setzt dann einen \emph{Resize Mode}, auf den wir gleich noch genauer
+eingehen. Beim Modus \ospcmd{SizeViewToRootObject} handelt sich es um
+den Standardwert, so dass der Aufruf dieser Methode hier eigentlich
+auch entfallen kann. Anschließend wird der View per \ospcmd{show()}
+angezeigt, wie es für jedes andere Qt-Widget oder das Qt-Hauptfenster
+vorgesehen ist. Wenn Sie das RSS-Beispiel aus den vorhergehenden
+Kapiteln unter \ospfile{main.qml} gespeichert haben, stellt die
+Python-Anwendung nach Start einfach die Liste der RSS-Einträge dar.
+Bei der Bedienung der Oberfläche gibt es keinen Unterschied.
+
+\index{QML!Resize Mode}%
+Die Angabe \ospcmd{SizeViewToRootObject} als Resize Mode gibt nun an,
+dass sich der View an die Größe des \emph{Root Object} anpassen soll.
+Bei Ersterem handelt es sich um unser Objekt der Klasse
+\ospcmd{QDeclarativeView}, bei Letzterem um die (interpretierte)
+QML-Datei \ospfile{main.qml}. Ergebnis ist, dass das Hauptfenster
+immer genau so groß ist, wie es die Angaben in \ospfile{main.qml} für
+Höhe und Breite festlegen. Prinzipiell lässt sich die Fenstergröße
+natürlich sowohl programmatisch als auch manuell mit der Maus ändern,
+allerdings wird der Inhalt des Fensters dann nicht an die neue
+Fenstergröße angepasst. Das Layout der QML-Datei ist fix und in
+unserem Fall immer genau 360 mal 640 Pixel groß. Die initiale Größe
+des Fensters richtet sich also nach der Größe des QML-Inhalts und
+sollte dann erst einmal nicht mehr geändert werden.  Grund dafür ist,
+dass QML mit Fokus auf mobile Geräte entworfen wurde und dort alle
+Anwendungen im Vollbildmodus laufen.
+
+Damit sich der QML-Inhalt an die Größe des Fensters anpasst, muss der
+Resize Mode zunächst auf \ospcmd{SizeRootObjectToView} gesetzt werden.
+In diesem Modus passt sich nun der View, also der QML-Inhalt, an die
+Größe des deklarativen Views an. Wenn Sie in Listing
+\osplistingref{code:qdeclarativeview1} einfach nur die entsprechende
+Zeile ändern und die Anwendung starten, werden Sie feststellen, dass
+sich das dargestellte QML-Element in der Größe an das Fenster
+anpasst.  Ändern Sie mit der Maus die Größe des Fensters, füllt
+das Haupt-QML-Element jeweils die gesamte Größe des Fensters aus.
+
+\index{QML!Scrollbalken}%
+\index{QML!Flickable}%
+Neben der Darstellung der Daten als \ospcmd{ListView} gibt es nun eine
+alternative Layout-Variante, die sich vor allem für
+Desktop-Anwendungen eignet. Mit dieser Variante lassen sich QML-Views
+nämlich sehr schön in schon vorhandene Qt-Anwendungen mit den
+Standard-Qt-Widgets integrieren und gleichzeitig auf einfache Weise
+mit Scrollbalken versehen. QML unterstützt von sich aus bisher keine
+Scrollbalken, falls der Inhalt eines Elements größer als der View ist;
+sie sollen erst zu den in der Entwicklung befindlichen Qt Components
+hinzugefügt werden. Stattdessen sind einige QML-Elemente, wie z.\,B.
+auch der \ospcmd{ListView}, von der Klasse \ospcmd{Flickable}
+abgeleitet, die vor allem für Touchscreens optimiert ist. So lässt
+sich beispielsweise mit dem Finger (oder alternativ per
+Maus-Taste-Halten-Und-Verschieben) durch lange vertikale oder
+horizontale Listen scrollen, wie Sie es von Ihrem Mobiltelefon kennen.
+Scrollbalken sehen Sie dabei aber eben noch nicht.
+
+Der Modus \ospcmd{SizeViewToRootObject} erlaubt es nun, die Größe des
+Hauptfensters bzw. des Elements zur Darstellung der QML-Datei
+festzulegen, dabei aber den QML-Inhalt größer als das Fenster bzw. den
+deklarativen View zu machen. In unserem Fall ist die Liste der
+RSS-Einträge wohl meist länger als das Fenster hoch ist. Wenn man das
+Layout in der hier vorgestellten Variante erstellt, kann man dann die
+Standard-Qt-Scrollbalken für den \ospcmd{QDeclarativeView} verwenden,
+so dass man ganz einfach mit den Scrollbalken durch die Liste der
+RSS-Einträge blättert. Diese Scrollbalken funktionieren aber leider
+bisher nicht mit Elementen, die von \ospcmd{Flickable} abgeleitet
+sind, so dass wir hier auf den Einsatz von \ospcmd{ListView}
+verzichten müssen. Zunächst darf man dann in der QML-Datei keine Größe
+mehr angeben, da andernfalls kein sinnvolles Layout mit Scrollbalken
+mehr möglich ist. Der erste Teil von \ospfile{main.qml} inklusive des
+schon bekannten XML-Modells für den RSS-Feed sieht dann folgendermaßen
+aus:
+
+\begin{osplisting}{QML}{Erster Teil des RSS-Viewers mit flexiblem Layout}{code:qmlrssviewflex1}
+import Qt 4.7
+
+Rectangle {
+    id: mainScreen
+    
+    XmlListModel {
+        id: xmlModel
+        source: "http://www.dasskript.com/blogposts.rss"
+        query: "/rss/channel/item"
+
+        XmlRole { name: "title"; query: "title/string()" }
+        XmlRole { name: "guid"; query: "guid/string()" }
+        XmlRole { name: "link"; query: "link/string()" }
+        XmlRole { name: "pubDate"; query: "pubDate/string()" }
+    }
+\end{osplisting}
+
+\index{QML!Column}%
+\index{QML!Repeater}%
+Statt eines \ospcmd{ListView} müssen wir nun aber ein anderes Element
+verwenden. Alternativ zu den Views bietet QML die Möglichkeit, eine
+Liste von Elementen als Zeile, Spalte oder in einem Raster anzuzeigen.
+Dazu dienen die in Kapitel \ref{sec:qtcomponents} aufgelisteten
+Positionierungselemente, in unserem Fall das Spaltenlayoutelement
+\ospcmd{Column}. Die RSS-Einträge werden dann in einer Spalte
+untereinander angezeigt. Innerhalb eines Positionierungselements
+können Sie eine Reihe visueller QML-Elemente definieren, die dann im
+entsprechenden Layout erscheinen. Im Gegensatz zu \ospcmd{ListView}
+und anderen Views zur Anzeige von Modellen unterstützen
+Positionierungselemente allerdings ein flexibles Layout nur dann, wenn
+Sie keine festen Größenangaben zu den einzelnen Elemente machen.
+
+Wir wollen nun aber natürlich nicht fest vorgegebene QML-Elemente
+gruppieren, sondern wiederum die Daten aus dem XML-Modell anzeigen.
+Einen Delegate hatten wir dafür ja schon definiert, das
+\ospcmd{RSSListItem}. Für die Darstellung sich wiederholender Elemente
+steht in QML nun der \ospcmd{Repeater} zur Verfügung. Mit seiner Hilfe
+lassen sich schleifenartige Konstrukte deklarieren, z.\,B. um eben ein
+Element mehrfach in ein Positionierungselement einzufügen.  Der
+\ospcmd{Repeater} unterstützt, analog zum
+\ospcmd{ListView}, die Attribute \ospcmd{delegate} und \ospcmd{model},
+so dass sich unsere Spalte mit RSS-Einträgen wie die RSS-Liste
+definieren lässt:
+
+
+\begin{osplisting}{QML}{Column und Repeater für eine Liste mit flexiblem Layout}{code:qmlrssviewflex2}
+    Column {
+        id: listviewRss
+        anchors.fill: parent
+        spacing: 10
+        focus: true
+        Repeater {
+            model: xmlModel
+    
+            delegate: RssListItem {
+                text: title
+                date: pubDate
+                onClicked: console.log(link)
+            }
+        }
+    }
+
+} // Ende Rectangle mainScreen
+\end{osplisting}
+
+Bei \ospcmd{RssListItem} handelt es sich um eine einfache Version des
+RSS"=Listeneintrags, ganz ohne Web-View-Anzeige und Wechsel der
+Hintergrundfarbe. Letzteres hat seine Ursache in einer Einschränkung
+bei dieser Art von Layouts: Das \ospcmd{RssListItem}-Element kann nun
+kein \ospcmd{Item} oder \ospcmd{Rectangle} mehr sein, sondern muss
+wiederum aus einem Positionierungselement aufgebaut werden. Wir müssen
+also für jeden RSS-Eintrag wieder eine Spalte anlegen. In diesem Fall
+besteht die Spalte nur aus zwei Elementen, dem Titel und dem Datum des
+Eintrags. Beachten Sie wieder, dass keine absoluten Größen mehr
+angegeben werden dürfen:
+
+\begin{osplisting}{QML}{RSS-Eintrag in einem flexiblen Layout}{code:qmlrssviewflex3}
+import Qt 4.7
+
+Column {
+    id: rssItem
+
+    property alias text: itemText.text
+    property alias date: itemDate.text
+
+    signal clicked
+    
+    Text {
+        id: itemDate
+        font.pixelSize: 16
+    }
+
+    Text {
+        id: itemText
+        anchors.margins: 10
+        font.pixelSize: 20
+        wrapMode: Text.WordWrap
+        MouseArea {
+            id: mouseRegion
+            anchors.fill: parent
+            onPressed: rssItem.state = 'Pressed'
+            onReleased: rssItem.state = 'Default'
+            onClicked: { rssItem.clicked(); }
+        }
+    }
+
+    states:[
+        State {
+            name: "Pressed"
+            when: mouseRegion.pressed == true
+            PropertyChanges {
+                target: itemText
+                style: Text.Sunken
+                color: "grey"
+            }
+        }
+    ]
+}
+\end{osplisting}
+
+Im Gegensatz zum Beispiel-Code in Kapitel
+\ref{sec:pureqmlapplications} können wir für den Titel nun keine feste
+Breite mehr vorgeben. Darum kann es nun passieren, dass der Titel des
+RSS-Eintrags breiter als das Fenster und damit nicht mehr lesbar ist.
+Darauf werden wir noch zurückkommen. Sonst sieht das
+\ospcmd{RssListItem}-Element aber noch recht ähnlich aus, die
+Zustandsänderung beim Anklicken kann unverändert übernommen werden.
+Ähnlich ließe sich auch eine Wechsel der Hintergrundfarbe für das
+gerade aktive Element implementieren, der Einfachheit halber soll aber
+an dieser Stelle darauf verzichtet werden.
+
+Wenn Sie die Anwendung \ospfile{main.py} nun starten, gibt es aber
+immer noch ein Problem: Es wird gar kein Fenster dargestellt. Das
+liegt daran, dass der \ospcmd{QDeclarativeView} noch keine Größe hat,
+schließlich haben wir ja die Größenangabe aus der QML-Datei entfernt,
+um das Layout flexibel zu machen. Der View hat in diesem Fall keine
+Standardgröße und wird einfach nicht angezeigt. Dies lässt sich
+ändern, indem wir ihm per \ospcmd{resize} eine initiale Größe
+zuweisen. Das komplette Skript \ospfile{main.py} sieht dann
+folgendermaßen aus:
+
+\begin{osplisting}{Python}{Neue Hauptanwendung für das flexible Layout}{code:qmlrssviewflex3}
+#!/usr/bin/env python
+
+import sys, os, traceback
+from PyQt4 import QtCore, QtGui, QtDeclarative
+
+def main(argv):
+    app = QtGui.QApplication(argv)
+    main = QtGui.QMainWindow()
+    view = QtDeclarative.QDeclarativeView(main)
+
+    view.setResizeMode(QtDeclarative.QDeclarativeView.SizeViewToRootObject)
+    
+    view.setSource(QtCore.QUrl("main.qml"))
+    
+    main.setCentralWidget(view)
+    main.resize(360, 480)
+    main.show()
+    app.exec_()
+
+if __name__ == "__main__":
+    main(sys.argv)
+\end{osplisting}
+
+Die linke Seite von Abbildung \ospfigref{fig:qml_rssviewer2} zeigt das
+Fenster, das die Anwendung nun präsentiert. Die RSS-Einträge werden so
+gruppiert und angezeigt, dass sich das Fenster beliebig in der Größe
+ändern lässt, ohne das Layout zu zerstören -- was zugegebenermaßen
+auch daran liegt, dass das Layout mit einer Spalte von Einträgen recht
+simpel gehalten ist und das Fenster in diesem Fall nur einen
+Ausschnitt der Liste anzeigt. Die Liste wird nun vom Rahmen des
+Fensters abgeschnitten, ohne dass der Benutzer bisher eine Möglichkeit
+hat, in der Liste zu scrollen.
+
+\ospfigure{0.6}{images/qml_rssviewer2}{RSS-Viewer mit flexiblem Layout}{fig:qml_rssviewer2}
+
+\index{Scrollbalken}%
+\index{QAbstractScrollArea!setHorizontalScrollBarPolicy()}%
+\index{QAbstractScrollArea!setVerticalScrollBarPolicy()}%
+Die einfachste Variante ist es, die Scrollbalken immer anzuzeigen.
+Fügen Sie dazu die folgenden zwei Zeilen hinter den Aufruf von
+\ospcmd{setResizeMode} ein:
+
+\begin{ospsimplelisting}
+view.setResizeMode(QtDeclarative.QDeclarativeView.SizeViewToRootObject)
+view.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+view.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
+\end{ospsimplelisting}
+
+Die Scrollbalken werden ausgegraut, wenn der Inhalt des Views nicht
+größer als das Fenster ist. Andernfalls lassen sich die Balken wie
+üblich zum Scrollen nutzen. Abbildung \ospfigref{fig:qml_rssviewer2}
+zeigt rechts die Scrollbalken-Version der Anwendung zum Vergleich.
+
+Automatische Scrollbalken für den View lassen sich leider nicht so
+trivial realisieren. Normalerweise ist es in Qt ja so, dass die
+Scrollbalken immer erst dann erscheinen, wenn der Inhalt für einen
+View zu groß wird. Dieses Verhalten unterstützt der
+\ospcmd{QDeclarativeView} bisher nicht. Die Entwicklung bei Qt Quick
+ist im Moment aber derart rasant, dass vermutlich schon Qt Quick 2.0
+in Qt 4.8 weit über die hier vorgestellten Layout-Varianten hinaus
+gehen wird. Die grundlegenden QML-Elemente bleiben natürlich erhalten,
+so dass Sie die hier vorgestellten Techniken wesentlich flexibler an
+unterschiedliche Eingabesysteme anpassen können.
+
+
+\ospsubsection{Python-Daten in QML-Views darstellen}{Python-Daten in QML-Views darstellen}{sec:pythondatainqmlviews}
+
+\index{QML!Python-Daten}%
+\index{QML!Modelle und Views}%
+In den Beispielen hat sich die Interaktion zwischen der Hauptanwendung
+in Python und der QML-Oberfläche auf ein Minimum beschränkt. Lediglich
+das Verhalten des \ospcmd{QDeclarativeView} wurde aus Python heraus
+gesteuert, alles Weitere war vollständig in QML umgesetzt. Im nächsten
+Schritt wollen wir Daten aus dem Python-Code in der QML-Oberfläche
+darstellen. Das ist wohl einer der häufigsten Anwendungsfälle: Der
+Code zur Datenverarbeitung wird in Python geschrieben und kann auf die
+zahlreichen Python-Bibliotheken zurückgreifen; die Darstellung der
+Daten erfolgt dann in einer übersichtlichen und leicht zu wartenden
+QML-GUI.
+
+\index{QML!Context Properties}%
+\index{QML!Root Context}%
+Zur Weitergabe von Python-Datenstrukturen dienen in Qt Quick die
+sogenannten \emph{Context Properties}. Bei diesen Eigenschaften
+handelt es sich um Datenstrukturen, auf die der deklarative View ohne
+besondere Vorkehrungen direkt Zugriff hat. Die Context
+Properties können nun im Python-Code dem \ospcmd{rootContext}
+des \ospcmd{QDeclarativeView} zugewiesen werden. Jede Python-Variable
+kommt als Eigenschaft in Frage, so dass sich beispielsweise leicht
+eine einfache Liste oder ein Dictionary übergeben lassen. Die
+Beispielanwendung des vorhergehenden Kapitels lässt sich
+folgendermaßen zur Übergabe einer Liste an den QML-View
+anpassen:
+
+\index{QDeclarativeView!rootContext()}%
+\index{QDeclarativeContext!setContextProperty()}%
+\index{QML!Python-Liste}%
+\begin{osplisting}{Python}{Python-Anwendung mit Liste als Context Property}{code:qmlcontext1}
+#!/usr/bin/env python
+
+import sys, os, traceback
+from PyQt4 import QtCore, QtGui, QtDeclarative
+
+def main(argv):
+    app = QtGui.QApplication(argv)
+    view = QtDeclarative.QDeclarativeView()
+
+    colors = [ "red", "green", "blue" ]
+
+    context = view.rootContext()
+    context.setContextProperty("colorModel", colors)
+
+    view.setSource(QtCore.QUrl("main.qml"))
+    view.show()
+    app.exec_()
+
+if __name__ == "__main__":
+    main(sys.argv)
+\end{osplisting}
+
+Hier wird die Variable \ospcmd{colors} als Context Property
+\ospcmd{colorModel} an den deklarativen View übergeben.  Wie der Name
+der Eigenschaft schon andeutet, lassen sich diese auch hervorragend
+als Modell z.\,B. für einen \ospcmd{ListView} in QML einsetzen. In
+unserem Beispiel wollen wir die Werte der Liste in einem solchen View
+anzeigen, wobei jeder Listeneintrag die entsprechende Hintergrundfarbe
+aus der Liste erhält:
+
+\begin{osplisting}{QML}{QML-View zur Darstellung der Python-Liste}{code:qmlcontext2}
+import Qt 4.7
+
+Rectangle {
+    id: mainScreen
+
+    width: 400
+    height: 400
+
+    ListView {
+        id: listview
+        anchors.fill: parent
+        orientation: ListView.Vertical
+
+        model: colorModel
+
+        delegate: Rectangle {
+            height: colorText.height + 20
+            width: parent.width
+            color: modelData
+            Text {
+                id: colorText
+                text: modelData
+                font.pixelSize: 20
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+    }
+
+}
+\end{osplisting}
+
+Der Code zeigt eine vertikale Liste an, die aus einzelnen
+\ospcmd{Rectangle}"=Elementen besteht. Diese wiederum enthalten den
+Text aus der Python-Liste, der hier innerhalb des Rechtecks zentriert
+wird. Dazu dienen die beiden \ospcmd{anchors}-Angaben, die das Zentrum
+des Elements \ospcmd{Text} anhand des Zentrums von \ospcmd{Rectangle}
+als Elternelement ausrichten. Das Datenmodell zur Darstellung im
+\ospcmd{ListView} wird hier direkt auf die Eigenschaft
+\ospcmd{colorModel} gesetzt, die wieder auf die Python-Variable
+\ospcmd{colors} verweist. Im \ospcmd{delegate} kann nun per
+\ospcmd{modelData} auf den Inhalt des Listenelements, in unserem Fall
+z.\,B. den String \ospcmd{rot}, zugegriffen werden. Abbildung
+\ospfigref{fig:qml_context1} zeigt das Fenster der laufenden Anwendung mit
+den drei Listenelementen.
+
+\ospfigure{0.5}{images/qml_context1}{Eine Python-Liste in QML darstellen}{fig:qml_context1}
+
+\index{QML!Python-Dictionaries}%
+Auf dieselbe Weise lassen sich auch Python-Dictionaries und andere
+Datentypen in QML verwenden. Ersetzen Sie beispielsweise im Python
+Code die Liste durch folgende Liste aus Dictionaries:
+
+\begin{ospsimplelisting}
+colors = [
+    { "color": "red", "text": "Zeile 1" },
+    { "color": "green", "text": "Zeile 2" },
+    { "color": "blue", "text": "Zeile 3" }
+]
+\end{ospsimplelisting}
+
+Der Rest der Python-Anwendung bleibt erhalten, schließlich setzen wir
+das Context Property per Variablennamen \ospcmd{colors}, der
+sich nicht geändert hat. Wiederum übergeben wir eine Liste,
+allerdings besteht diese nun aus immer gleich aufgebauten
+Dictionaries. In der QML-Datei müssen Sie beim Zugriff auf
+\ospcmd{modelData} den entsprechenden Dictionary-Schlüssel angeben,
+wobei die Schlüssel des Dictionary direkt im \ospcmd{delegate}
+verwendet werden können:
+
+\begin{ospsimplelisting}
+delegate: Rectangle {
+    height: colorText.height + 20
+    width: parent.width
+    color: modelData.color
+    Text {
+        id: colorText
+        text: modelData.text
+        font.pixelSize: 20
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.verticalCenter: parent.verticalCenter
+    }
+}
+\end{ospsimplelisting}
+
+Statt \ospcmd{modelData} verwenden wir jetzt also
+\ospcmd{modelData.color} und \ospcmd{model\-Data.text}, so dass der
+sichtbare String im \ospcmd{ListView}  nicht mehr der Name der
+Hintergrundfarbe ist, sondern beliebige Strings als Werte des
+Dictionary"=Schlüssels \ospcmd{text}.
+
+\index{QML!Komplexe Datenstrukturen}%
+Die Datenstrukturen können beliebig komplex werden. Ein schönes
+Beispiel liefern die Daten, wie sie in linguistischen Anwendungen,
+beispielsweise in der Sprachtypologie oder Sprachdokumentation,
+auftreten. Dabei werden einzelne Sätze der zu untersuchenden Sprache
+annotiert, d.\,h. normalerweise in Wörter und deren
+Morpheme\ospfootnote{fn:morphemes}{Morpheme sind die kleinsten
+  bedeutungstragenden Einheiten von Wörtern, z.\,B. hat das deutsche
+  Wort \dqo{}programmieren\dqc{} zwei Morpheme:
+  \dqo{}programmier-\dqc{} als Wortstamm und \dqo{}-en\dqc{} als
+  Infinitivendung. Die Darstellung erfolgt in der Linguistik meist als
+  sogenannte \emph{Interlinearversion}, die die Funktion der Morpheme
+  als sogenannte \emph{Glossen} enthält. Zum Beispiel wäre
+  \dqo{}INFINITIV\dqc{} eine Glosse für das Morphem \dqo{}-en\dqc{}.}
+getrennt sowie um einer Übersetzung ergänzt. Abbildung
+\ospfigref{fig:qml_context2} zeigt ein Beispiel aus dem Türkischen, in
+dem die einzelnen Morpheme sowie deren Funktionen in jeweils einer
+eigenen Zeile unter dem Originalsatz aufgeführt sind. Auf die genaue
+Bedeutung der Glossierung soll hier nicht näher eingegangen werden,
+jedoch ist die Datenstruktur ein interessantes Problem für
+die Darstellung in QML.
+
+\ospfigure{0.8}{images/qml_context2}{Interlinearversion in einem QML-View}{fig:qml_context2}
+
+Zunächst zerlegen wir den Beispielsatz in einer Python-Datenstruktur
+in Listen und Dictionaries, wobei wir alles zusammen als ein
+Listenelement definieren. So können später einfach weitere
+Beispielsätze hinzugefügt werden:
+
+\begin{ospsimplelisting}
+utterances = []
+utterances.append({
+    "id": "a1",
+    
+    "utterance":
+        u"dün ak\u015Fam ko\u015Fa ko\u015Fa eve geldim",
+        
+    "ilelements":    
+        [ [u'dün', u'dün', u'yesterday'],
+          [u'ak\u015Fam', u'ak\u015Fam', u'evening'],
+          [u'ko\u015Fa', u'ko\u015F-a', u'run-CV'],
+          [u'ko\u015Fa', u'ko\u015F-a', u'run-CV'],
+          [u'eve', u'ev-e', u'home-DIR'],
+          [u'geldim', u'gel-di-m', u'come-PAST-1SG']
+        ],
+    
+    "translations":
+        [ u"yesterday evening I came home running" ]
+})
+\end{ospsimplelisting}
+
+Die Variable \ospcmd{utterance} enthält jetzt also eine Liste mit
+Beispielsätzen, die wiederum aus einem Dictionary mit den einzelnen
+Elementen der Interlinearversion bestehen. Der Rest der
+Python-Anwendung entspricht wieder dem Aufbau der oben besprochenen
+Beispiele, wobei wir in diesem Fall eben \ospcmd{utterance} als
+Context Property setzen. Außerdem soll dieses Mal kein
+\ospcmd{ListView} zur Darstellung verwendet werden, stattdessen
+benutzen wir die Layout-Alternative \ospcmd{Column}, wie in Kapitel
+\ref{sec:embedqmlinpython} beschrieben. Wir müssen im Python-Code also
+eine Größe für das Hauptfenster definieren:
+
+\begin{osplisting}{Python}{Hauptanwendung zur Darstellung von Interlinearversionen}{code:qmlcontext3}
+import sys, os, traceback
+from PyQt4 import QtCore, QtGui, QtDeclarative
+
+def main(argv):
+    app = QtGui.QApplication(argv)
+    view = QtDeclarative.QDeclarativeView()
+    view.setResizeMode(QtDeclarative.QDeclarativeView.SizeViewToRootObject)
+    
+    context = view.rootContext()
+    context.setContextProperty("utterances", utterances)
+
+    view.setSource(QtCore.QUrl("main3.qml"))
+    view.resize(480, 120)
+    view.show()
+    app.exec_()
+
+if __name__ == "__main__":
+    main(sys.argv)
+\end{osplisting}
+
+Auch die Darstellung in QML erfolgt zunächst analog zu unserer
+einfachen Liste, allerdings setzen wir dieses Mal \ospcmd{Column} zur
+Listendarstellung sowie ein komplexes \ospcmd{delegate} ein, das wir
+später extern definieren. Die Datei \ospfile{main3.qml} sieht dann
+folgendermaßen aus:
+
+\osppagebreak
+
+\begin{osplisting}{QML}{Eine Liste mit Interlinearversionen}{code:qmlcontext4}
+import Qt 4.7
+
+Rectangle {
+
+    id: mainScreen
+
+    Column {
+        id: list
+        
+        anchors.fill: parent
+        spacing: 10
+        anchors.margins: 5
+        
+        Column {
+            spacing: 10
+            Repeater {
+                model: utterances
+                delegate: Utterance {}
+            }
+        }
+
+    }
+
+}
+\end{osplisting}
+
+Der komplizierte Teil, die Darstellung einer einzelnen
+\ospcmd{utterance}, erfolgt nun in der Datei \ospfile{Utterance.qml}.
+Dort werden der Reihe nach der Originalsatz, die Interlinearversion
+samt Glossen sowie alle Übersetzungen für den Satz dargestellt. Das
+Beispiel zeigt recht schön, wie sich per \ospcmd{Row} und
+\ospcmd{Column} auch für komplexe Daten ein ansprechendes und
+flexibles Layout erstellen lässt:
+
+\index{QML!Row}%
+\index{QML!Column}%
+\index{QML!Repeater}%
+\begin{osplisting}{QML}{Darstellung eines Beispielsatzes als Interlinearversion}{code:qmlcontext5}
+import Qt 4.7
+
+Column {
+    
+    Row {
+        id: utterance
+        spacing: 10
+        Text {
+            id: preUtt
+            text: modelData.id
+            anchors.margins: 5
+            font.weight: Font.Bold
+            font.capitalization: Font.SmallCaps
+        }
+        Text {
+            id: utt
+            anchors.margins: 5
+            font.weight: Font.Bold
+            text: modelData.utterance
+        }
+    }
+
+    Row {
+        id: words
+        spacing: 20
+        
+        Column {
+            Text {
+                id: word
+                text: "words"
+                font.capitalization: Font.SmallCaps
+                color: "#a0a0a0"
+            }
+            Text {
+                id: morpheme
+                text: "morph"
+                font.capitalization: Font.SmallCaps
+                color: "#a0a0a0"
+            }
+            Text {
+                id: gloss
+                text: "gloss"
+                font.capitalization: Font.SmallCaps
+                color: "#a0a0a0"
+            }
+        }
+    
+        Repeater { model: modelData.ilelements
+            Column {
+                Text {
+                    id: word
+                    text: modelData[0]
+                }
+                Text {
+                    id: morpheme
+                    text: modelData[1]
+                    font.italic: true
+                }
+                Text {
+                    id: gloss
+                    text: modelData[2]
+                }
+            }
+        }
+    }
+
+    Column {
+        id: translations
+        Repeater { model: modelData.translations
+            Row {
+                spacing: 20
+                Text {
+                    id: preTrans
+                    text: "trans"
+                    color: "#a0a0a0"
+                    font.capitalization: Font.SmallCaps
+                }
+                Text {
+                    id: trans
+                    font.italic: true
+                    text: modelData
+                }
+            }
+        }
+    }
+}
+\end{osplisting}
+
+Es werden einfach alle Strings als \ospcmd{Text}-Elemente innerhalb
+der Layout-Elemente aufgelistet. Die passende Anordnung von
+\ospcmd{Rows} und \ospcmd{Columns} ergibt sich aus unserer Anforderung
+zur Darstellung von Interlinearversionen. Hier lassen sich die
+QML-Layout-Elemente sehr schön einsetzen, um ohne den Einsatz von
+Tabellen oder Ähnlichem die einzelnen Datenblöcke zueinander
+auszurichten. Der klare, deklarative Ansatz in Qt Quick bietet eben
+die Möglichkeit, die Layout-Vorgaben für die Darstellung eines
+Datenmodells je nach Anwendungsfall auszudrücken und gegebenenfalls
+auch unterschiedliche Ansichten für die Darstellung der Daten zu
+deklarieren. Das Datenmodell wird dann von der Python-Anwendung zur
+Verfügung gestellt. Nebenbei sehen Sie im Beispiel noch, wie man auf
+einzelne Listenelemente zugreift, falls die einzelnen Datenelemente
+des Modells Listen sind: Sie indizieren die Variable
+\ospcmd{modelData}, in unserem Beispiel per \ospcmd{modelData[0]} usw.
+auf den Inhalt von \ospcmd{ilelements} (Wörter, Morpheme, Glossen).
+Bei Listen mit fest vorgegebenen Größen können Sie auf diese Weise
+einfach auf die einzelnen Elemente zugreifen.
+
+Sie haben nun alles Notwendige an der Hand, um Python-Daten in einer
+QML-Oberfläche darzustellen. Was noch fehlt ist die Möglichkeit,
+Python-Code aus QML und umgekehrt aufzurufen. Der
+Signal-Slot-Mechanismus in Qt bietet genau das.
+
+
+\ospsubsection{Python-Code aus QML aufrufen und umgekehrt}{Python-Code aus QML aufrufen und umgekehrt}{sec:signalslotspythonqml}
+
+\index{QML!Python-Code aufrufen}%
+\index{QML!QML-Code aus Python heraus aufrufen}%
+\index{QML!Signale und Slots}%
+\index{Signale und Slots}%
+\index{Signale und Slots!QML}%
+In Kapitel \ref{sec:signalslot} wurde der Signal-Slot-Mechanismus in
+Qt vorgestellt, der für die Interaktion zwischen Qt-Objekten verwendet
+wird. Oft handelt es sich dabei um Ereignisse, die durch den Benutzer
+ausgelöst werden, indem er mit der GUI interagiert. Genau diese
+Interaktion soll nun auch für eine QML-Oberfläche verwirklicht werden,
+und genau wie beim Einsatz von Qt-Widgets spielt auch hier der
+Signal-Slot-Mechanismus die entscheidende Rolle.
+
+\index{Javascript}%
+\index{QML!Javascript}%
+Das Vorgehen in QML ist im Prinzip dasselbe wie schon im Python-Code:
+Beliebige (Javascript-)Funktionen dienen als Slots, Signale werden
+einfach mit einem Schlüsselwort deklariert, in diesem Fall per
+\ospcmd{signal}. Diese Signale können dann ausgelöst werden, indem man
+den Namen des Signals als Funktionsaufruf verwendet.  Und schließlich
+können Signale und Slot quer zwischen Python und QML verbunden werden,
+indem man in Python die schon vorgestellte Methode \ospcmd{connect}
+des Signals mit dem Slot als Parameter aufruft.  Soweit zur Übersicht,
+nun aber Schritt für Schritt.
+
+Zunächst deklarieren wir die QML-Oberfläche. Ganz ähnlich wie im
+Python-Beispiel aus Kapitel \ref{sec:signalslot} wollen wir ein
+Text-Element und einen Button anzeigen. Nach Klick auf den Button soll
+der Text aktualisiert werden. Der folgende QML-Code beschreibt eine
+solche GUI, wobei wir den Button manuell aus einem Rechteck und einem
+darin zentrierten Text zusammensetzen:
+
+\index{QML!signal}%
+\begin{osplisting}{QML}{Text und ein Button zum Aktualisieren}{code:qmlsignalslot1}
+import Qt 4.7
+
+Rectangle {
+    id: mainScreen
+    
+    width: 400
+    height: 400
+    
+    signal messageRequested;
+
+    function updateMessage(text) {
+        message.text = text
+    }
+    
+    Text {
+        id: message
+        anchors.top: parent.top
+        anchors.bottom: button.top
+        width: parent.width
+        text: ""
+        wrapMode: Text.WordWrap
+        font.pixelSize: 30
+    }
+    
+    Rectangle {
+        id: button
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        height: 50
+        color: "darkgrey"
+        Text {
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: "Aktualisieren"
+            color: "white"
+            font.pixelSize: 20
+        }
+        MouseArea {
+            anchors.fill: parent
+            onClicked: messageRequested()
+        }
+    }
+    
+}    
+\end{osplisting}
+
+Das Textfeld ist zunächst leer. Bei Klick auf das \ospcmd{Rectangle}
+wird nun das Signal \ospcmd{messageRequested()} ausgelöst, das gleich
+am Anfang der Datei nach der Größe des QML-Views deklariert wird. Dazu
+dient die \ospcmd{MouseArea}, die hier auf den Klick reagiert. Außer
+dem Signal wird eine Funktion \ospcmd{update\-Message()} implementiert,
+die der Entwickler als Slot verwenden kann. Beachten Sie, dass
+wir hier die beiden Hauptelemente Rechteck und Text zueinander
+ausrichten: Der untere Rand des Text-Elements wird per Anker anhand des
+oberen Randes des Rechtecks ausgerichtet. Alle anderen Anker beziehen
+sich auf das Elternelement, in diesem Fall auf das zentrale
+\ospcmd{Rectangle} und damit auf den Rand des Hauptfensters.
+
+Abbildung \ospfigref{fig:qml_signalslot} zeigt die Oberfläche, wie sie
+mit gefülltem Textelement aussehen würde. Ein Klick auf
+\ospmenu{Aktualisieren} löst nun aber noch keine Aktion aus,
+schließlich ist das Signal \ospcmd{messageRequested()} mit keinem Slot
+verbunden.
+
+\ospfigure{0.6}{images/qml_signalslot}{Der QML-View der Beispielanwendung}{fig:qml_signalslot}
+
+Dies soll nun im Python-Code erledigt werden. Für Signal und Slot
+wollen wir in unserem Beispiel eine eigene Klasse verwenden, die
+beides bereitstellt. Der Ablauf ist folgender: Der QML-View sendet das
+Signal nach Klick auf den Button an den Slot des Python-Objekts.
+Dieser stellt einen Text zur Verfügung und schickt diesen in einem
+Signal an den Slot \ospcmd{updateMessage()} des QML-Views. In diesem
+Fall haben wir dann beide \dqo{}Richtungen\dqc{} der Kommunikation
+abgedeckt, vom QML-Signal zum Python-Slot und vom Python-Signal zum
+QML-Slot. Abbildung \ospfigref{fig:qml_signalslot_dia} zeigt die
+Kommunikation schematisch an und beschreibt schon die zu verwendenden
+Namen der Python-Funktionen.
+
+\ospfigure{0.75}{images/qml_signalslot_dia}{Signal-Slot-Kommunikation zwischen Python und QML}{fig:qml_signalslot_dia}
+
+Zunächst soll der Code der Hauptanwendung in Python vorgestellt
+werden, noch ohne die Signal-Slot-Klasse \ospcmd{Messenger}. Es werden
+eine Reihe von Modulen eingebunden, die wir später zur Generierung des
+Textes verwenden, außerdem werden im Code gleich die Signale und Slots
+verbunden:
+
+\begin{osplisting}{Python}{Hauptanwendung mit Verknüpfung von Signalen und Slots}{code:qml_signalslot2}
+import sys, random
+import StringIO
+import contextlib
+from PyQt4 import QtCore, QtGui, QtDeclarative
+
+def main(argv):
+    app = QtGui.QApplication(argv)
+    view = QtDeclarative.QDeclarativeView()
+    view.setSource(QtCore.QUrl("main.qml"))
+
+    messenger = Messenger()
+    root = view.rootObject()
+    root.messageRequested.connect(messenger.emit_message)
+    messenger.message.connect(root.updateMessage)
+    root.updateMessage("Hallo Welt!")
+
+    view.show()
+    app.exec_()
+
+if __name__ == "__main__":
+    main(sys.argv)
+\end{osplisting}
+
+Die Methode \ospcmd{connect()} wird im Python-Code also zweimal
+aufgerufen, um die in Abbildung \ospfigref{fig:qml_signalslot_dia}
+gezeigten Verknüpfungen anzulegen. Im ersten Fall verknüpfen wir das
+Signal aus dem QML-View. Dazu speichert der Code zunächst das
+sogenannte \emph{Root Object} in der Variablen \ospcmd{root}.  Das
+Objekt enthält den interpretierten QML-Code, also das daraus erzeugte
+Objekt samt Daten, Elementen und Funktionen. Der Slot
+\ospcmd{messageRequested} ist so direkt als Attribut dieses Objekts
+verfügbar und besitzt wie alle anderen Slots die Methode
+\ospcmd{connect()}. Im zweiten \ospcmd{connect()} wird dann  das
+Signal des \ospcmd{Messenger} mit dem QML-Slot
+\ospcmd{updateMessage()} verknüpft, der auch direkt im Root
+Object verfügbar ist.
+
+\index{Zen of Python}%
+Was noch fehlt ist die Implementierung der Klasse \ospcmd{Messenger},
+die das Signal \ospcmd{message()} sowie den Slot
+\ospcmd{emit\_message()} zur Verfügung stellen muss. Im Prinzip können
+diese Funktionen minimal gehalten sein, so dass immer ein fester Text
+zurückgeliefert wird. Wir wollen aber als gute Python-Programmierer in
+unserem Beispiel einen Satz des \dqo{}Zen of Python\dqc{}
+zurückliefern, das, grob gesagt, eine Reihe grundlegender Ideen bei
+der Entwicklung von und mit Python
+beschreibt.\ospfootnote{fn:pythonzen}{\ospurl{http://www.python.org/dev/peps/pep-0020/}}
+Insgesamt sind es 19 Sprüche in 19 Zeilen, wobei wir in unserem
+Beispiel jeweils einen zufälligen Spruch an den QML-View zurückliefern
+wollen.
+
+Als Quelle des Zen dient uns der Aufruf von \ospcmd{import this}, der
+alle Sprüche per \ospcmd{print()} auf die Standardausgabe schreibt.
+Wir wollen diese Ausgabe abfangen, an Zeilenumbrüchen trennen und dann
+jeweils einen Spruch auswählen und per \ospcmd{message()} ausliefern.
+Die folgende Implementierung von \ospcmd{Messenger} macht genau das:
+
+\begin{osplisting}{Python}{Implementierung der Klasse Messenger mit Python-Zen}{code:qml_signalslot3}
+class Messenger(QtCore.QObject):
+    message = QtCore.pyqtSignal(str)
+    
+    def __init__(self, *args):
+        QtCore.QObject.__init__(self, *args)
+        with stdoutIO() as s:
+            exec "import this"
+        self.zen = s.getvalue().split("\n")
+    
+    def emit_message(self):
+        ind = random.randint(0, len(self.zen)-1)
+        self.message.emit(self.zen[ind])
+\end{osplisting}
+
+Zunächst definiert die Klasse das Signal \ospcmd{message()}, dem wir
+später einen String mit dem Spruch übergeben. Der Konstruktor der
+Klasse liest dann das komplette Zen aus \ospcmd{import this}, indem es
+die Standardausgabe in eine Variable umleitet. Die Funktion
+\ospcmd{stdoutIO()} müssen wir noch manuell als sogenannten
+\ospcmd{contextmanager} implementieren, darauf werden wir sofort
+zurückkommen. Alle Sprüche sind nach Erzeugung eines Objekts der
+Klasse \ospcmd{Messenger} dann im Attribut \ospcmd{self.zen} als Liste
+abgelegt. Der Slot \ospcmd{emit\_message()} wählt dann nur noch eines
+der Listenelemente zufällig aus und löst dann das Signal
+\ospcmd{message()} mit den ausgewählten Spruch als Parameter aus.
+
+\index{Kontext-Manager}%
+Zur Umleitung der Standardausgabe bedient man sich in Python am besten
+des Dekorators \ospcmd{contextmanager} aus dem Modul
+\ospcmd{contextlib}. Damit können wir die Ausgabe direkt in ein Objekt
+der Klasse \ospcmd{StringIO} umleiten, das wir im Weiteren wie einen
+String behandeln können. In Listing
+\osplistingref{code:qml_signalslot3} ist die Variable \ospcmd{s} dann
+genau dieses Objekt; per \ospcmd{getvalue()} liefert es uns den
+gewünschten String. Die Funktion \ospcmd{stdoutIO()} sieht nun
+folgendermaßen aus:
+
+\begin{osplisting}{Python}{Kontextmanager zur Umleitung der Standardausgabe}{code:qml_signalslot4}
+@contextlib.contextmanager
+def stdoutIO(stdout=None):
+    old = sys.stdout
+    if stdout is None:
+        stdout = StringIO.StringIO()
+    sys.stdout = stdout
+    yield stdout
+    sys.stdout = old
+\end{osplisting}
+
+Damit ist die Beispielanwendung vollständig. Wenn Sie die Anwendung
+nun starten und auf \ospmenu{Aktualisieren} klicken, wird jeweils ein
+Zen-Spruch in der GUI angezeigt. Das Beispiel zeigt recht schön die
+Arbeitsteilung zwischen Python und QML: Während Python die
+zugrundeliegenden Arbeiten und Abläufe ausführt, also die
+Anwendungslogik implementiert, dient der QML-View der Anzeige der
+erzeugten Daten. Die Pflege der beiden Anwendungsteile lässt sich
+hervorragend parallelisieren und an verschiedene Teams delegieren.
+Letztlich sorgt die Trennung auch für leichter wartbaren Code, da
+für Änderungen an GUI und Logik immer gleich die richtige Baustelle
+bekannt ist.
+
+
+\ospvacat
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "pyqt"
+%%% End: 

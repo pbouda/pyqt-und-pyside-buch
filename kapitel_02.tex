@@ -1,0 +1,3117 @@
+\ospchapter{Einführung in die Programmierung mit PyQt und PySide}{Einführung in die Programmierung mit PyQt\osplinebreak{} und PySide}{chap:einfuehrung}
+
+
+\ospsection{Vorbereitungen}{Vorbereitungen}{sec:vorbereitungen}
+
+Mit PyQt steht dem Entwickler ein ausgereiftes GUI-Framework unter
+Python zur Verfügung. Um in einer komfortablen Umgebung mit der
+Entwicklungsarbeit beginnen zu können, muss man zunächst die nötigen
+Pakete zum Editieren und Ausführen des Skript-Codes auf seinem Rechner
+einrichten. Python und Qt sind grundsätzlich plattformunabhängig, so
+dass sich eine Reihe von Betriebssystemen für die Entwicklung und als
+Zielsystem für PyQt-Anwendungen eignen. Es soll hier hauptsächlich auf
+Windows und Linux eingegangen werden, außerdem wird gegebenenfalls auf
+Besonderheiten unter Mac OS eingegangen.  Zudem lassen sich
+PyQt-Anwendung beispielsweise aber mittlerweile auch auf
+Mobiltelefonen ausführen (und entwickeln!), seitdem Nokia das
+Qt-Framework als Entwicklungsplattform und GUI-Framework für seine
+Betriebssysteme Symbian und Maemo bzw. MeeGo eingekauft hat. Es gibt
+mit dem Nokia N900 und dem N9 immer noch zwei aktuelle Smartphones,
+auf denen Sie Ihre Python-Anwendungen laufen lassen können, auch wenn
+Nokia mittlerweile voll auf Windows Phone 7 setzt. Zu den
+Zielplattformen und der Paketerstellung aber später in Kapitel
+\ref{chap:projektsstruktur} mehr. Zunächst wollen wir die
+Entwicklungsumgebung auf dem Entwicklerrechner einrichten.
+
+
+\ospsubsection{Entwicklungsumgebung}{Entwicklungsumgebung}{sec:entwicklungsumgebung}
+
+Wer schon Skripte und Anwendungen mit Python entwickelt hat, der kann
+für die PyQt-Programmierung getrost weiter auf seine gewohnte Umgebung
+mit Editor, IDE usw. vertrauen. Die Arbeit mit PyQt unterscheidet sich
+nicht grundsätzlich von derjenigen mit anderen Python-Modulen und
+-Frameworks.
+
+\index{Editor}%
+Wer jedoch mit Python bisher nicht viel zu tun hatte, kann
+grundsätzlich alle Beispiele dieses Buches mit einem einfachen
+(Code-)Editor ausprobieren. Viele Editoren unterstützen mindestens
+Syntax-Highlighting für Python, einige weitere außerdem Dinge wie
+Code-Vervollständigung, Anzeige von erwarteten Parametern bei der
+Eingabe von Funktionsnamen, Aufruf des Interpreters per Hot-Key usw.
+Als recht vernünftige Basis hat sich für den Autor der Komodo-Editor
+von
+ActiveState\ospfootnote{fn:komodoedit}{\ospurl{http://www.activestate.com/komodo-edit}}
+bewährt: Er ist frei verfügbar, plattformunabhängig und unterstützt
+neben Python auch andere Programmiersprachen. In einem
+fortgeschrittenen Stadium kann man dann auf die Komodo IDE umsteigen,
+die Active State mit kommerzieller Lizenz für professionelle
+Entwickler anbietet.
+
+\index{IDE}%
+\index{KDevelop}%
+\index{Eric}%
+\index{PyDev}%
+\index{PyCharm}%
+Aber auch für eine komplette IDE gibt es freie Alternativen: Unter
+Linux unterstützt
+KDevelop\ospfootnote{fn:kdevelop}{\ospurl{http://www.kdevelop.org}}
+PyQt- und PySide-Projekte; mit
+Eric\ospfootnote{fn:eric}{\ospurl{http://eric-ide.python-projects.org}}
+existiert außerdem eine selbst auf PyQt basierende, ausgewachsene IDE
+mit allem, was das PyQt-Entwickler-Herz begehrt. Wenn man größere
+Projekte mit PyQt plant, ist diese wohl das Mittel der Wahl. Es lohnt
+sich dann auch, mit Eric zu starten, da man anhand der Beispiele in
+diesem Buch auch gleich die Funktionen der IDE ausprobieren kann. Auf
+der Eric-Webseite finden Sie eine Reihe von Tutorials, die Ihnen einen
+einfachen Einstieg ermöglichen.  Eclipse-Anwendern steht mit
+PyDev\ospfootnote{fn:pydev}{\ospurl{http://pydev.org/}} ein
+umfangreiches Plugin zur Python-Entwicklung zur Verfügung.  Letztlich
+ist auch
+PyCharm\ospfootnote{fn:pycharm}{\ospurl{http://www.jetbrains.com/pycharm/} --
+  Open-Source-Projekte können sich um eine kostenlose Lizenz
+  bewerben.} eine bei Python-Entwicklern beliebte,
+plattformunabhängige (aber kostenpflichtige) IDE, die sich
+hervorragend für die Entwicklung mit PyQt und PySide eignet.
+
+\ospsubsection{Python und PyQt bzw. PySide installieren}{Python und PyQt bzw. PySide installieren}{sec:installieren}
+
+\index{Installation}%
+\index{Python-Versionen}%
+Neben einem Editor müssen auf dem Entwicklersystem natürlich
+Python\ospfootnote{fn:python}{\ospurl{http://www.python.org}} sowie
+PyQt\ospfootnote{fn:pyqt}{\ospurl{http://www.riverbankcomputing.co.uk/software/pyqt}}
+bzw.  PySide\ospfootnote{fn:pyside}{\ospurl{http://www.pyside.org}}
+installiert werden. Sowohl PyQt als auch PySide liegen in einer
+Version für Python 2 als auch Python 3 vor. Die Python-3-Version wird
+im Allgemeinen dann empfohlen, wenn man von vornherein weiß, dass man
+keine Python-Module verwenden möchte, die Python 2 voraussetzen.
+Leider ist es jedoch immer noch so, dass nicht alle Module in einer
+Python-3-Version existieren, so dass man mit einer
+Python-2-Installation häufig besser fährt. Ich setze auf meinem
+Entwicklungsrechner für die meisten Zwecke Python 2.7 ein.  Falls man
+außer PyQt auch andere Module verwenden möchte und unter Windows
+arbeitet, dann findet man für diese Version häufig auch vorkompilierte
+Versionen. Andernfalls müsste man solche Zusatzmodule mit einem
+C++-Compiler kompilieren, wobei der Einrichtungsaufwand nicht
+unerheblich ist. Ich empfehle also Python-Neulingen, Python 2.7 sowie
+die passende PyQt-Installationsdatei zu verwenden. Der Quellcode
+dieses Buches wurde immer mit Python 2 entwickelt, in den seltensten
+Fällen sollte es jedoch einen größeren Portierungsaufwand für Python 3
+geben. Die Syntax der Beispiele benutzt keine besonderen
+Konstruktionen.
+
+\index{PyQt vs. PySide}%
+Ob man nun zunächst auf PyQt oder PySide setzt, ist unerheblich.
+PySide hat einerseits den Vorteil, dass es in einer LGPL-Version
+angeboten wird, so dass sich damit auch kommerzielle Anwendungen
+entwickeln lassen, ohne dass der Code dafür veröffentlicht werden
+muss. Wenn Sie PyQt verwenden, müssten Sie in diesem Fall eine
+kommerzielle Lizenz vom Anbieter Riverbank Computing Limited erwerben.
+Andererseits ist PyQt ein etabliertes Produkt, das seit Jahren
+gepflegt wird. PySide wurde demgegenüber erst nach der Übernahme von
+Trolltech und damit dem Kauf von Qt durch Nokia aus der Taufe gehoben
+und wird derzeit allein von Nokia finanziert. Wie sich der
+Strategiewechsel auf die weitere PySide-Entwicklung auswirkt, ist im
+Moment kaum abzusehen.  Eine Gruppe am Instituto Nokia de Tecnologia
+in Brasilien, wo bislang die Entwicklung maßgeblich stattfand, wird
+zunächst das Projekts fortführen. Zudem gibt es eine nicht
+unerhebliche Anzahl von Entwicklern in der Community rund um das
+Projekt.  Verlässlicher ist im Moment sicher die weitere Entwicklung
+bei PyQt.  Dennoch: Die Konvertierung einer PyQt- in eine
+PySide-Anwendung beschränkt sich meist auf das Ändern einer
+\ospcmd{import}-Anweisung im Header des Quelltextes. Es gibt aus
+Entwicklersicht einige kleinere Unterschiede zwischen PyQt und PySide,
+die aber gerade beim Einstieg kaum ins Gewicht fallen. Sie können sich
+also für eine Variante entscheiden oder einfach beide installieren.
+Die Module koexistieren dann friedlich in einer Python-Installation,
+und Sie können so jederzeit von einem auf das andere Modul wechseln.
+Der Quelltext der Beispiele bezieht sich in diesem Buch immer zuerst
+auf PyQt. Würde man bestimmte Stellen in PySide anders programmieren,
+wird im Text immer darauf eingegangen. Über den Index finden Sie alle
+diese Fälle unter dem Eintrag \dqo{}PyQt vs. PySide\dqc{}. Meist sind
+die Anpassungsarbeiten aber marginal.
+
+\index{Shiboken}%
+Intern ist der Unterschied zwischen PyQt und PySide allerdings
+gewaltig: Nokia hat eine eigene Bibliothek namens \emph{Shiboken} zur
+Erzeugung von Python"=Modulen aus Qt-basierten APIs entwickeln lassen.
+Ziel war es einerseits, die API gegenüber PyQt schneller zu machen,
+andererseits ein eigenes Verfahren zur Erstellung von Python-Modulen
+aus Qt-Bibliotheken anbieten zu können. Entwickler von Bibliotheken
+rund um Qt sollten so die Möglichkeit bekommen, mit Python eine
+alternative Programmiersprache unterstützen zu können.  Aber auch hier
+ist nach Nokias Strategiewechsel kaum abzusehen, wie sich Shiboken in
+Zukunft entwickeln wird. Nach den letzten Benchmarks des
+PySide-Teams ist PySide aber zumindest nicht langsamer als PyQt; mit
+Erscheinen dieses Buches haben sich die Entwickler eventuell sogar
+schon einen Vorsprung erarbeitet.
+
+
+\ospsection{Eine erste Anwendung}{Eine erste Anwendung}{sec:erstesprojekt}
+
+\index{Hauptfenster}%
+\index{Anwendung}%
+\index{Programmgerüst|see{Anwendung}}%
+\index{Programmtemplate|see{Anwendung}}%
+\index{Projekttemplate|see{Anwendung}}%
+\index{Hallo Welt}%
+Nachdem nun alle Vorbereitungen getroffen wurden, können wir also mit
+der ersten PyQt-Anwendung beginnen. Für den Sprung ins kalte Wasser
+erzeugen wir gleich einmal eine vollständige Anwendung inklusive
+Hauptfenster. Hier der Quelltext, den wir dann Zeile für Zeile
+betrachten werden:
+
+\index{QApplication}%
+\index{QApplication!exec\_()}%
+\index{QMainWindow}%
+\index{QMainWindow!show()}%
+\begin{osplisting}{Python}{Erste Hallo-Welt-Anwendung}{code:hallowelt}
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import sys
+from PyQt4 import QtCore, QtGui
+
+def main(argv):
+    app = QtGui.QApplication(argv)
+    mainwindow = QtGui.QMainWindow()
+    mainwindow.show()
+    sys.exit(app.exec_())
+
+if __name__ == "__main__":
+    main(sys.argv)
+\end{osplisting}
+
+Speichern Sie diesen Quelltext  in einer Datei
+\ospfile{hallowelt.py} und starten Sie das Skript dann in einer
+Kommandozeile mit dem Python-Interpreter, indem Sie den Befehl
+\ospcmd{python hallowelt.py} in eine Kommandozeile eingeben. Unter
+Windows müssen Sie möglicherweise den kompletten Pfad zum Interpreter
+angeben, etwa \ospcmd{c:\bsl{}Python27\bsl{}python.exe hallowelt.py}.
+
+So sollten Sie schon Ihr erstes PyQt-Hauptfenster vor sich haben! Nun
+aber zu den einzelnen Schritten seiner Erzeugung.
+
+
+\index{QtGui}%
+\index{QtCore}%
+Zunächst erfolgt der Import der beiden PyQt-Module \ospcmd{QtCore} und
+\ospcmd{QtGui}. Die Trennung dieser Module findet sich (weniger
+explitit) auch im Basis-C++-Framework: Grob gesagt, enthält
+\ospcmd{QtCore} alle nicht sichtbaren Qt"=Komponenten, \ospcmd{QtGui}
+eben die GUI-Klassen und -Komponenten. Haben Sie PySide auf Ihrem
+Rechner installiert,  ersetzen Sie die \ospcmd{import}-Zeile einfach
+folgendermaßen:
+
+\index{PySide}
+\begin{ospsimplelisting}
+from PySide import QtCore, QtGui
+\end{ospsimplelisting}
+
+Schon läuft das Skript mit dem installierten PySide-Modul. Oft
+beschränkt sich der Wechsel von PyQt zu PySide oder umgekehrt auf
+genau diese Anpassung.
+
+Danach werden in \ospcmd{main} ein Objekt aus der Klasse
+\ospcmd{QApplication} sowie das Hauptfenster aus \ospcmd{QMainWindow}
+erstellt. Das Hauptfenster ist eines der sogenannten Qt-Widgets, die
+uns als GUI-Elemente noch häufiger begegnen werden. Mit der Methode
+\ospcmd{show()} wird das Hauptfenster auf dem Bildschirm angezeigt.
+Zuletzt wird die Event-Loop der Anwendung mit der Methode
+\ospcmd{exec\_()} gestartet. Die Anwendung nimmt nun alle
+Benutzereingaben entgegen und gibt sie an die entsprechenden Elemente
+innerhalb des Hauptfensters weiter. Die Event-Loop wird beendet, wenn
+das Hauptfenster geschlossen wird. Übrigens heißt die Original-Methode
+für den Einstieg in die Event-Loop unter C++ \ospcmd{exec()} (also
+ohne Unterstrich). Da es sich bei \ospcmd{exec()} unter Python aber um
+einen reservierten Ausdruck handelt, haben die PyQt-Entwickler einfach
+einen Unterstrich an die Methode angefügt -- nur für den Fall, dass Sie
+sich einmal in der C++Dokumentation des Qt-Frameworks umschauen und
+dort kein \ospcmd{exec\_()} finden.
+
+Nun benötigt das Hauptfenster erste Inhalte. Dafür erstellt man
+zunächst eine eigene Klasse \ospcmd{MainWindow}, die man aus der
+Basisklasse \ospcmd{QMainWindow} ableitet. Im Konstruktor der Klasse
+erzeugt man dann die gewünschten GUI-Elemente, in unserem Beispiel ein
+Label, einen Button und ein Eingabefeld. Sie können alles Weitere in
+die Datei \ospcmd{hallowelt.py}
+schreiben.\ospfootnote{fn:einedatei}{Freundlicherweise erlaubt Python
+  ja die Definition mehrerer Klasssen und Funktionen in einer
+  Quelltextdatei. Wenn die Anwendung größer wird, lassen sich
+  diese Klassen gut in separate Module auslagern.} Die Klasse
+muss nur vor dem Aufruf von \ospcmd{main()} deklariert werden, also
+fügen Sie folgende Zeilen vor der \ospcmd{if}-Anweisung hinzu:
+
+\index{QMainWindow}%
+\index{QMainWindow!setWindowTitle()}%
+\index{QLabel}%
+\index{QPushButton}%
+\index{QLineEdit}%
+\begin{osplisting}{Python}{Erste Hauptfenster-Klasse}{code:ersteshautpfenster}
+class MainWindow(QtGui.QMainWindow):
+
+    def __init__(self, *args):
+        QtGui.QMainWindow.__init__(self, *args)
+        self.labelHalloWelt = QtGui.QLabel(self.tr("Hello World!"))
+        self.buttonTextAktualisieren =
+        	QtGui.QPushButton(self.tr("Update"))
+        self.editText = QtGui.QLineEdit()
+        self.setWindowTitle(self.tr("Hello World"))
+\end{osplisting}
+
+\index{Lokalisierung}%
+\index{Unicode}%
+\index{Uebersetzung@Übersetzung|see{Lokalisierung}}%
+\index{Lokalisierung!tr()-Methode}%
+Der Konstruktor ruft den Konstruktor der Basisklasse
+\ospcmd{QMainWindow} auf und erzeugt drei GUI-Widgets.  Gespeichert
+werden diese Objekte als Attribute in \ospcmd{self}, so dass wir in
+anderen Methoden darauf zugreifen können. Dies werden wir bald nutzen,
+um auf Benutzeraktivitäten und andere Ereignisse mit den GUI-Elementen
+zu reagieren. In der letzten Zeile des Kontruktors wird noch per
+\ospcmd{setWindowTitle()} der Fenstertitel gesetzt; dieser erscheint
+in der Titelleiste des Hauptfensters. Der String des Fenstertitels
+sowie alle anderen Strings im Beispiel für die Beschriftung der
+GUI-Elemente sind in einen Aufruf der Methode \ospcmd{tr()}
+eingebettet. \ospcmd{tr()} steht für \dqo{}translate\dqc{}, was
+bedeutet, dass das Qt-Framework an dieser Stelle nach Übersetzungen
+für die aktuelle Sprache des Betriebssystems sucht. Wir werden in
+diesem Kapitel noch darauf zurückkommen; Kapitel
+\ref{sec:lokalisierung} widmet sich dem Thema ausführlich. An dieser
+Stelle sei aber bereits festgestellt, dass die Funktion \ospcmd{tr()}
+keine Unicode-Zeichenketten entgegennimmt.  Darum verwenden wir an
+dieser Stelle und in allen weiteren Beispielen dieses Kapitels
+englische Begriffe. Deutsche Sonderzeichen wie Umlaute lassen sich
+leider eben nicht als Unicode an \ospcmd{tr()} übergeben, so dass man
+auf Englisch als Default-Sprache angewiesen ist. Kapitel
+\ref{sec:lokalisierung} zeigt, wie man Übersetzungen für alle
+GUI-Strings in die Anwendung integriert, so dass die Oberfläche immer
+in der Sprache des Betriebssystems erscheint, soweit die Strings
+in dieser Sprache vorliegen.
+
+Falls Sie von vornherein sicher sind, keine übersetzte Version Ihrer
+Soft\-ware zu benötigen, können Sie selbstverständlich die Aufrufe von
+\ospcmd{tr()} weglassen. In diesem Fall müssen Sie Unicode-Strings an
+die Konstruktoren bzw. Methoden übergeben. Der Code unserer ersten
+Beispielanwendung \ospcoderef{code:ersteshautpfenster} sieht dann
+folgendermaßen aus:
+
+\begin{osplisting}{Python}{Erste Hauptfenster-Klasse ohne Internationalisierung}{code:ersteshautpfensterohneint}
+class MainWindow(QtGui.QMainWindow):
+
+    def __init__(self, *args):
+        QtGui.QMainWindow.__init__(self, *args)
+        self.labelHalloWelt = QtGui.QLabel(u"Hallo Welt!")
+        self.buttonTextAktualisieren =
+        	QtGui.QPushButton(u"Aktualisieren")
+        self.editText = QtGui.QLineEdit()
+        self.setWindowTitle(u"Hallo Welt")
+\end{osplisting}
+
+Im Weiteren werden wir jedoch sämtliche Beispiele für die
+spätere Übersetzung vorbereiten.
+
+Sie müssen in der \ospcmd{main()}-Funktion des Hauptprogramms nun natürlich ein Objekt der abgleiteten Klasse \ospcmd{MainWindow} anstatt aus \ospcmd{QMainWindow} erstellen; die entsprechende Zeile lautet dann:
+
+\begin{ospsimplelisting}
+    mainwindow = MainWindow()
+\end{ospsimplelisting}
+
+\index{QWidget}%
+\index{Layout}%
+\index{Layout!addWidget()-Methode}%
+\index{QVBoxLayout}%
+\index{QVBoxLayout!addWidget()}%
+\index{Zentrales Widget}%
+Wenn Sie die Anwendung nun starten, ist aber immer noch nichts auf dem
+Bildschirm zu sehen. Dazu muss man noch zwei wichtige Objekte in der
+Qt-Welt definieren, nämlich ein zentrales Widget (Klasse
+\ospcmd{QWidget}), dem wir ein vertikales Layout (Klasse
+\ospcmd{QVBoxLayout}) zuweisen. Dem Layout übergibt man dann die
+einzelnen GUI-Elemente per \ospcmd{addWidget()}, in unserem Fall
+werden diese dann vertikal angeordnet. Dazu fügen Sie dem
+Konstruktor folgende Zeilen hinzu:
+
+\index{QMainWindow!setCentralWidget()}%
+\begin{osplisting}{Python}{Erstes Layout}{code:ersteslayout}
+        widgetZentral = QtGui.QWidget()
+
+        layoutZentral = QtGui.QVBoxLayout()
+        layoutZentral.addWidget(self.labelHalloWelt)
+        layoutZentral.addWidget(self.editText)
+        layoutZentral.addWidget(self.buttonTextAktualisieren)
+
+        widgetZentral.setLayout(layoutZentral)
+        self.setCentralWidget(widgetZentral)
+\end{osplisting}
+
+\index{QObject}%
+\index{Klassenhierarchie}%
+Die letzte Zeile weist das zentrale Widget schließlich dem
+Hauptfenster zu. Nun lässt sich die Anwendung starten, und die drei
+Elemente sind auf dem Bildschirm zu sehen. Damit haben Sie schon die
+wichtigsten Elemente einer Qt-Anwendung kennengelernt: das
+Hauptfenster, das ein zentrales Widget enthält; diesem wiederum weist
+man ein Layout zu.\ospfootnote{fn:layout}{Man wird wohl häufig mehrere
+  Arten von Layouts ineinander verschachteln, um eine Oberfläche mit
+  mehreren Elemente zu versehen; dazu mehr in Abschnitt
+  \ref{sec:layouts}.} Die einzelnen GUI-Elemente wiederum werden dem
+Layout übergeben, das sich selbstständig um Anordnung und Darstellung
+kümmert. Alle GUI-Elemente, also Widgets, sind grundsätzlich von der
+Klasse \ospcmd{QWidget} abgeleitet. Diese wiederum hat als Basisklasse
+\ospcmd{QObject}, die die  Python-Basisklasse
+\ospcmd{object} um einige nützliche Funktionen erweitert. Unter C++
+erfüllt diese Hierarchie u.a. eine wichtige Funktion in der
+Speicherverwaltung, aber auch unter Python werden wir nützliche
+Funktionen dieser Klassen kennenlernen. Mehr zur Klassenhierarchie in
+Qt behandelt Kapitel \ref{sec:klassenhierarchie}.
+
+\index{Garbage Collection}%
+\index{Objekthierarchie}%
+Beachten Sie, dass hier das Layout und das zentrale Widget nur als
+lokale Variablen definiert wurden. Das heißt, dass diese Objekte im
+Normalfall durch den Python-Interpreter und seine \dqo{}Garbage
+Collection\dqc{} gelöscht würden. Indem wir das Layout dem zentralen
+Widget und das zentrale Widget wiederum dem Hauptfenster zuweisen,
+bildet PyQt eine sogenannte \emph{Objekthierarchie}. Erst wenn das
+Basisobjekt, in diesem Fall das Hauptfenster, gelöscht wird, werden
+auch alle seine zugehörigen Objekte gelöscht, auch wenn man diese nur
+als lokale Variablen definiert hat. Diese Eigenschaft von Qt wird uns
+im Laufe dieses Kapitels noch einige Male begegnen und in Kapitel
+\ref{sec:objekthierarchie} noch einmal zusammenfassend erläutert.
+
+Abbildung \ospfigref{fig:hallowelt2} zeigt das Hauptfenster unserer Anwendung unter Ubuntu.
+
+\ospfigure{0.4}{images/hallowelt2}{Hauptfenster der ersten Hallo-Welt-Anwendung mit Layout}{fig:hallowelt2}
+
+
+\ospsection{Das Hauptfenster}{Das Hauptfenster}{sec:hauptfenster}
+
+\index{QDialog}%
+\index{QFileDialog}%
+\index{Hauptfenster}%
+\index{Layout}%
+Das Hauptfenster ist der zentrale Einstiegspunkt einer Qt-Anwendung.
+Es wird von der Klasse \ospcmd{QMainWindow} abgeleitet und
+initialisiert alle GUI"=Elemente.  Es gibt in Qt noch andere
+Fensterklassen: Mit \ospcmd{QDialog} und seinen Unterklassen wie
+\ospcmd{QFileDialog} lassen sich einfache Dialoge zur Benachrichtigung
+für den Benutzer oder Abfragen von Daten erstellen.  Grundsätzlich
+kann jedes Widget auch als Hauptfenster dienen. Wenn Sie im bisherigen
+Code alle Vorkommen von \ospcmd{QMainWindow} durch \ospcmd{QWidget}
+ersetzen, erscheint dasselbe Fenster. Sie können und dürfen jedoch
+kein zentrales Widget definieren, da nur ein Objekt der Klasse
+\ospcmd{QMainWindow} dieses Konzept kennt.  Stattdessen können Sie per
+\ospcmd{self.setLayout(layoutZentral)} das Layout direkt an das von
+Ihnen abgeleitete und als Hauptfenster verwendete
+\ospcmd{QWidget}-Objekt übergeben. Neben dem zentralen Widget stellt
+ein Objekt der Klasse \ospcmd{QMainWindow} auch weitere Eigenschaften
+wie Menü- und Statusleiste zur Verfügung. Diesen Eigenschaften eines
+Hauptfensters widmen wir uns im Folgenden.
+
+\index{Anwendung}%
+\index{Anwendung!Template}%
+Bei der Entwicklung von Qt-Anwendungen ist es sinnvoll, den Code 
+immer wiederkehrender Initialisierungsabläufe einheitlich zu
+organisieren. Es ist bei der Entwicklungsarbeit auf lange Sicht
+vorteilhaft, wenn vor allem das Hauptfenster durch feste Methoden und
+einer Art Standardkonstruktor initialisiert wird. Auch benutzen viele
+PyQt-Anwendungen und -Beispiele aus dem Internet den hier vorgestellten
+oder einen ähnlichen Aufbau, so dass man sich als Entwickler dort
+schnell zurechtfindet, wenn man sich an dieses einheitliche
+Programmgerüst erst einmal gewöhnt hat.
+
+Das hier vorgestellte Programmgerüst wird im Verlauf dieses Buches
+erweitert und angepasst, etwa wenn ein mit dem Qt Designer erstelltes
+Layout verwendet werden soll.  Schließlich werden wir in Kapitel
+\ref{chap:projektsstruktur} auch die \ospcmd{main()}-Funktion
+erweitern, damit sich das Projekt sowohl auf dem Entwicklerrechner als
+auch als installiertes Paket auf dem Rechner des Anwenders ausführen
+lässt. 
+
+Hier nun der Vorschlag für das Grundgerüst des Hauptfensters einer
+PyQt-Anwendung, das wir anschließend abschnittsweise besprechen. Es
+enthält bereits alle bislang besprochenen GUI-Elemente:
+
+\begin{osplisting}{Python}{Grundstruktur des Hauptfensters}{code:grundstruktur}
+class MainWindow(QtGui.QMainWindow):
+
+    def __init__(self, *args):
+        QtGui.QMainWindow.__init__(self, *args)
+        self.createMenu()
+        self.createComponents()
+        self.createLayout()
+        self.createConnects()
+
+        self.setWindowTitle(self.tr(u"Hello World"))
+
+    def createMenu(self):
+    	pass
+
+    def createComponents(self):
+        self.labelHalloWelt = QtGui.QLabel(self.tr(u"Hello World!"))
+        self.buttonTextAktualisieren =
+            QtGui.QPushButton(self.tr(u"Update"))
+        self.editText = QtGui.QLineEdit()
+
+    def createConnects(self):
+        pass
+
+    def createLayout(self):
+        layoutZentral = QtGui.QVBoxLayout()
+        layoutZentral.addWidget(self.labelHalloWelt)
+        layoutZentral.addWidget(self.editText)
+        layoutZentral.addWidget(self.buttonTextAktualisieren)
+        
+        widgetZentral = QtGui.QWidget()
+        widgetZentral.setLayout(layoutZentral)
+        self.setCentralWidget(widgetZentral)
+\end{osplisting}
+
+Der Konstruktor unserer \ospcmd{MainWindow}-Klasse ruft lediglich eine
+Reihe von Klassenmethoden auf. Einige sind noch leer und werden in den
+folgenden Kapiteln nach und nach gefüllt. Aber der Reihe nach:
+
+\begin{ospdeflist}
+  \ospdefitem{\ospcmd{createMenu()}} erstellt das Anwendungsmenü sowie
+  die darin enthaltenen Menüpunkte. Diese Methode implementieren wir
+  im anschließenden Abschnitt \ref{sec:anwendungsmenue}.
+
+\osppagebreak
+
+\ospdefitem{\ospcmd{createComponents()}} hier werden die GUI-Elemente
+erstellt. In unserem Fall sind es die drei schon oben besprochenen
+Elemente Label, Button und Eingabefeld.
+
+\ospdefitem{\ospcmd{createLayout()}} erstellt das zentrale Layout,
+erzeugt ein zentrales Widget und weist diesem Widget das zentrale
+Layout zu.
+
+\ospdefitem{\ospcmd{createConnects()}} sorgt u.\,a. dafür, dass die
+GUI-Elemente später auf Aktionen des Benutzers reagieren. Qt basiert
+hierzu auf dem sogenannten Signal-Slot-Konzept, ein
+Entwicklungsmuster, das Objekte als Sender und Empfänger von
+Nachrichten voneinander entkoppelt. Dieses Muster wird in Abschnitt
+\ref{sec:signalslot} implementiert und erläutert.
+\end{ospdeflist}
+
+Damit haben wir ein geeignetes Grundgerüst für alle weiteren
+PyQt"=Anwendungen definiert. Es ist keine zwingende Voraussetzung für
+die Entwicklung mit PyQt, erleichtert die Arbeit in vielen Situationen
+aber sehr.
+
+
+\ospsection{Das Anwendungsmenü}{Das Anwendungsmenü}{sec:anwendungsmenue}
+
+\index{Menü}%
+\index{Anwendungsmenü|see{Menü}}%
+\index{Menüleiste|see{Menü}}%
+Beim Anwendungsmenü handelt es sich um die klassische Menüleiste einer
+Anwendung, die je nach Betriebssystem unterhalb der Titelleiste oder
+in einer eigenen, zentralen Menüleiste am Bildschirmrand erscheint.
+PyQt unterstützt  Untermenüs und alle gängigen Varianten für
+einzelne Menüpunkte, wie z.\,B. ein- und ausschaltbare Optionen im Menü.
+
+\ospsubsection{Einfache Menüs mit Untermenüs}{Einfache Menüs mit Untermenüs}{sec:einfachesmenue}
+
+\index{QMenu}%
+\index{QMenu!addAction()}%
+\index{QMenu!addSeparator()}%
+\index{QMenuBar}%
+\index{QMenuBar!addMenu()}%
+\index{QAction}%
+\index{QAction!setMenuRole()}%
+Für ein einfaches Menü genügen zunächst drei Klassen:
+\ospcmd{QMenuBar} für die Menüleiste, \ospcmd{QMenu} für die einzelnen
+Hauptmenüeinträge (\ospmenu{Datei}, \ospmenu{Bearbeiten} usw.)  sowie
+\ospcmd{QAction} für die einzelnen Menüeinträge. Um ein Menü mit einem
+Hauptmenü \ospmenu{Datei} und drei Einträgen zu definieren, ändern Sie
+die Methoden \ospcmd{createMenu()} des Programmgerüsts 
+folgendermaßen:
+
+\begin{osplisting}{Python}{Erstes Hauptmenü}{code:ersteshauptmenue}
+    def createMenu(self):
+        self.actionDateiOeffnen =
+            QtGui.QAction(self.tr("Open file..."), self)
+        self.actionDateiSpeichern =
+            QtGui.QAction(self.tr("Save"), self)
+        self.actionBeenden = QtGui.QAction(self.tr("Quit"), self)
+        self.actionBeenden.setMenuRole(QtGui.QAction.QuitRole)
+
+        menuDatei = self.menuBar().addMenu(self.tr("File"))
+        menuDatei.addAction(self.actionDateiOeffnen)
+        menuDatei.addAction(self.actionDateiSpeichern)
+        menuDatei.addSeparator()
+        menuDatei.addAction(self.actionBeenden)
+\end{osplisting}
+
+Den Aufbau des so erzeugten Menüs unter Windows zeigt Abbildung
+\ospfigref{fig:hallowelt2_menu}.
+
+\ospfigure{0.4}{images/hallowelt2_menu}{Hauptmenü der Hallo-Welt-Anwendung}{fig:hallowelt2_menu}
+
+In \ospcmd{createMenu()} werden zunächst die Punkte für das Datei-Menü
+erzeugt. Die Menüeinträge werden als Objekte von \ospcmd{QAction}
+erzeugt. Die Klasse \ospcmd{QAction} stellt zahlreiche Methoden zur
+Verfügung, durch die Sie Menüeinträge um Shortcuts, Icons usw.
+erweitern können. Da dieselben \ospcmd{QAction}-Objekte neben der
+Menüleiste auch in anderen GUI-Elementen wie Toolbars auftauchen
+können, hat man sich für einen recht allgemeinen Namen für die Klasse
+entschieden (im Gegensatz zu Namen wie \dqo{}MenuItem\dqc{} und
+ähnlichem in anderen Toolkits). Für uns ist aber im Moment nur die
+Funktion der \ospcmd{QAction} als Menüeintrag interessant. Im
+Gegensatz zu den GUI-Elementen müssen Objekte des Typs \ospcmd{QAction}
+immer gleich bei der Erzeugung mit einem Elternobjekt verbunden
+werden. Dies geschieht wie im Beispiel durch die Übergabe des
+Parameters \ospcmd{self} als zweites Argument.
+
+
+\index{QAction!QuitRole}%
+\index{QAction!AboutRole}%
+\index{QAction!PreferencesRole}%
+\index{Menu Role}%
+Der Menüeintrag für \ospmenu{Beenden} erhält zusätzlich eine Rolle.
+Eine solche \emph{Menu Role} wird allerdings nur unter Mac OS
+relevant, damit der Menüpunkt dort korrekt im Anwendungsmenü
+erscheint. Soll die Anwendung also plattformunabhängig bleiben und
+sich auch unter Mac OS wie eine native Anwendung verhalten, ist die
+entsprechende Rolle zu definieren. Außer der \ospcmd{QuitRole} gibt es
+noch zwei relevante Rollen: die \ospcmd{AboutRole} für einen möglichen
+\ospmenu{Über}-Eintrag und die \ospcmd{PreferencesRole} für einen
+Menüpunkt \ospmenu{Einstellungen}.
+
+Nachdem die Menüeinträge erzeugt wurden, fügen wir dem Hauptfenster
+per \ospcmd{menuBar().addMenu()} einen Hauptmenüeintrag hinzu. Jedes
+Objekt der Klasse \ospcmd{QMainWindow} hat standardmäßig eine
+Menüleiste, die aber mangels Menüeinträgen in unseren ersten
+Beispielen nicht sichtbar war. Mit der Hauptfenster-Methode
+\ospcmd{menuBar()} erhalten wir ein Objekt der Klasse
+\ospcmd{QMenuBar} zurück, das wiederum eine Methode \ospcmd{addMenu()}
+zum Hinzufügen von Untermenüs besitzt. Diese liefert uns ein Objekt
+der Klasse \ospcmd{QMenu}, das wir in der Variablen \ospcmd{menuDatei}
+speichern. Per \ospcmd{addAction()} weist man schließlich einzelne
+Aktionen dem Untermenü zu. Neben dieser Methode existieren in der
+Klasse \ospcmd{QMenu} noch andere, wie \ospcmd{addSeparator()} und
+\ospcmd{addMenu()} zum Hinzufügen von Trennelementen und weiteren,
+verschachtelten Untermenüs. Beachten Sie, dass die Aktionen wiederum
+als Attribute des Hauptfenster-Objekts definiert werden, so dass wir
+die Aktionen später auch mit bestimmten Methodenaufrufen verbinden
+können. Weitere Hauptmenüpunkte fügen Sie danach einfach mit weiteren
+Aufrufen von \ospcmd{addMenu()} hinzu.  Hier ein
+\ospmenu{Hilfe}-Menü mit einem \ospmenu{Über...}-Menüeintrag:
+
+\begin{ospsimplelisting}
+        self.actionUeber =
+            QtGui.QAction(self.tr("About Hello World..."), self)
+        menuUeber = self.menuBar().addMenu(self.tr("Help"))
+        menuUeber.addAction(self.actionUeber)
+\end{ospsimplelisting}
+
+An dieser Stelle sei kurz eine Alternative zum Erzeugen einer
+solchen Menüleiste erwähnt. Sie können sowohl die Menüleiste als
+auch das Untermenü zunächst als (lokale) Objekte der Klassen
+\ospcmd{QMenuBar} bzw. \ospcmd{QMenu} erzeugen. Diese Objekte
+weist man dann mit den entsprechenden \ospcmd{add()}-Methoden der
+Elternobjekte zu: das Untermenü der Menüleiste, die Menüleiste dem
+Hauptfenster. Das funktioniert ganz ähnlich wie im Beispiel oben mit
+den GUI-Elemente, dem Layout und dem zentralen Widget, so dass sich
+letztlich wieder eine Qt-Objekthierarchie ergibt:
+
+\begin{osplisting}{Python}{Alternative Hauptmenü-Erzeugung}{code:alternativeshauptmenue}
+	# [...] Aktionen definieren
+		
+        menuDatei = QtGui.QMenu(self.tr("File"), self)
+        # [...] add-Aufrufe wie oben
+
+        menuBar = QtGui.QMenuBar(self)
+        menuBar.addMenu(menuDatei)
+        
+        self.setMenuBar(menuBar)
+\end{osplisting}
+
+Beachten Sie, dass in diesem Fall die Objekte mit dem Parameter
+\ospcmd{self} erzeugt werden, damit die Qt-Objekthierarchie definiert
+ist und die Objekte nach Verlassen der Methode erhalten bleiben. Die
+Lebenszeit der Objekte wird danach vom Qt-Framework weiter verwaltet.
+Generell ist die erste Methode vorzuziehen, da so immer nur das
+Hauptfenster die Objekte erzeugt und automatisch alle Beziehungen
+untereinander geklärt sind.
+
+\ospsubsection{Verschachtelte Menüs und erweiterte Menüeinträge}{Verschachtelte Menüs und erweiterte Menüeinträge}{sec:komplexemenues}
+
+\index{Menü!Untermenü}%
+Qt erlaubt nicht nur einfache Menüs mit Menüeinträgen, sondern auch
+die Konstruktion komplexer Untermenüs. Daneben können einzelne
+Menüeinträge auch zum Ein- bzw. Ausschalten von Optionen bzw. zur
+Auswahl einer Option aus einer Liste verwendet werden.
+
+Ein weiteres Untermenü erezugt man, indem man ein Objekt der
+Klasse \ospcmd{QMenu} erzeugt und parallel zu den Aktionen und
+Trennlinien einem anderen \ospmenu{QMenu}-Objekt per
+\ospcmd{addMenu()} hinzufügt. Das Menü enthält dann ein weiteres
+Untermenü, das auf den meisten Betriebssystemen mit einem kleinen
+Pfeil neben dem Menüeintrag als ausklappbar gekennzeichnet wird. Um
+ein solches Untermenü zu erzeugen, fügen Sie folgenden Code vor den
+Aufruf von \ospcmd{addSeparator()} im bisherigen Beispielprogramm
+hinzu:
+
+\index{QMenuBar!addMenu()}%
+\begin{osplisting}{Python}{Erzeugen eines Untermenüs}{code:untermenue}
+        self.actionLinksAusrichten =
+            QtGui.QAction(self.tr("Align Left"), self)
+        self.actionRechtsAusrichten =
+            QtGui.QAction(self.tr("Align Right"), self)
+        menuAnsicht = menuDatei.addMenu(self.tr("View"))
+        menuAnsicht.addAction(self.actionLinksAusrichten)
+        menuAnsicht.addAction(self.actionRechtsAusrichten)
+\end{osplisting}
+
+\index{Menü!Optionen}%
+\index{Menü!Checkbox}%
+Damit erscheint zwischen dem Menüeintrag \ospmenu{Speichern} und der
+Trennlinie ein Untermenü-Einträge \ospmenu{Ansicht} mit zwei
+Untereinträgen. In diesem Fall sollen die Menüeinträge möglicherweise
+verwendet werden, um später in einem Text-Widget zwischen dem links
+und rechts ausgerichteten Text zu wechseln. Solche Optionen werden
+auch in Menüs meist mit einer Kennzeichnung des gerade aktivierten
+Modus versehen, unter Windows beispielsweise ein kleiner, ausgefüllter
+Kreis. Wenn die Optionen nicht exklusiv sind, findet man häufig einen
+Haken neben der aktivierten Option. In diesem Fall ist eine
+nicht-exklusive Auswahl wenig sinnvoll -- schließlich kann man einen
+Text unmöglich gleichzeitig links und rechts ausrichten. Dennoch
+wollen wir auch diesen Fall an dem vorgestellten Beispiel
+demonstrieren.
+
+\index{QActionGroup}%
+\index{QAction!setCheckable()}%
+\index{QAction!setChecked()}%
+\index{QAction!setExclusive()}%
+Zur Realisierung solcher Menü-Optionen stellt Qt die Klasse
+\ospcmd{QActionGroup} bereit. Ein Objekt dieser Klasse dient als
+Elternobjekt derjenigen Menüeinträge, die zu einer Option gehören, die
+also logisch zusammengehören wie die Einstellung der Textausrichtung.
+Das Objekt der Klasse \ospcmd{QActionGroup} ist kein sichtbares
+Wigdet, und wir werden dem Menü auch weiterhin nur die beiden Objekte
+der Klasse \ospcmd{QAction} hinzufügen. Es dient also nur dem
+Zusammenhalt der Aktionen. Qt stellt noch andere Gruppierungsklassen
+zur Verfügung, die wir noch kennenlernen werden.  Neben der
+Gruppierung legen wir mit der Methode \ospcmd{setCheckable()} der
+Klasse \ospcmd{QAction} die beiden Aktionen als auswählbare Elemente
+fest. Der gesamte Code für unser Untermenü sieht dann folgendermaßen
+aus:
+
+\begin{osplisting}{Python}{Erzeugen eines Untermenüs mit Optionen}{code:untermenueoptionen}
+        actiongroupAnsichten = QtGui.QActionGroup(self)
+        self.actionLinksAusrichten =
+            QtGui.QAction(self.tr("Align Left"), actiongroupAnsichten)
+        self.actionLinksAusrichten.setCheckable(True)
+        self.actionLinksAusrichten.setChecked(True)
+        self.actionRechtsAusrichten =
+            QtGui.QAction(self.tr("Align Right"), actiongroupAnsichten)
+        self.actionRechtsAusrichten.setCheckable(True)
+        actiongroupAnsichten.setExclusive(True)
+        
+        menuAnsicht = menuDatei.addMenu(self.tr("View"))
+        menuAnsicht.addAction(self.actionLinksAusrichten)
+        menuAnsicht.addAction(self.actionRechtsAusrichten)
+\end{osplisting}
+
+Die Gruppierung erfolgt also allein durch die Übergabe von
+\ospcmd{actiongroup\-Ansichten} an den Konstruktor der Aktionen. Statt
+\ospcmd{self}, also dem Hauptfenster (wie im ersten Ansatz), wird nun
+die Gruppe das Elternobjekt der Aktionen. Wiederum übernimmt intern Qt
+die Speicherverwaltung für dieses Objekt. Per \ospcmd{setChecked()}
+legen wir außerdem die Linksausrichtung als Default-Einstellung für
+unsere Option fest. Schließlich wird die Exklusivität der beiden
+Einstellungen durch den Aufruf der Methode \ospcmd{setExclusive()}
+gewährleistet. Wenn die Optionen nicht-exklusiv sein sollen, übergeben
+Sie dieser Methode den Parameter \ospcmd{False}.  Tatsächlich können
+Sie den Aufruf mit \ospcmd{True}, wie in unserem Fall, einfach
+weglassen. Die Standard\-einstellung einer \ospcmd{QActionGroup} ist
+immer eine Exklusivität der einzelnen Aktionen. Lesbarer ist der Code
+aber mit diesem Aufruf, so dass wir hier diese Variante verwenden.
+
+Abbildung \ospfigref{fig:hallowelt2_menu3} zeigt schließlich das Menü
+mit nicht-exklusiven bzw. exklusiven Menüeinträgen nebeneinander unter
+Windows. Wie schon erwähnt, zeigen unterschiedliche Symbole neben den
+Einträgen diese Eigenschaft auf den ersten Blick an, wie man es von
+anderen Anwendungen unter diesem Betriebssystem gewohnt ist.
+
+\ospfigure{0.8}{images/hallowelt2_menu3}{Untermenü mit nicht-exklusiven (links) und exklusiven (rechts) Optionen}{fig:hallowelt2_menu3}
+
+
+\ospsection{Layouts}{Layouts}{sec:layouts}
+
+\index{Layout}%
+Layouts dienen bei Qt dazu, Elemente auf bestimmte Weise in einem
+Fenster anzuordnen. Das vertikale Layout mit der Klasse
+\ospcmd{QVBoxLayout} haben wir in unserem Hallo-Welt-Programm schon
+verwendet.
+
+
+\ospsubsection{Freie Layouts}{Freie Layouts}{sec:freielayouts}
+
+\index{Layout!freies Layout}%
+\index{QWidget!setGeometry()}%
+Prinzipiell ist es mit Qt möglich, die Elemente ohne ein Layout im
+Hauptfenster anzuordnen. Dazu definiert man für jedes Element über die
+Methode \ospcmd{setGeometry()} eine feste Position und Größe. Für die
+drei Elemente unseres Programmgerüsts kann man beispielsweise folgende
+Definitionen in \ospcmd{createComponents()} vornehmen:
+
+\begin{osplisting}{Python}{GUI-Elemente frei positionieren}{code:freieslayout}
+def createComponents(self):
+    self.labelHalloWelt = QtGui.QLabel(self.tr("Hello World!"), self);
+    self.labelHalloWelt.setGeometry(20, 20, 100, 50)
+    self.buttonTextAktualisieren =
+        QtGui.QPushButton(self.tr("Update"), self)
+    self.buttonTextAktualisieren.setGeometry(20, 100, 150, 50)
+    self.editText = QtGui.QLineEdit(self)
+    self.editText.setGeometry(220, 100, 200, 50)
+\end{osplisting}
+
+Die Methode \ospcmd{createLayout()} kann dann leer bleiben, weil kein
+Layout und kein zentrales Widget mehr benötigt werden. Sie können
+diese auch versuchsweise im Konstruktor auskommentieren.  Nun entsteht
+allerdings ein Problem: Das Hauptfenster ist zu klein, um alle
+Elemente anzeigen zu können. Der Benutzer kann natürlich die
+Fenstergröße ändern, um den Button und das Texteingabefeld sichtbar zu
+machen. Sinnvoller ist es allerdings, am Ende des Konstruktors des
+Hauptfensters vor oder nach dem Aufruf von \ospcmd{setWindowTitle()}
+die Größe des Fensters anzupassen:
+
+\index{QWidget!resize()}%
+\index{Hauptfenster!Größe ändern}%
+\begin{ospsimplelisting}
+        self.resize(500, 250)
+\end{ospsimplelisting}
+
+Zurück zum freien Layout: Als Parameter der Methode
+\ospcmd{setGeometry()} übergibt man die Position vom linken und oberen
+Fensterrand, gefolgt von Breite und Höhe. Beachten Sie, dass nun alle
+Elemente mit dem Parameter \ospcmd{self} im Konstruktor erzeugt
+werden. Dies stellt die Objekthierarchie sicher: Da jetzt kein
+zentrales Widget und auch kein Layout mehr existieren, über die die
+Elemente dem Hauptfenster zugeordnet werden, müssen wir die Elemente
+gleich bei der Erzeugung das Hauptfensters als Elternelement
+übergeben.  Somit werden die Elemente überhaupt erst im Hauptfenster
+angezeigt; außerdem wird beim Schließen des Hauptfensters auch der
+Speicherplatz der Elemente freigegeben. Das Hauptfenster unserer
+Anwendung sieht dann aus wie in Abbildung
+\ospfigref{fig:mainwindowmanuelleslayout}.
+
+\ospfigure{0.6}{images/hallowelt4_freieslayout}{Hauptfenster der Anwendung mit manuellem Layout}{fig:mainwindowmanuelleslayout}
+
+Grundsätzlich ist vom Einsatz solch manueller Layouts jedoch
+abzuraten. Die Positionen der einzelnen Elemente lassen sich nur
+äußerst schwer abschätzen, außerdem geraten solche Layouts später bei
+der Lokalisierung der Anwendung oft durcheinander, wenn sich
+String-Längen ändern. Qt bietet darum mit seinen von \ospcmd{QLayout}
+abgeleiteten Klassen eine Reihe von automatischen Layouts, die dem
+Entwickler einen Großteil der Arbeit beim Platzieren und Anpassen von
+Elementen abnehmen.
+
+
+\ospsubsection{Horizontales und vertikales Layout}{Horizontales und vertikales Layout}{sec:hvlayout}
+
+\index{Layout!horizontales Layout}%
+\index{Layout!vertikales Layout}%
+\index{QHBoxLayout}%
+\index{QVBoxLayout}%
+Elemente lassen sich mit den Klassen \ospcmd{QHBoxLayout} und
+\ospcmd{QVBoxLayout}\osplinebreak{} neben- bzw. untereinander
+anordnen. Beide sind von \ospcmd{QBoxLayout} abgeleitet und teilen
+sich die meisten Methoden. \ospcmd{QBoxLayout} wiederum basiert auf
+\ospcmd{QLayout}, der Basisklasse für alle Layoutklassen.
+
+Wenn wir im Programmgerüst bei der Initialisierung in
+\ospcmd{createLayout} statt dem vertikalen ein horizontales Layout mit
+\ospcmd{QHBoxLayout} erstellen, werden die drei Elemente nebeneinander
+statt untereinander angeordnet. Abbildung
+\ospfigref{fig:mainwindowverthorizlayout} stellt beide
+Layout-Varianten einander gegenüber.
+
+\ospfigure{0.9}{images/mainwindowverthorizlayout}{Hauptfenster der Anwendung mit horizontalem (links) und vertikalem (rechts) Layout}{fig:mainwindowverthorizlayout}
+
+Versuchen Sie einmal, auch bei diesen Layouts per
+\ospcmd{resize()}-Methode im Konstruktor des Hauptfensters die
+Fenstergröße zu ändern. In diesem Fall passt sich die Größe der
+Elemente automatisch der Fenstergröße an, aber nur in der Breite, die
+Höhe der Elemente ändert sich nicht.  Qt übernimmt über seine
+Layout-Klassen automatisch die Kontrolle über Größe und teilweise auch
+Position der GUI-Elemente.  Diese Automatik erleichtert die Erstellung
+von Benutzeroberflächen enorm. Bei zunehmender Komplexität kann es
+aber schnell zu unerwünschten Effekten beim Layout kommen, da jedes
+Qt-Widget über eine Reihe eigener Eigenschaften auf das automatische
+Layout Einfluss nehmen kann. In den folgenden Abschnitten werden wir
+uns darum mit diesen Eigenschaften beschäftigen und ein grundlegendes
+Verständnis für den Layout-Mechanismus schaffen. 
+
+Versuchen Sie bei allen Beispielen auch, die Fenstergröße entweder per
+\ospcmd{resize()} oder manuell mit der Maus zu ändern: Qt
+passt nämlich beim Start der Anwendung automatisch die Größe des
+Fensters an die berechnete Größe der Widgets an. Änderungen an diesen
+Einstellungen werden dann erst sichtbar, wenn das Fenster zu groß oder
+zu klein für die Widgets wird bzw. wenn sich die Fenstergröße bei
+laufender Anwendung ändert.
+
+\index{QSizePolicy}%
+\index{Size Policy}%
+\begin{ospdeflist}
+
+  \ospdefitem{\ospcmd{QSizePolicy::Fixed}} Die Größe des Widgets
+  entspricht den Werten, die über \ospcmd{sizeHint()} abegrufen
+  werden können. Die Größe wird nicht geändert.
+
+  \ospdefitem{\ospcmd{QSizePolicy::Minimum}} \ospcmd{sizeHint()} gibt
+  die minimale Größe an, das Widget kann aber vergrößert werden.
+
+  \ospdefitem{\ospcmd{QSizePolicy::Maximum}} \ospcmd{sizeHint()} gibt
+  die maximale Größe an, das Widget kann beliebig verkleinert werden.
+
+  \ospdefitem{\ospcmd{QSizePolicy::Preferred}} \ospcmd{sizeHint()}
+  gibt die optimale Größe an, das Widget kann aber verkleinert oder
+  vergrößert werden. Das Widget profitiert aber nicht von einer
+  Vergrößerung. Dies ist die Standardeinstellung für \ospcmd{QWidget}.
+
+  \ospdefitem{\ospcmd{QSizePolicy::Expanding}} Auch hier ist
+  \ospcmd{sizeHint()} ein Optimalwert, und das Widget kann vergrößert
+  und verkleinert werden. Jedoch sollte das Widget so groß wie möglich
+  dargestellt werden.
+
+  \ospdefitem{\ospcmd{QSizePolicy::MinimumExpanding}} Der Wert von
+  \ospcmd{sizeHint()} ist minimal und ausreichend für das Widget,
+  jedoch profitiert das Widget von mehr Platz und sollte, wenn
+  möglich, maximal vergrößert werden.
+
+  \ospdefitem{\ospcmd{QSizePolicy::Ignored}} \ospcmd{sizeHint()}
+  sollte ignoriert und das Widget so groß wie möglich dargestellt
+  werden.
+\end{ospdeflist}
+
+\index{QWidget!sizePolicy()}%
+\index{QWidget!setSizePolicy()}%
+\index{QWidget!sizeHint()}%
+Bei automatischen Layouts übernimmt Qt, wie gesagt, weitestgehend die
+Kontrolle über Größe und Position der Widgets. So zeigt Abbildung
+\ospfigref{fig:mainwindowverthorizlayout}, dass bei einem horizontalen
+Layout das Eingabefeld den freien Platz so weit wie möglich ausfüllt,
+während der Button und das Label daneben auf eine sinnvolle Größe
+schrumpfen, so dass der Text vollständig in den Elementen dargestellt
+werden kann. Im vertikalen Layout dagegen breitet sich auch der Button
+über die gesamte Breite des Bildschirms aus. 
+
+Dieses Verhalten lässt sich über die sogenannte \emph{Size Policy}
+ändern. Jedes \ospcmd{QWidget} (von dem alle bisher verwendeten
+Widget-Klassen abgeleitet sind) definiert dazu die Methoden
+\ospcmd{sizePolicy()}, \ospcmd{setSizePolicy()} und
+\ospcmd{size\-Hint()}. Die Methode \ospcmd{sizeHint()} gibt zurück, wie
+viel Platz das Widget unter normalen Umständen beanspruchen möchte. Je
+nach Size Policy kann das Widget aber vergrößert oder verkleinert
+dargestellt werden.  Dazu übergibt man der Methode
+\ospcmd{setSizePolicy()} zwei Werte aus einem vordefinierten
+Enumerator \ospcmd{QSizePolicy::Policy} für die horizontale und
+vertikale Einstellung. Alle gültigen Werte finden Sie in der Liste
+oben. Um beispielsweise alle Elemente gleich groß zu machen, weist man
+ihnen für die Horizontale den Wert \ospcmd{QSizePolicy::Expanding} zu,
+so dass sie den maximal verfügbaren Platz einnehmen. Das Eingabefeld
+besitzt diesen Wert standardmäßig, so dass es in unserem Fall
+ausreicht, den Wert für den Button und das Label zu setzen. Fügen Sie
+dazu folgende zwei Zeilen am Anfang der
+\ospcmd{createLayout()}-Methode hinzu:
+
+\begin{ospsimplelisting}
+self.buttonTextAktualisieren.setSizePolicy(QtGui.QSizePolicy.Expanding,
+                                           QtGui.QSizePolicy.Fixed)
+self.labelHalloWelt.setSizePolicy(QtGui.QSizePolicy.Expanding,
+                                  QtGui.QSizePolicy.Fixed)
+\end{ospsimplelisting}
+
+\index{QWidget!setMinimumSize()}%
+Die Einstellung für die Vertikale bleibt auf den Wert
+\ospcmd{QSizePolicy::Fixed} gesetzt, so dass die Elemente immer eine
+vordefinierte Höhe einnehmen. Diese feste Höhe (wie auch die Breite)
+lässt sich über eine weitere Methode \ospcmd{setMinimumSize()}
+festlegen. Falls sich das Element vergrößern oder verkleinern soll,
+kann man so auch eine minimale Größe angeben, die nicht unterschritten
+wird, wenn beispielsweise neue Elemente Platz innerhalb des Layouts
+beanspruchen. Erweitern Sie \ospcmd{createLayout()} noch um folgende
+Zeile, um das Eingabefeld mit einer minimalen Größe zu versehen:
+
+\begin{ospsimplelisting}
+self.editText.setMinimumSize(350, 50)
+\end{ospsimplelisting}
+
+\index{QWidget!Stretchfaktor}%
+\index{Stretchfaktor}%
+Neben diesen Möglichkeiten zur Beeinflussung eines automatischen
+Layouts gibt es eine weitere, den sogenannten \emph{Stretchfaktor}.
+Über ihn definiert man, wie sich die Größe der Elemente gegenüber der
+anderer Elemente verhält. Standardmäßig wird allen \ospcmd{QWidget}
+der Stretchfaktor 0 zugewiesen, so dass der Platz über die Werte der
+Angabe der \ospcmd{QSizePolicy} zugewiesen wird. Um den Stretchfaktor
+kontrollieren zu können, muss dieser also für alle Elemente definiert
+werden. Andernfalls nimmt möglicherweise ein Element allen verfügbaren
+Platz ein (z.\,B. weil es \ospcmd{QSizePolicy::Expanding} gesetzt
+hat).
+
+Wenn nun das Eingabefeld genau doppelt so groß sein soll wie die
+anderen Elemente, definieren Sie statt der Mindestgröße lieber
+einen Stretchfaktor. Dieser wird zu dem Zeitpunkt gesetzt, wenn das
+Element dem Layout zugewiesen wird, und kann als zweiter Parameter an
+\ospcmd{addWidget()} übergeben werden. Mit den folgenden Zeilen legen
+Sie fest, dass der Button mindestens doppelt so groß sein soll wie die
+anderen beiden Elemente:
+
+\begin{ospsimplelisting}
+        layoutZentral.addWidget(self.labelHalloWelt, 1)
+        layoutZentral.addWidget(self.editText, 2)
+        layoutZentral.addWidget(self.buttonTextAktualisieren, 1)
+\end{ospsimplelisting}
+
+Aus allen Angaben errechnet Qt dann das endgültige Layout, und bei
+Änderungen der Fenstergröße passen sich alle Elemente automatisch an.
+Die Definition dieser Werte erleichtert es, dynamisch Elemente in das
+Layout hinzuzufügen und unterschiedliche Lokalisierungen mit einer
+automatischen Anpassung der Widget-Größe zu verbinden, und zwar
+möglichst unabhängig von der Auflösung und dem Qt-Style des
+Betriebssystems, so dass auf absolute Angaben wie bei der Geometrie und
+der Größe von Widgets lieber verzichtet werden sollte. 
+
+Beachten Sie, dass außer der Auflösung und damit Größe des
+Hauptfensters auch Standardgrößen von Fonts, Scollbars usw. eine Rolle
+für das Layout spielen. Arbeitet man hier mit festen Werten, wird die
+GUI der Anwendung in den meisten Fällen für jedes Betriebssystem
+separat definiert werden müssen. Stattdessen arbeitet man am
+sinnvollsten über die Definition von Size Policies und
+Stretchfaktoren.
+
+\index{Layout!Stretchelement}%
+Eine weitere Möglichkeit, auf das automatische Layout Einfluss zu
+nehmen, sei hier auch noch erwähnt: In allen Layout-Klassen existiert
+die Methode \ospcmd{addStretch()}, mit der sich ein unsichtbares
+Stretchelement in das Layout einfügen lässt. Dieses Stretchelement
+nimmt immer den maximal möglichen Platz ein, so dass andere Elemente
+im Layout auf ihre optimale Größe zusammengestaucht werden. Um
+beispielsweise alle Elemente so weit oben wie möglich zu
+positionieren, kann nach dem Hinzufügen aller Elemente in ein
+vertikales Layout einfach ein \ospcmd{addStretch()} ausgeführt werden:
+
+\begin{osplisting}{Python}{Layout mit Stretchfaktor}{code:stretchfaktor}
+    def createLayout(self):
+        layoutZentral = QtGui.QVBoxLayout()
+        layoutZentral.addWidget(self.labelHalloWelt)
+        layoutZentral.addWidget(self.editText)
+        layoutZentral.addWidget(self.buttonTextAktualisieren)
+        layoutZentral.addStretch()
+        
+        widgetZentral = QtGui.QWidget()
+        widgetZentral.setLayout(layoutZentral)
+        self.setCentralWidget(widgetZentral)
+\end{osplisting}
+
+Auch der Methode \ospcmd{addStretch()} kann optional ein Stretchfaktor
+als Parameter übergeben werden. Die minimale Größe des Stretchelements
+ist immer null, so dass es gegebenenfalls Platz für die Darstellung
+aller anderen Widgets macht.
+
+
+\ospsubsection{Elemente im Raster}{Elemente im Raster}{sec:gridlayouts}
+
+\index{Layout!Grid/Rasterlayout}%
+\index{QGridLayout}%
+Neben den sogenannten \emph{Box Layouts} gibt eine weitere, häufig
+eingesetzte Layoutklasse, mit der sich Widgets in einem Raster
+(\emph{Grid}) anordnen lassen. Die Klasse \ospcmd{QGridLayout} spannt
+dazu ein Raster auf, in dem sich die Elemente vom Entwickler anordnen
+lassen. Für jedes Widget gibt man dann bei Aufruf von
+\ospcmd{addWidget()} an, in welche Spalte und Zeile das Widget gesetzt
+werden soll -- gegebenenfalls die Anzahl von Spalten und Zeilen, die
+das Widget in Breite und Höhe einnimmt (standardmäßig genau eine
+Spalte und Zeile).
+
+Um die drei Elemente in einem Rasterlayout anzuordnen, ändern Sie die
+Methode \ospcmd{createLayout()} folgendermaßen ab:
+
+\begin{osplisting}{Python}{Grid-Layout}{code:gridlayout}
+def createLayout(self):
+    layoutZentral = QtGui.QGridLayout()
+    layoutZentral.addWidget(self.labelHalloWelt, 0, 1)
+    layoutZentral.addWidget(self.editText, 1, 1, 1, 2)
+    layoutZentral.addWidget(self.buttonTextAktualisieren, 2, 0, 1, 2)
+        
+    widgetZentral = QtGui.QWidget()
+    widgetZentral.setLayout(layoutZentral)
+    self.setCentralWidget(widgetZentral)
+\end{osplisting}
+
+\ospcmd{addWidget()} kann bei Grid Layouts also noch zwei bis vier
+Parameter aufnehmen: Zeile und Spalte für das Widget sowie die Größe
+in Rastereinheiten in Höhe und Breite, also wie viele Zeilen und
+Spalten das Widget umspannen soll. Die Größe des Grid Layouts wird
+automatisch gesetzt, in unserem Fall erstreckt sich das Layout je drei
+Einheiten in die Horizontale und in die Vertikale. Jedes Element hat
+nur eine Spalte und nur eine Zeile des Layouts, das Label und der
+Button sind jeweils zwei Spalten breit. Dadurch überlappen sich
+beispielsweise Button und Eingabefeld in der Horizontalen: Der Button
+beginnt in Spalte 1 und endet in Spalte 2, das Eingabefeld startet in
+Spalte 2 und endet in 3. Zu sehen ist das Ergebnis auf der linken
+Seite von Abbildung \ospfigref{fig:mainwindowgridlayout}.
+
+\ospfigure{0.9}{images/mainwindowgridlayout}{Rasterlayout ohne (links) und mit (rechts) Stretchfaktor}{fig:mainwindowgridlayout}
+
+\index{QGridLayout!setRowStretch()}%
+\index{QGridLayout!setColumnStretch()}%
+Im rechten Teil der Abbildung sehen Sie eine kleine Abwandlung des
+Layouts. In Rasterlayouts lassen sich auch die einzelnen Einheiten des
+Rasters mit einem Stretchfaktor versehen. Dadurch kann eine Spalte bzw.
+eine Zeile doppelt so groß wie die anderen definiert werden. Dazu
+dienen die beiden Methoden \ospcmd{setColumnStretch()} und
+\ospcmd{setRowStretch()} von \ospcmd{QGridLayout}. Um die dritte
+Spalte, also den rechten Teil des Eingabefelds, dreimal so breit wie
+die anderen Spalten zu machen, fügen Sie folgenden Code an das Ende von
+\ospcmd{createLayout()} an:
+
+\begin{ospsimplelisting}
+        layoutZentral.setColumnStretch(0, 1)
+        layoutZentral.setColumnStretch(1, 1)
+        layoutZentral.setColumnStretch(2, 3)
+\end{ospsimplelisting}
+
+Beachten Sie, dass in diesem Fall der Stretchfaktor für alle Spalten
+zu definieren ist. Für die Berechnung des Layouts spielt außerdem noch
+die \emph{Size Policy} der einzelnen Elemente eine Rolle, so dass
+unter Umständen nicht immer vorhersehbar ist, wie die Elemente
+schließlich auf dem Bildschirm erscheinen. Es gilt außerdem wieder,
+dass die Größe des Hauptfensters letztlich auch Einfluss auf das
+Layout nimmt. Ist das Fenster zu klein, geht immer die Sichtbarkeit
+aller Elemente vor, so dass ein eventuell angegebener Stretchfaktor
+nicht voll zur Geltung kommt. 
+
+Wenn Sie das Fenster mit Rasterlayout und Stretchfaktor immer weiter
+verkleinern, werden Sie sehen, dass die dritte Spalte immer kleiner
+wird. Die Sichtbarkeit der Beschriftung auf dem Button geht in diesem
+Fall vor. Gerade der Umgang mit Rasterlayouts setzt viel Erfahrung
+voraus. Es empfiehlt sich, zunächst mit horizontalen und vertikalen
+Layouts zu starten.  Diese lassen sich nämlich auf viele Arten
+verschachteln, so dass auch sie schnell zum gewünschten GUI führen und
+sich als brauchbare Alternative für Rasterlayouts erweisen.
+
+
+\ospsubsection{Verschachteln von Layouts}{Verschachteln von Layouts}{sec:schachtellayouts}
+
+\index{Layout!Schachtellayout}%
+\index{QHBoxLayout!addLayout()}%
+\index{QVBoxLayout!addLayout()}%
+Neben \ospcmd{addWidget()} zum Hinzufügen von Elementen gehört zu den
+Box Layouts die Methode \ospcmd{addLayout()}. Hierüber lassen sich
+neben Widgets auch ganze Layouts zu einem vorhanden Layout hinzufügen.
+Diese können natürlich wiederum Widgets und Layouts enthalten, so dass
+sich komplexe Hierarchien ergeben. Bei Desktop-Anwendungen wird man
+unter Umständen ab einer bestimmten Anzahl von Widgets lieber auf
+Rasterlayouts ausweichen; aus Erfahrung lässt sich das Aussehen einer
+Anwendung mit verschachtelten Layouts aber wesentlich genauer
+definieren. Häufig sind also horizontale und vertikale Layouts das
+Mittel der Wahl, um Widgets logisch in der Oberfläche anzuordnen.
+
+In unserem Fall soll der Button später dazu benutzt werden, den Text
+des Eingabefelds in das Label einzutragen. Der Button gehört also
+zunächst einmal zum Eingabefeld. Die beiden Elemente wollen wir
+nebeneinander positionieren. Darüber zeigen wir einfach das Label in
+einer eigenen Zeile an. Dieser Aufbau lässt sich leicht durch ein
+horizontales Layout innerhalb eines vertikalen implementieren.
+Folgende \ospcmd{createLayout()}-Methode liefert das Gewünschte:
+
+\index{Layout!Elemente zentrieren}%
+\begin{osplisting}{Python}{Verschacheltes\\ Layout}{code:schachtellayout}
+def createLayout(self):
+    layoutZentral = QtGui.QVBoxLayout()
+    layoutZentral.addWidget(self.labelHalloWelt, 0, QtCore.Qt.AlignCenter)
+
+    layoutHorizontal = QtGui.QHBoxLayout()
+    layoutHorizontal.addWidget(self.editText)
+    layoutHorizontal.addWidget(self.buttonTextAktualisieren)
+
+    layoutZentral.addLayout(layoutHorizontal)
+        
+    widgetZentral = QtGui.QWidget()
+    widgetZentral.setLayout(layoutZentral)
+    self.setCentralWidget(widgetZentral)
+\end{osplisting}
+
+Sie müssen den Typ \ospcmd{layoutZentral} wieder auf
+\ospcmd{QHBoxLayout} ändern. Beachten Sie die beiden zusätzlichen
+Parameter beim Hinzufügen des Labels: Der erste Parameter gibt den
+Stretchfaktor an (hier der Standardwert 0), der zweite zentriert das
+Widget (für rechtsbündige Ausrichtung gibt es \ospcmd{Qt::AlignRight},
+für Blocksatz \ospcmd{Qt::AlignJustify}).  Abbildung
+\ospfigref{fig:mainwindowschachtellayout} zeigt das so definierte
+Layout. Damit ist das GUI der Anwendung erst einmal fertig.  Was nun
+noch fehlt, ist Interaktion, die wir im folgenden Abschnitt über den
+Signal-Slot-Mechanismus implementieren.
+
+\ospfigure{0.5}{images/mainwindowschachtellayout}{Fertiges GUI der Anwendung mit verschachteltem Layout}{fig:mainwindowschachtellayout}
+
+Vorher werden wir aber noch eine weitere Layout-Variante kennenlernen,
+die sich von den bisherigen deutlich unterscheidet. Mit ihr lassen
+sich Layouts übereinander platzieren, so dass nicht immer alle
+GUI-Elemente direkt sichtbar sind, sondern dem Benutzer erst bei
+Bedarf angezeigt werden.
+
+
+\ospsubsection{Stapellayouts}{Stapellayouts}{sec:stapellayouts}
+
+\index{Layout!Stapellayout}%
+\index{QStackedLayout}%
+Neben den Box Layouts und Rasterlayouts existiert noch eine dritte
+Variante, das sogenannte \emph{Stapellayout}. Wie der Name andeutet,
+werden hier Layouts gestapelt, wobei immer nur eine Seite des Layouts
+sichtbar ist. Erzeugt wird ein solches Layout mit der Klasse
+\ospcmd{QStackedLayout}.
+
+Die einzelnen Seiten eines Stapellayouts bestehen wiederum aus
+Objekten der Klasse \ospcmd{QWidget}, so dass im Prinzip jedes
+GUI-Element eine Seite des Layouts einnehmen kann. Oft wird man jedoch
+die einzelnen Seiten aus komplexeren Widgets aufbauen, wobei jedes
+Seiten-Widget ein zentrales Layout und Unterelemente (weitere Layouts
+und Widgets) enthalten kann. Das funktioniert im Prinzip wie das
+zentrale Widget unseres bisherigen Hauptfensters, dem wir ja auch ein
+Layout und die drei GUI-Elemente zugewiesen haben. Einem Stapellayout
+können nun mehrere solcher aus mehreren Elementen bestehende Widgets
+zugewiesen werden. Der Einfachheit halber verwenden wir wieder unsere
+drei Elemente; wir weisen das Label als einfaches Widget der ersten
+Seite des Layouts zu, die beiden anderen Elemente fügen wir einem
+komplexen Widget samt horizontalem Layout hinzu und setzen es auf die
+zweite Seite. Der Methode \ospcmd{createLayout()} sieht dann
+folgendermaßen aus:
+
+\index{QStackedLayout!addWidget()}%
+\begin{osplisting}{Python}{Widgets im Stapellayout}{code:stapellayout}
+def createLayout(self):
+    layoutZentral = QtGui.QStackedLayout()
+        
+    layoutZentral.addWidget(self.labelHalloWelt)
+
+    layoutHorizontal = QtGui.QHBoxLayout()
+    layoutHorizontal.addWidget(self.editText)
+    layoutHorizontal.addWidget(self.buttonTextAktualisieren)
+        
+    zweiteSeite = QtGui.QWidget()
+    zweiteSeite.setLayout(layoutHorizontal)
+    layoutZentral.addWidget(zweiteSeite)
+        
+    widgetZentral = QtGui.QWidget()
+    widgetZentral.setLayout(layoutZentral)
+    self.setCentralWidget(widgetZentral)
+\end{osplisting}
+
+Das Stapellayout wird dann, parallel zu den bisherigen Layouts, dem
+Hauptfenster über ein zentrales Widget zugewiesen. Standardmäßig ist
+dann zunächst nur die erste Seite des Stapels sichtbar, in unserem
+Fall also das Label. Möchte man dem Benutzer eine andere Seite
+anzeigen, bedient man sich der Methode \ospcmd{setCurrentIndex()}, die
+als Parameter den Index der anzuzeigenden Seite erwartet. Zum
+Umschalten auf die zweite Seite können Sie dem Code also folgende
+Zeile hinzufügen:
+
+\index{QStackedLayout!setCurrentIndex()}%
+\begin{ospsimplelisting}
+        layoutZentral.setCurrentIndex(1)
+\end{ospsimplelisting}
+
+\index{QStackedLayout!setCurrentWidget()}%
+Alternativ können Sie per \ospcmd{setCurrentWidget()} auch direkt das
+anzuzeigende Widget angeben:
+
+\begin{ospsimplelisting}
+        layoutZentral.setCurrentWidget(zweiteSeite)
+\end{ospsimplelisting}
+
+\index{QStackedLayout!currentIndex()}%
+\index{QStackedLayout!currentWidget()}%
+Den aktuellen Index bzw. das aktuelle Widget können Sie jederzeit mit
+der Methode \ospcmd{currentIndex()} bzw. \ospcmd{currentWidget()}
+abfragen. Natürlich soll der Benutzer normalerweise die Möglichkeit
+haben, die aktuelle Seite im Stapellayout auszuwählen. Dazu muss aber
+zunächst noch ein wichtiges Konzept in Qt eingeführt werden, nämlich
+der Signal-Slot-Mechanismus. Dieser ist Thema des nächsten
+Abschnitts; wir werden dann in Kapitel \ref{sec:sigslotstapel} wieder
+auf das Umschalten im Stapellayout zurückkommen.
+
+Der Vollständigkeit halber sei zuvor noch eine alternative Variante
+zur Darstellung solcher Seiten vorgestellt, die das Umschalten
+auf eine andere Seite gleich mitbringt.
+
+\ospsubsection{Tab-Widget}{Tab-Widget}{sec:tabwidget}
+
+\index{Tab-Widget}%
+\index{QTabWidget}%
+In Qt macht die Klasse \ospcmd{QTabWidget} die einzelnen Seiten über
+\emph{Tabs} (Reiter) zugänglich. Tabs bzw. Reiter dienen unter den
+meisten Betriebssystemen der Gruppierung von Elementen, wenn man dem
+Benutzer nicht gleich alle Elemente auf einmal anzeigen will.  Genau
+diese Funktion stellt das Tab-Widget zur Verfügung.
+
+\index{QTabWidget!addTab()}%
+\index{QTabWidget!addWidget()}%
+Die Erstellung eines solchen Tab-Widgets ist der Erstellung eines
+Stapellayouts sehr ähnlich, nur dass in diesem Fall die Methode
+\ospcmd{addTab()} an Stelle von \ospcmd{addWidget()} aufgerufen werden
+muss, um eine Seite hinzuzufügen. Wiederum übergibt man der Methode
+ein einfaches oder komplexes Widget, zusätzlich aber noch ein
+(optionales) Icon sowie einen String als Titel des Tabs. Die Methode
+\cmd{createLayout()} unseres Hauptfensters zur Erzeugung eines
+Tab-Widgets sieht dann folgendermaßen aus:
+
+\begin{osplisting}{Python}{Ein Tab-Widget zur Gruppierung der Elemente}{code:tabwidget}
+    def createLayout(self):
+        layoutZentral = QtGui.QHBoxLayout()
+        
+        tabWidget = QtGui.QTabWidget()
+        tabWidget.addTab(self.labelHalloWelt, self.tr("Page 1"))
+
+        layoutHorizontal = QtGui.QHBoxLayout()
+        layoutHorizontal.addWidget(self.editText)
+        layoutHorizontal.addWidget(self.buttonTextAktualisieren)
+        
+        zweiteSeite = QtGui.QWidget()
+        zweiteSeite.setLayout(layoutHorizontal)
+        tabWidget.addTab(zweiteSeite, self.tr("Page 2"))
+        
+        layoutZentral.addWidget(tabWidget)
+        widgetZentral = QtGui.QWidget()
+        widgetZentral.setLayout(layoutZentral)
+        self.setCentralWidget(widgetZentral)
+\end{osplisting}
+
+In diesem Fall enthält das zentrale Layout nur ein Element, nämlich
+das Tab-Widget, das im Prinzip per \ospcmd{setCentralWidget()} als
+zentrales Widget des Hauptfensters dienen kann. Wir erzeugen jedoch
+ein weiteres Widget samt horizontalem Layout, damit die Oberfläche
+erweiterbar bleibt. So können später weitere Elemente parallel zum
+Tab-Widget in die Oberfläche eingefügt werden.  Abbildung
+\ospfigref{fig:mainwindowstapelvstab} stellt die Varianten des
+Hauptfensters mit Stapellayout bzw. Tab-Widget einander
+gegenüber. Der Benutzer kann im Tab-Widget nun schon manuell zwischen
+den Tabs wechseln; auch hier stehen die Methoden
+\ospcmd{setCurrentIndex()} bzw. \ospcmd{setCurrentWidget()} für das
+Wechseln der Seite und \ospcmd{currentIndex()} bzw.
+\ospcmd{currentWidget()} zum Auslesen der aktuellen Seite zur
+Verfügung.
+
+\ospfigure{0.8}{images/mainwindowstapelvstab}{Stapellayout (links) vs. Tab-Widget (rechts), jeweils auf Seite 2}{fig:mainwindowstapelvstab}
+
+Schließlich ist es natürlich sinnvoll, das Tab-Widget schon in der
+Methode \ospcmd{createComponents()} zu erzeugen -- schließlich handelt
+es sich um ein weiteres sichtbares Widget. Das Widget muss dann aber
+als Attribut des Hauptfensters erzeugt werden, damit wir in jeder
+Methode darauf zugreifen können (in \ospcmd{createLayout()} und später
+eventuell in \ospcmd{createConnects()}, wenn bestimmte Signale und
+Slots des Tab-Widgets verwendet werden sollen). Sie können daher
+alternativ die beiden folgenden Methoden zur Erzeugung des Tab-Widgets
+im Hauptfenster verwenden:
+
+\begin{osplisting}{Python}{Das Tab-Widget in createComponents()}{code:tabwidget2}
+    def createComponents(self):
+        self.labelHalloWelt = QtGui.QLabel(self.tr("Hello World!"))
+        self.buttonTextAktualisieren =
+            QtGui.QPushButton(self.tr("Update"))
+        self.editText = QtGui.QLineEdit()
+        
+        self.tabWidget = QtGui.QTabWidget()
+        self.tabWidget.addTab(self.labelHalloWelt, self.tr("Page 1"))
+        layoutHorizontal = QtGui.QHBoxLayout()
+        layoutHorizontal.addWidget(self.editText)
+        layoutHorizontal.addWidget(self.buttonTextAktualisieren)
+        zweiteSeite = QtGui.QWidget()
+        zweiteSeite.setLayout(layoutHorizontal)
+        self.tabWidget.addTab(zweiteSeite, self.tr("Page 2"))
+
+    def createLayout(self):
+        layoutZentral = QtGui.QHBoxLayout()
+        layoutZentral.addWidget(self.tabWidget)
+        widgetZentral = QtGui.QWidget()
+        widgetZentral.setLayout(layoutZentral)
+        self.setCentralWidget(widgetZentral)
+\end{osplisting}
+
+\ospsection{Signale und Slots}{Signale und Slots}{sec:signalslot}
+
+\index{Signale und Slots}%
+\index{Signale}%
+\index{Slots}%
+Nachdem wir nun die Oberfläche unserer Anwendung definiert haben, wird
+es Zeit, dass sie auch auf Eingaben des Benutzers reagiert. Qt setzt
+hier auf das Signal-Slot-Konzept, ein Entwicklungsmuster, das eine
+flexible Kommunikation zwischen Objekten ermöglicht, diese aber
+dennoch weitestgehend voneinander entkoppelt. Andere GUI-Frameworks
+benutzen dafür häufig Callback-Funktionen oder Event-Handler.
+Letztere kennt Qt auch, ihnen werden wir uns in Abschnitt
+\ref{sec:eventhandler} zuwenden.
+
+Der Hauptunterschied zum Event-Handler liegt darin, dass bei Signalen
+und Slots immer mehrere Signale mit mehreren Slots verbunden sein
+können.  Sobald ein Objekt ein Signal aussendet, werden alle mit ihm
+verbundenen Slots aller Objekte aufgerufen, wobei die Reihenfolge
+nicht definiert ist. Wird ein Objekt gelöscht, enden automatisch alle
+Verbindungen. Damit ein Objekt Signale und Slots unterstützt, muss es
+von der Klasse \ospcmd{QObject} abgeleitet sein.  Unter anderem sind
+alle Qt-Widgets von dieser Basisklasse abgleitet.  Um das Konzept zu
+verstehen, beginnen wir gleich mit einer einfachen Verbindung.  Wir
+wollen, dass in unserem Programm der Button \ospmenu{Aktualisieren}
+das Label mit dem Text aus dem Eingabefeld füllt. Dazu verbinden wir
+das Signal \ospcmd{clicked()} des Buttons mit einem noch zu
+definierenden Slot \ospcmd{textAktualisieren()} unseres Hauptfensters.
+Füllen Sie dazu die Methode \ospcmd{createConnects()} mit folgendem
+Inhalt:
+
+\index{QObject!connect()}%
+\index{Signale und Slots!Verbindungen erstellen}%
+\begin{ospsimplelisting}
+    def createConnects(self):
+        self.buttonTextAktualisieren.clicked.connect(self.textAktualisieren)
+\end{ospsimplelisting}
+
+\index{Python-Callables}%
+Das Signal \ospcmd{clicked} des Buttons hat also eine
+Methode \ospcmd{connect()}, der man eine Python-Funktion übergibt.
+Allgemein nimmt die Methode sogenannte \emph{Python-Callables}
+entgegen, in unserem Fall werden das stets Funktionen und Methoden
+sein. Was nun noch fehlt, ist die Implementierung der Methode
+\ospcmd{textAktualisieren()}, über die wir den Text des Eingabefeldes
+in das Text-Label übertragen. Fügen Sie der Klasse \ospcmd{MainWindow}
+dazu folgenden Code hinzu:
+
+\index{QLabel!setText()}%
+\index{QLineEdit!text()}%
+\begin{ospsimplelisting}
+    def textAktualisieren(self):
+        self.labelHalloWelt.setText(self.editText.text())
+\end{ospsimplelisting}
+
+\index{Slots!Dekorator}%
+Die Funktionalität des Buttons ist damit vollständig implementiert.
+PyQt und PySide stellen außerdem je einen Dekorator zur Verfügung, mit
+dem Funktionen und Methoden explizit also Slots gekennzeichnet werden
+können. Dies ist zwar nicht zwingend, denn Sie können, wie gesagt,
+jedes Python"=Callable als Parameter für \ospcmd{connect()} verwenden.
+Die Verwendung der Dekoratoren dient vor allem dazu, die
+Speicherverwaltung von Qt zu optimieren und die Ausführung der Slots
+etwas zu beschleunigen. Auch die Lesbarkeit des Codes wird unter
+Umständen verbessert. Mit dem Dekorator \ospcmd{@pyqtSlot()}
+implementieren Sie die Methode \ospcmd{textAktualisieren()} unter PyQt
+folgendermaßen:
+
+\index{Slots!pyqtSlot()/Slot()}%
+\index{PyQt vs. PySide}%
+\begin{ospsimplelisting}
+    @QtCore.pyqtSlot()
+    def textAktualisieren(self):
+        self.labelHalloWelt.setText(self.editText.text())
+\end{ospsimplelisting}
+
+Unter PySide heißt der entsprechende Dekorator \ospcmd{@Slot()}:
+
+\begin{ospsimplelisting}
+    @QtCore.Slot()
+    def textAktualisieren(self):
+        self.labelHalloWelt.setText(self.editText.text())
+\end{ospsimplelisting}
+
+\index{Signale!pyqtSignal()/Signal()}%
+Wir werden an dieser Stelle zwar nur auf die vorgegebenen Qt-Signale
+zurückgreifen, dennoch sei hier kurz auf die Erstellung eigener
+Signale eingegangen. Häufig braucht man eigene Signale erst aber einer
+bestimmten Ausbaustufe von Anwendungen, in vielen Fällen reichen für
+GUIs aber auch die Signale und Slots der Qt-Widgets aus, um die
+Funktionalität der eigenen Anwendung vollständig zu implementieren.
+Für die Definition eigener Signale steht in PyQt die Funktion
+\ospcmd{pyqtSignal()} bzw. in PySide die Funktion \ospcmd{Signal()}
+zur Verfügung. Signale werden gleich nach Beginn der Klasse als
+Klassenattribut definiert:
+
+\begin{ospsimplelisting}
+class MainWindow(QtGui.QMainWindow):
+
+    meinSignal = QtCore.pyqtSignal()
+
+	# Rest der Klasse
+\end{ospsimplelisting}
+
+Sie können diese Signale dann parallel zu den vordefinierten
+Qt-Signalen per \ospcmd{connect()} mit beliebigen Slots verbinden.
+
+\index{Slots!Slots mit Parametern}%
+\index{Signale!Signale mit Parametern}%
+Bisher haben unsere Slots keine Daten entgegengenommen, da wir den
+Text direkt aus dem Eingabefeld auslesen können. Die verwendeten
+Signale und Slots hatten alle keine Parameter. Signale und Slots
+können jedoch auch Methoden mit Parametern sein, wobei dem Slot dann
+der Wert des Signal-Parameters zur Verfügung steht. Die Klasse
+\ospcmd{QLineEdit} stellt beispielsweise den Slot
+\ospcmd{textChanged(QString)} bereit, die wir auch direkt mit
+\ospcmd{setText()} des Labels verbinden können. Das Signal wird immer
+dann generiert, wenn der Text des Eingabefeldes vom Benutzer oder
+durch Programmcode geändert wurde. Der Parameter von
+\ospcmd{textChanged()} entspricht dem aktuellen Text des Eingabefeldes
+und kann direkt an das Label übergeben werden. PyQt und PySide
+behandeln die Übergabe der Parameter jedoch automatisch. Die
+Verbindung des entsprechenden Signals und Slots unterscheidet sich
+deswegen nicht von derjenigen ohne Parameter:
+
+\begin{ospsimplelisting}
+        self.editText.textChanged.connect(self.labelHalloWelt.setText)
+\end{ospsimplelisting}
+
+Intern wird nun jedoch ein Parameter des Typs \ospcmd{QString} vom
+Signal \ospcmd{text\-Changed} an die Methode \ospcmd{setText()} des
+Labels übergeben. Die Aufschrift des Labels ändert sich, sobald der
+Benutzer eine Änderung im Eingabefeld vornimmt. Die Parameter der
+Slot- und Signal-Methode sollten sich bestenfalls entsprechen. Es ist
+aber möglich, dass der Slot weniger Parameter erwartet als das Signal
+aussendet; dann müssen aber mindestens die Typen der gemeinsamen
+Parameter übereinstimmen, andernfalls gibt das Framework während der
+Laufzeit des Programms eine Fehlermeldung aus. Auch bei fehlenden
+Signalen oder Slots erhält man erst zur Laufzeit eine Warnung, der
+Interpreter informiert nicht beim Start der Anwendung.
+
+\index{QAction!triggered()}%
+Da wir im folgenden Abschnitt einen About-Dialog implementieren
+wollen, verknüpfen wir auch noch den einzigen Menüpunkt des
+Programmgerüsts mit einer (bisher leeren) Methode, die später den
+About-Dialog darstellt. Das entsprechende Signal einer
+\ospcmd{QAction} heißt \ospcmd{triggered()}. Hier der komplette Code
+zur Verbindung aller relevanten Signale und Slots sowie für den neuen
+Slot \ospcmd{zeigeUeberDialog()}, der später den Dialog anzeigt:
+
+\begin{osplisting}{Python}{Signal und Slots verbinden}{code:signalslotconnects}
+    def createConnects(self):
+        self.buttonTextAktualisieren.clicked.connect(self.textAktualisieren)
+        self.editText.textChanged.connect(self.labelHalloWelt.setText)
+        self.actionUeber.triggered.connect(self.zeigeUeberDialog)
+
+    @QtCore.pyqtSlot()
+    def zeigeUeberDialog(self):
+        print u"Hier kommt der Dialog"
+\end{osplisting}
+
+Mit drei Aufrufen von \ospcmd{connect()} und zwei einfachen Methoden
+haben wir nun schon einfache Interaktionen mit der Anwendung möglich
+gemacht. Qt kümmert sich im Hintergrund um alle Verbindungen und den
+Aufruf der Slots. Wie gesagt, kann jedes Signal und jeder Slot
+grundsätzlich auch mit mehreren Slots respektive Signalen verknüpft
+werden. So kann z.\,B. auch ein zweites Label mit dem
+\ospmenu{Aktualisieren}-Button verbunden werden, oder ein zweiter
+Menüeintrag verweist auf den Slot \ospcmd{textAktualisieren()}.
+Signale und Slots schaffen so eine flexible Möglichkeit, Elemente und
+Aktionen miteinander zu verknüpfen.
+
+
+\ospsubsection{Signale und Slots für das Stapellayout}{Signale und Slots für das Stapellayout}{sec:sigslotstapel}
+
+\index{Layout!Stapellayout}%
+Da nun die Grundprinzipien des Signal-Slot-Mechanismus vorgestellt
+wurden, kommen wir noch einmal auf das Stapellayout zurück.  Bisher
+hatten wir nur ein Stapellayout definiert, das die Widgets auf zwei
+Seiten des Layouts verteilte. Leider war immer nur eine Seite dieses
+Layouts sichtbar, der Benutzer hatte keine Möglichkeit, auf die zweite
+Seite umzuschalten. Dies wollen wir nun ändern.
+
+\ospfigure{0.8}{images/stapellayoutmitcombobox}{Ein Stapellayout mit Combobox}{fig:stapellayoutmitcombobox}
+
+\index{QComboBox}%
+\index{Combobox}%
+Zunächst fügen wir der Oberfläche ein neues Widget hinzu. Zum
+Umschalten bietet sich eine \emph{Combobox} an, die Qt mit
+der Klasse \ospcmd{QComboBox} bereitstellt. Eine Combobox definiert
+eine Liste von Einträgen, die der Benutzer über eine Schaltfläche
+aufklappt. Die Schaltfläche zeigt immer den aktuell gültigen Eintrag
+an. Die Anwendung benötigt außerdem ein neues, zusätzliches Layout,
+schließlich können wir die Combobox nicht innerhalb des Stapellayouts
+platzieren; sie würde sonst beim Umschalten der Seite verschwinden.
+Wir positionieren die Combobox einfach per vertikalem Boxlayout über
+dem Stapellayout. Die fertige Anwendung sieht dann aus wie in
+Abbildung \ospfigref{fig:stapellayoutmitcombobox}.
+
+
+
+\index{QComboBox!addItem()}%
+Zunächst einmal muss die Combobox mit zwei Einträgen für die beiden
+Seiten erstellt werden. Dazu erzeugen wir ein Objekt der Klasse
+\ospcmd{QComboBox}, dem wir per Methode \ospcmd{addItem()} Einträge
+hinzufügen. Der folgende Code am Ende der Hauptfenster-Methode
+\ospcmd{createConnects()} übernimmt diese Aufgabe:
+
+\begin{ospsimplelisting}
+        self.comboboxStapel = QtGui.QComboBox()
+        self.comboboxStapel.addItem(self.tr("Page 1"))
+        self.comboboxStapel.addItem(self.tr("Page 2"))
+\end{ospsimplelisting}
+
+Das Stapellayout selbst hatten wir schon in \ospcmd{createLayout}
+erzeugt, allerdings als lokale Variable \ospcmd{layoutStapel}. Um nun
+in \ospcmd{createConnects()} auf die Slots des Layouts zugreifen zu
+können, müssen wir das Layout als Attribut des Hauptfensters
+deklarieren. Gleichzeitig fügen wir als zentrales Layout ein
+vertikales Boxlayout hinzu, dem wir die Combobox und das Stapellayout
+per \ospcmd{addWidget()} und \ospcmd{addLayout()} zuweisen. Die
+gesamte Methode \ospcmd{createLayout()} sieht dann folgendermaßen aus:
+
+\begin{osplisting}{Python}{Layout für Stapel und Combobox}{code:stapelundcombobox}
+    def createLayout(self):
+        layoutZentral = QtGui.QVBoxLayout()
+        
+        self.layoutStapel = QtGui.QStackedLayout()
+        self.layoutStapel.addWidget(self.labelHalloWelt)
+
+        layoutHorizontal = QtGui.QHBoxLayout()
+        layoutHorizontal.addWidget(self.editText)
+        layoutHorizontal.addWidget(self.buttonTextAktualisieren)
+        
+        zweiteSeite = QtGui.QWidget()
+        zweiteSeite.setLayout(layoutHorizontal)
+        self.layoutStapel.addWidget(zweiteSeite)
+        
+        layoutZentral.addWidget(self.comboboxStapel)
+        layoutZentral.addLayout(self.layoutStapel)
+        
+        widgetZentral = QtGui.QWidget()
+        widgetZentral.setLayout(layoutZentral)
+        self.setCentralWidget(widgetZentral)
+\end{osplisting}
+
+\index{QComboBox!currentIndexChanged}%
+\index{QStackedLayout!setCurrentIndex()}%
+Die Verknüpfung von Combobox und Stapellayout besteht dann nur noch
+aus einer Zeile, parallel zu den bisherigen Signal-Slot-Beispielen.
+Die Combobox sendet beim Auswählen eines neuen Eintrags aus der Liste
+das Signal \ospcmd{currentIndexChanged}. Das Stapellayout hat wiederum
+die Methode \ospcmd{setCurrentIndex()}, die wir in Kapitel
+\ref{sec:stapellayouts} manuell aufgerufen hatten, um die zweite Seite
+anzuzeigen. Nun können wir diese Methode direkt als Empfänger des
+Signals setzen. Sowohl Signal als auch Slot haben einen Parameter vom
+Typ Integer, der den aktuellen Index des Combobox-Eintrags bzw. der
+Seite im Stapellayout darstellt. Idealerweise entspricht dieser
+Parameter jeweils dem Index im anderen Widget, so dass wir ohne
+weitere Umstände folgende Methode \ospcmd{createConnects()}
+implementieren können:
+
+\begin{ospsimplelisting}
+    def createConnects(self):
+        self.comboboxStapel.currentIndexChanged.connect(
+            self.layoutStapel.setCurrentIndex)
+\end{ospsimplelisting}
+
+Schon kann der Benutzer per Combobox die aktuelle Seite im
+Stapellayout umschalten. Der Signal-Slot-Mechanismus in Qt stellt dem
+Entwickler hier eine sehr elegante und flexible Möglichkeit zur
+Verfügung, die GUI-Elemente einer Anwendung zu aktivieren.
+
+
+\ospsection{Dialoge}{Dialoge}{sec:dialoge}
+
+\index{Dialoge}%
+Neben einem Hauptfenster sind Dialoge das Mittel der Wahl, wenn es
+darum geht, dem Benutzer Daten zu präsentieren oder Eingaben
+abzufragen. Dazu stellt Qt eine Reihe von Standarddialogen z.\,B. für
+das Öffnen und Speichern von Dateien bereit, die in den nächsten
+Abschnitten beschrieben werden. Neben den Standarddialogen erlaubt es
+Qt auf einfache Weise, eigenen Dialoge zu erzeugen. Dazu
+stellt das Framework eine Dialog-Basisklasse bereit, von der eigene
+Dialog-Klassen mit eigenen Benutzeroberflächen abgeleitet werden
+können.
+
+Grundsätzlich ist bei Dialogen zu beachten, dass diese auf
+unterschiedlichen Betriebssystemen unterschiedlich aussehen. In
+Abbildung \ospfigref{fig:openfilewindowsubuntu} sehen Sie
+beispielsweise einen \ospmenu{Datei öffnen}-Dialog unter Windows und
+Ubuntu Linux, Abbildung \ospfigref{fig:customdialogwindowsubuntu}
+zeigt dieselbe Gegenüberstellung für einen selbst definierten Dialog.
+Für den Entwickler ist dieser Unterschied dank Qt transparent: Unsere
+Dialoge werden sich immer so verhalten, wie es der Benutzer vom System
+gewohnt ist und erwartet.
+
+\ospfigure{0.95}{images/dateioeffnen_windows_ubuntu}{\ospmenu{Datei öffnen} unter Windows (links) und Ubuntu (rechts)}{fig:openfilewindowsubuntu}
+
+\osppagebreak
+
+\ospfigure{0.6}{images/eigenerdialog_windows_ubuntu}{Eigener Dialog unter Windows (links) und Ubuntu (rechts)}{fig:customdialogwindowsubuntu}
+
+\index{Dialoge!modale}%
+\index{Dialoge!nicht-modale}%
+Auf Desktop-Systemen wird meist zwischen modalen und nicht-modalen
+Dialogen unterschieden, wobei modale Dialoge den Eingabefokus
+erzwingen und erst nach Schließen des Fensters mit der Anwendung
+weiter gearbeitet werden kann. Im Gegensatz dazu erlauben es
+nicht-modale Dialoge, den Benutzer weiter mit der Anwendung arbeiten
+zu lassen und nur bei Bedarf wieder mit dem Dialog zu interagieren.
+Nicht-modale Dialoge sollten nur in gut begründeten Ausnahmefällen
+verwendet werden. Ein solcher wäre z.\,B. eine Suchfunktion, bei der
+der Benutzer in einem Dialog die Suchbegriffe eingeben, aber, ohne das
+Suchfenster zu schließen, weiter an dem Dokument arbeiten kann.  Heute
+würde man allerdings stattdessen eher eine (an- und abdockbare)
+Seitenleiste verwenden. Allgemeinen sind nicht-modale Dialoge aus der
+Mode gekommen, da sie häufig wenig benutzerfreundlich sind. Wir werden
+uns darum hier hauptsächlich mit modalen Dialogen beschäftigen.
+
+Um Code und Inhalt der Dialoge verständlicher zu gestalten, werden die
+Strings aller Dialoge in diesem Kapitel ausnahmsweise ohne
+\ospcmd{self.tr()} ausgegeben. Somit übergeben wir die Inhalte aller
+Dialoge einfach als deutsche Unicode-Strings mit Umlauten. Falls Sie
+Ihre Anwendung später übersetzen wollen, sollten Sie aber auch in
+Dialogen immer alle Strings mit \ospcmd{self.tr()} umschließen.
+
+\ospsubsection{Dialoge für Nachrichten und Fragen}{Dialoge für Nachrichten und Fragen}{sec:messagebox}
+
+\index{Dialoge!Nachrichtendialoge}%
+\index{Dialoge!Abfragedialoge}%
+Nachrichtendialoge sind die einfachste Form von Dialogen und zeigen
+dem Benutzer eine Nachricht oder stellen ihm eine Frage. Der
+Benutzer schließt das Fenster mit einem Klick auf einen Button. Bei
+Fragen können dem Benutzer mehrere Buttons zur Auswahl gestellt
+werden. Der Dialog liefert dann einen Wert zurück, je nachdem, welchen
+Button der Benutzer angeklickt hat. Auf diese Weise lassen sich
+beispielsweise Ja/Nein-Fragen stellen und die Auswahl des Benutzers
+weiter verarbeiten.
+
+\index{QMessageBox}%
+\index{QMessageBox!information()}%
+Für das About-Fenster der Beispielanwendung reicht es zunächst,
+einen Text anzuzeigen. Für solche Dialoge stellt Qt die Klasse
+\ospcmd{QMessageBox} zur Verfügung, die wiederum eine Reihe statischer
+Methoden für die Darstellung unterschiedlicher Dialoge bereitstellt.
+Für die Darstellung eines kleinen Textes verwenden wir die Methode
+\ospcmd{QMessageBox.information()}. Ihr übergeben wir als Parameter
+zuerst unsere Hauptfenster-Klasse als Elternobjekt, dann den Text.
+Erweitern Sie dazu die Beispielanwendung um folgende
+\ospcmd{zeigeUeberDialog()}-Methode, die im vorherigen Abschnitt als
+Slot deklariert wurde:
+
+\begin{osplisting}{Python}{Über-Dialog per Nachrichtenfenster}{code:messageboxabout}
+    @QtCore.pyqtSlot()
+    def zeigeUeberDialog(self):
+        QtGui.QMessageBox.information(self,
+            u"Über \"Hallo Welt\"",
+            u"Hallo Welt - Begrüsst die Welt auf eine\
+                einzigartige Art und Weise. Um mehr über\
+                Qt-Programmierung zu erfahren besuchen Sie\
+                unsere Website:\
+                <a href=\"http://www.dasskript.com\">dasskript.com</a>"
+        )
+\end{osplisting}
+
+\index{Dialoge!About}%
+\index{QMessageBox!about()}%
+Der Text kann auch HTML-Tags enthalten, Qt stellt ihn dann automatisch
+als Rich-Text, d.\,h. mit Formatierungen, im Dialog dar.  Abbildung
+\ospfigref{fig:messageboxinformation} zeigt das Informationsfenster
+unter Windows. 
+
+
+\ospfigure{0.5}{images/messageboxinformation}{Nachricht in einem Dialog}{fig:messageboxinformation}
+
+Das Icon im Dialog wird von Qt automatisch gewählt, per
+\ospmenu{OK} schließt der Benutzer das Fenster. Für unseren Fall des
+About-Fensters bietet es sich an, statt des Informationsdialogs die
+statische Methode \ospcmd{QMessageBox.about()} aufzurufen. Ersetzen
+Sie einfach den Aufruf in \ospcmd{zeigeUeberDialog()}:
+
+\begin{ospsimplelisting}
+        QtGui.QMessageBox.about(self,
+            u"Über \"Hallo Welt\"",
+            u"Hallo Welt - Begrüsst die Welt auf eine ...
+            # weiter wie oben
+        )
+\end{ospsimplelisting}
+
+\index{QMessageBox!setWindowIcon()}%
+\index{QMessageBox!aboutQt()}%
+Diese Methode hat den Vorteil, dass automatisch das Icon des
+Hauptfensters angezeigt wird, falls vorhanden. Dieses Icon lässt sich
+über die Methode \ospcmd{setWindowIcon()} setzen. Falls das
+Hauptfenster kein Icon hat, wird automatisch das Icon des
+Informationsdialogs verwendet, so dass in unserem Fall beide Aufrufe
+das gleiche Resultat zeigen. Für die Ausgabe von Informationen über Qt
+gibt es zudem noch die Methode \ospcmd{QMessageBox.aboutQt()}.
+
+\index{QMessageBox!question()}%
+\index{Dialoge!Abfragedialoge}%
+\index{QMessageBox!Yes}%
+\index{QMessageBox!No}%
+Auch einfache Abfragen lassen sich so durchführen. Möchte man etwa den
+Benutzer im About-Fenster zum Spenden für die Weiterentwicklung der
+Anwendung auffordern, startet man einen entsprechenden Dialog per
+Aufruf von \ospcmd{QMessageBox.question()}.  Dieser Funktion sollten
+aber nun zwei zusätzliche Parameter übergeben werden, damit dem
+Benutzer statt einem \ospmenu{OK}-Button zwei Knöpfe mit \ospmenu{Ja}
+und \ospmenu{Nein} zum Beantworten der Frage angezeigt werden. Dazu
+stellt die Klasse \ospcmd{QMessageBox} einen Enumerator mit einer
+Reihe von Button-Typen bereit, von denen wir hier
+\ospcmd{QMessageBox.Yes} und \ospcmd{QMessageBox.No} verwenden.
+Außerdem liefert die Methode nun einen Statuscode zurück, der anzeigt,
+welchen Button der Benutzer gedrückt hat. Dieser Rückgabewert kann mit
+denselben Enumerator-Werten verglichen werden, die auch als Parameter
+beim Methodenaufruf übergeben werden. Um einen Abfrage-Dialog
+anzuzeigen und den Benutzer gleich auf eine entsprechende Webseite zu
+leiten, benutzen Sie folgenden Code:
+
+\begin{osplisting}{Python}{Abfrage in einem Nachrichtendialog}{code:messageboxquestion}
+    @QtCore.pyqtSlot()
+    def zeigeUeberDialog(self):
+        status = QtGui.QMessageBox.question(
+            self, u"Über \"Hallo Welt\"",
+            u"Möchten Sie jetzt für diese Anwendung spenden?",
+            QtGui.QMessageBox.Yes, QtGui.QMessageBox.No
+            )
+        if (status == QtGui.QMessageBox.Yes):
+            QtGui.QDesktopServices.openUrl(
+                QtCore.QUrl("https://www.paypal.com/cgi-bin/webscr?\
+                            cmd=_s-xclick&hosted_button_id=VXN9T26P6HVLG")
+            )
+\end{osplisting}
+
+Der Dialog wird bei Klick auf einen der Buttons automatisch
+geschlossen, aber nur bei Klick auf \ospmenu{Ja} wird der Browser
+gestartet und die Webseite aufgerufen. Abbildung
+\ospfigref{fig:messageboxquestion} zeigt den Dialog unter Windows.
+Beachten Sie, dass in diesem Fall statt dem Informations-Icon ein
+Frage-Icon erscheint. Im Prinzip lassen sich für alle vordefinierten
+Arten von Dialogen die Buttons als zusätzliche Parameter definieren.
+Wenn man also zusätzliche Standardbuttons in einem Informationsdialog
+benötigt, können auch dem Aufruf von
+\ospcmd{QMessageBox.information()} zwei zusätzliche Parameter mit den
+entsprechenden Enumerator-Werten übergeben werden.
+
+\ospfigure{0.5}{images/messageboxquestion}{Frage in einem Dialog}{fig:messageboxquestion}
+
+Zwei weitere Dialogmethoden existieren für Warnungen und kritische
+Fehler. Der Aufruf der entsprechenden Methoden erfolgt analog zu den
+schon vorgestellten, die Dialoge zeigen anschließend entsprechende
+Icons an. Der Code für eine Warnmeldung ist folgender:
+
+\index{QMessageBox!warning()}%
+\begin{ospsimplelisting}
+        QtGui.QMessageBox.warning(self,
+            u"Über \"Hallo Welt\"",
+            u"Diese Anwendung ist sehr trivial.\n\
+Benutzung auf eigene Gefahr."
+        )
+\end{ospsimplelisting}
+
+Kritische Fehler lassen sich dem Benutzer folgendermaßen mitteilen:
+
+\index{QMessageBox!critical()}%
+\begin{ospsimplelisting}
+        status = QtGui.QMessageBox.critical(
+            self, u"Über \"Hallo Welt\"",
+            u"Diese Anwendung macht gar nichts.\n\
+Möchten Sie die Anwendung jetzt Schließen?",
+            QtGui.QMessageBox.Ignore, QtGui.QMessageBox.Close)
+        if (status == QtGui.QMessageBox.Close):
+            self.close();
+\end{ospsimplelisting}
+
+Auch hier werden wieder selbst definierte Buttons angezeigt und
+anschließend der Rückgabewert des Fensters weiter verarbeitet.
+Beachten Sie, dass bestimmte Arten von Buttons immer an einer
+bestimmten Position erscheinen, unabhängig davon, in welcher
+Reihenfolge Sie die Button-Parameter übergeben. Im letzten Beispiel
+können Sie die Reihenfolge der Buttons im Code vertauschen, der
+\ospmenu{Schließen}-Knopf wird (unter Windows) in jedem Fall unten
+rechts angezeigt, weil dies die Standardposition eines solchen Buttons
+unter Windows ist.
+
+
+\ospsubsection{Datei- und Verzeichnisdialoge}{Datei- und Verzeichnisdialoge}{sec:filedialogs}
+
+\index{Dialoge!Dateidialoge}%
+\index{Dialoge!Verzeichnisdialoge}%
+Neben der Ausgabe von Nachrichten sind das Öffnen und Speichern von
+Dateien häufige Dialogfunktionen. Qt stellt dazu vier Arten von Datei-
+und Verzeichnisdialogen bereit, um vom Benutzer eine Pfadangabe
+abzufragen. Auch hier wird das Aussehen des Dialogs vom Betriebssystem
+vorgegeben, so dass der Benutzer immer im Look\&Feel des Systems
+arbeitet.
+
+\index{QFileDialog}%
+\index{QFileDialog!getOpenFileName()}%
+Die einfachste Form des Dialogs ist, einen Dateinamen und -pfad zum
+Öffnen einer Datei abzufragen. Qt präsentiert dazu einen Datei-Dialog,
+in dem der Benutzer durch das Dateisystem browsen kann, um schließlich
+eine Datei auszuwählen. Geöffnet wird ein solcher Dialog mit der
+statischen Methode \ospcmd{QFileDialog.getOpenFileName()}. Dieser
+übergibt man das Elternobjekt, einen Titel, einen Pfad sowie eine
+Liste mit vorgegebenen Dateiendungen und einer Bezeichnung für diese
+Dateiendungen. Zurück bekommt man den vollständigen Pfad zur ausgewählten
+Datei beziehungsweise einen Null-String, falls der Benutzer auf
+\ospmenu{Abbrechen} geklickt hat:
+
+\begin{osplisting}{Python}{Abfrage eines Dateinamens per Dialog}{code:filedialog}
+dateiname = QtGui.QFileDialog.getOpenFileName(
+    self,
+    u"Datei öffnen",
+    u"/home/user",
+    u"Bilder (*.png *.xpm *.jpg)")
+if not dateiname.isNull():
+    dateiname = unicode(dateiname)
+    QtGui.QMessageBox.information(
+        self,
+        u"Bild wird geöffnet",
+        u"Das Bild {0} sollte hier geöffnet werden.".format(
+            dateiname))
+\end{osplisting}
+
+\index{QString}%
+\index{QString!isNull()}%
+\index{String-Konversion}%
+\index{QVariant}%
+\index{Unicode}%
+\index{PyQt vs. PySide}%
+Mit der Methode \ospcmd{isNull()} der Klasse \ospcmd{QString}
+überprüfen Sie, ob der Benutzer eine Datei gewählt hat. Der
+\ospcmd{Null}-Wert bezieht sich hier explizit auf die Klasse
+\ospcmd{QString} und entspricht \emph{nicht} dem \ospcmd{None} in
+Python. Ein Vergleich des Dateinamens mit \ospcmd{is not None} würde
+\ospcmd{True} zurückliefern, so dass hier das Nachrichtenfenster
+angezeigt würde, selbst wenn der Benutzer auf \ospmenu{Abbrechen}
+klickt. 
+
+Nach der \ospcmd{isNull()}-Abfrage wandeln wir den \ospcmd{QString}
+sofort in einen Python"=Unicode-String um. Die Konversion sollte
+\emph{immer} so bald wie möglich erfolgen, wenn man von Qt einen
+String zurückgeliefert kommt. Andernfalls kann es sein, dass spätere
+String-Vergleiche und andere Operationen sehr schwer nachvollziehbare
+Fehler produzieren. Um die Gefahr einer Vermischung von Python-Strings
+und \ospcmd{QStrings} gar nicht erst aufkommen lassen, sollte sich
+jeder PyQt-Entwickler diese Umwandlung von Anfang an angewöhnen. Etwas
+einfacher hat man es da unter PySide: Das Paket versteckt Qt-interne
+Klassen wie \ospcmd{QString} und \ospcmd{QVariant} (dazu 
+später mehr) vollständig vor dem Anwender, so dass Sie bei
+\ospcmd{getOpenFileName()} sofort einen Unicode-Python-String
+zurückbekommen und auf die manuelle Umwandlung per \ospcmd{unicode()}
+verzichten können. Im Folgenden wird hier immer die PyQt-Variante
+verwendet. Falls Sie PySide verwenden, lassen Sie die entsprechenden
+Aufrufe einfach weg.
+
+\index{QDir}%
+\index{QDir!homePath()}%
+\index{QDir!currentPath()}%
+\index{QDir!tempPath()}%
+\index{QDesktopServices}%
+\index{QDesktopServices!storageLocation()}%
+Für den dritten Parameter der Methode, also den Ausgangspfad, bietet
+Qt Standardpfade über die Klasse \ospcmd{QDir} an.  Dies ist nützlich,
+da sich das Home-Verzeichnis des Benutzers beispielsweise unter Linux
+an einem anderen Ort befindet als unter Windows. Um dennoch immer das
+Home-Verzeichnis des Benutzers zu öffnen, übergeben Sie der statischen
+Dialog-Methode als Parameter einen Aufruf \ospcmd{QDir.homePath()}
+(\ospcmd{QDir} befindet sich im Modul \ospcmd{QtCore}) statt des
+Strings \ospcmd{/home/user} als Ausgangspfad. Neben
+\ospcmd{homePath()} gibt es die Methoden
+\ospcmd{currentPath()}, \ospcmd{rootPath()} und \ospcmd{tempPath()},
+die jeweils einen \ospcmd{QString} auf das Arbeitsverzeichnis der
+Anwendung, das root-Verzeichnis des Dateisystems und das temporäre
+Verzeichnis des Systems zurückliefern.
+
+Genauer geht es allerdings seit Qt 4.2 mit der Klasse
+\ospcmd{QDesktopServices} aus dem Modul \ospcmd{QtGui}. Die statische
+Methode \ospcmd{storageLocation()} liefert den Standard-Pfad für
+bestimmte Dateitypen, also beispielsweise den Dokument- oder
+Bilder-Ordner. Dieser Methode übergeben Sie einen der Enumerator-Werte
+von \ospcmd{QDesktopServices.StandardLocation}, die in der folgenden
+Liste aufgeführt sind. Der Aufruf von 
+
+\begin{ospsimplelisting}
+QtGui.QDesktopServices.storageLocation(QtGui.QDesktopServices.PicturesLocation)\end{ospsimplelisting}
+ 
+liefert den Pfad zum Bilder-Ordner und kann so als dritter
+Parameter an \ospcmd{getOpenFileName()} übergeben werden.
+
+\begin{ospdeflist}
+ 
+  \ospdefitem{\ospcmd{QDesktopServices.DesktopLocation}}
+  Desktop-Ordner des Benutzers
+
+  \ospdefitem{\ospcmd{QDesktopServices.DocumentsLocation}}
+  Dokument-Ordner
+
+  \ospdefitem{\ospcmd{QDesktopServices.FontsLocation}} Font-Ordner
+
+  \ospdefitem{\ospcmd{QDesktopServices.ApplicationsLocation}} Ordner
+  mit installierten Anwendungen
+
+  \ospdefitem{\ospcmd{QDesktopServices.MusicLocation}} Musik-Ordner
+
+  \ospdefitem{\ospcmd{QDesktopServices.MoviesLocation}} Filme-Ordner
+
+  \ospdefitem{\ospcmd{QDesktopServices.PicturesLocation}}
+  Bilder-Ordner
+
+  \ospdefitem{\ospcmd{QDesktopServices.TempLocation}} Ordner für
+  temporäre Dateien
+
+  \ospdefitem{\ospcmd{QDesktopServices.HomeLocation}} Home-Verzeichnis
+  des Benutzers
+
+  \ospdefitem{\ospcmd{QDesktopServices.DataLocation}} Verzeichnis für
+  Anwendungsdaten
+
+  \ospdefitem{\ospcmd{QDesktopServices.CacheLocation}} Cache-Ordner
+  für benutzerspezifische temporäre Dateien
+\end{ospdeflist}
+
+\index{QFileDialog!getOpenFileNames()}%
+\index{QStringList}%
+\index{QList}%
+Möchte man mehrere Dateien auf einmal vom Benutzer abfragen,  ruft
+man \ospcmd{getOpenFileNames()} statt \ospcmd{getOpenFileName()} auf.
+Die Parameter für die Methode bleiben gleich, allerdings wird
+nun eine \ospcmd{QStringList} zurückgeliefert. String-Listen bzw.
+allgemein Objekte von Klassen, die von \ospcmd{QList} abgeleitet sind,
+lassen sich in Python sehr einfach mit den Standarditeratoren wie
+\ospcmd{for~... in~...} durchlaufen. Der Einfachheit halber geben wir
+in einem Beispiel alle Dateinamen auf der Konsole aus:
+
+\begin{osplisting}{Python}{Dateien-öffnen-Dialog}{code:openfiles}
+dateien = QtGui.QFileDialog.getOpenFileNames(
+    self,
+    u"Dateien öffnen",
+    QtGui.QDesktopServices.storageLocation(
+        QtGui.QDesktopServices.PicturesLocation),
+    u"Images (*.png *.xpm *.jpg)")
+
+for datei in dateien:
+    datei = unicode(datei)
+    print datei
+\end{osplisting}
+
+\index{QFileDialog!getSaveFileName()}%
+\index{Dialoge!Datei speichern}%
+Die Abfrage eines Namens für eine zu speichernden Datei lässt sich
+wiederum mit \ospcmd{getSaveFileName()} realisieren. Auch dabei können
+Sie die gleichen Parameter übergeben und erhalten als Rückgabewert
+einen \ospcmd{QString} mit dem Pfad zu einer vom Benutzer gewählten
+Datei. Der Vorteil: Bevor das Fenster geschlossen wird, fragt Qt den
+Benutzer automatisch, ob die Datei überschrieben werden soll, falls er
+eine schon vorhandene Datei ausgewählt hat. Im Code kann man sich
+darauf verlassen, dass das Framework diese Sicherheitsabfrage schon
+durchgeführt hat und die Datei gegebenenfalls einfach überschreiben:
+
+\begin{ospsimplelisting}
+dateiname = QtGui.QFileDialog.getSaveFileName(
+    self,
+    u"Datei speichern",
+    QtGui.QDesktopServices.storageLocation(
+        QtGui.QDesktopServices.PicturesLocation),
+    u"Images (*.png *.xpm *.jpg)")
+if not dateiname.isNull():
+    dateiname = unicode(dateiname)
+    print u"{0} wird überschrieben".format(dateiname)
+\end{ospsimplelisting}
+
+\index{QFileDialog!getExistingDirectory()}%
+\index{Dialoge!Verzeichnisdialoge}%
+Schließlich besteht die Möglichkeit, über
+\ospcmd{getExistingDirectory()} statt eines Dateinamens einen Pfad zu
+einem (existierenden) Ordner abzufragen.  Diese Methode benötigt dann
+keinen Dateityp, die übrigen Parameter sind äquivalent zum
+Dateidialog:
+
+\begin{ospsimplelisting}
+ordnerpfad = QtGui.QFileDialog.getExistingDirectory(
+    self,
+    u"Datei speichern",
+    QtGui.QDesktopServices.storageLocation(
+        QtGui.QDesktopServices.HomeLocation))
+if not ordnerpfad.isNull():
+    orderpfad = unicode(ordnerpfad)
+    print ordnerpfad
+\end{ospsimplelisting}
+
+
+\ospsubsection{Eingaben abfragen}{Eingaben abfragen}{sec:inputdialogs}
+
+\index{QInputDialog}%
+\index{Dialoge!Abfragedialoge}%
+Eine gänzlich andere Art von Eingabe stellen die Eingabedialoge für
+verschiedene Werte dar, die vom Benutzer abgefragt werden sollen. Dazu
+gehören Zahlen und Zeichenketten, gegebenenfalls soll der Wert aus
+einer von der Anwendung vorgegebenen Liste stammen. Für all diese
+Fälle stellt Qt per statischer Methoden der Klasse
+\ospcmd{QInputDialog} vorgefertigte Dialoge bereit.
+
+
+\ospsubsubsection{Zahlen abfragen}{Zahlen abfragen}{sec:inputdialognumbers}
+
+\index{QInputDialog!getInt()}%
+Wenn der Benutzer eine Zahl eingeben soll, rufen Sie die Methode
+\ospcmd{getInt()} auf:
+
+\begin{ospsimplelisting}
+ergebnis, ok = QtGui.QInputDialog.getInt(
+    self,
+    u"Einfache Addition",
+    u"Wieviel ist 5 plus 7?",
+    0, 0, 100, 1)
+if ok:
+    print ergebnis
+\end{ospsimplelisting}
+
+Die Parameter für die Methode sind der Reihe nach: Elternobjekt,
+Dialogtitel, String für ein Text-Label vor dem Eingabefeld,
+Anfangswert, Minimalwert, Maximalwert und Schrittweite. Zusätzlich zum
+Eingabewert liefert die Methode einen Boolean-Wert zurück, der angibt,
+ob der Benutzer im Dialog auf \ospmenu{OK} oder auf
+\ospmenu{Abbrechen} geklickt hat. Alle Parameter nach dem Label sind
+optional, können also weggelassen werden, wobei Qt dann automatisch
+Default-Werte verwendet und einsetzt. In Abbildung
+\ospfigref{fig:inputdialogintwindowsubuntu} sehen Sie den Dialog auf
+den beiden Betriebssystem Windows und Linux. Die Schrittweite (der
+siebte Parameter von \ospcmd{getInt()}) bestimmt, um wie viel die Zahl
+erhöht oder erniedrigt wird, wenn die kleinen Pfeile hoch und runter
+neben dem Eingabefeld betätigt werden. Beachten Sie die
+unterschiedlichen Positionen der Buttons in den Dialogen: Windows und
+Ubuntu haben hier unterschiedliche Standard-Positionen für
+\ospmenu{OK} und \ospmenu{Abbrechen}, Qt stellt die Buttons inklusive
+der Position immer gemäß dem Look\&{}Feel des Systems dar.
+
+\ospfigure{0.5}{images/eingabedialogzahl_windows_ubuntu}{Dialog zur Integer-Eingabe unter Windows (links) und Ubuntu (rechts)}{fig:inputdialogintwindowsubuntu}
+
+\index{QInputDialog!getDouble()}%
+Für die Abfrage von reellen Zahlen, also Komma-Werten, existiert die
+Methode \ospcmd{getDouble()}. Der siebte Parameter gibt statt der
+Schrittweite nun die Zahl der Nachkommstellen an:
+
+\begin{ospsimplelisting}
+ergebnis, ok = QtGui.QInputDialog.getDouble(
+    self,
+    u"Schwierige Addition",
+    u"Wieviel ist 5,6 plus 7,9?",
+    0, 0, 100, 2)
+if ok:
+    print ergebnis
+\end{ospsimplelisting}
+
+
+\ospsubsubsection{Aus Werten auswählen}{Aus Werten auswählen}{sec:getitemdialog}
+
+\index{QInputDialog!getItem()}%
+Per \ospcmd{QInputDialog.getItem()} kann man dem Benutzer eine Liste
+von möglichen Werten präsentieren, aus denen er einen auswählen kann.
+Die Werte sind dabei Strings, die in einer Liste übergeben werden. In
+Python kann dafür der Typ \ospcmd{list} verwendet werden, intern wird
+dieser in ein Objekt der Klasse \ospcmd{QStringList} umgewandelt. Auch
+hier bekommt der Aufrufer wieder einen Boolean-Wert zurück, aus dem
+bestimmt werden kann, welchen Button der Benutzer im Dialog angeklickt
+hat:
+
+\begin{ospsimplelisting}
+werte = [ u"Ist doch egal",
+          u"Dreizehnkommafünf",
+          u"Zwei",
+          u"Der Mount Everest" ]
+ergebnis, ok = QtGui.QInputDialog.getItem(
+    self,
+    u"Schwierige Addition",
+    u"Wieviel ist 5,6 plus 7,9?",
+    werte, 0, False)
+if ok:
+    ergebnis = unicode(ergebnis)
+    print ergebnis
+\end{ospsimplelisting}
+
+Vergessen Sie nicht, den Rückgabewert wie im Beispiel explizit in
+einen Python-Unicode-String zu wandeln, wenn Sie mit PyQt arbeiten.
+Der vorletzte Parameter gibt an, ob der Benutzer einen eigenen Text
+statt der vorgegebenen eingeben kann. Standardmäßig ist dieser Wert
+auf \ospcmd{True} gesetzt; wir schalten diese Funktion hier explizit
+aus. Diese Art von Dialogen präsentiert dem Benutzer eine
+Dropdown-Liste mit den übergebenen Werten. Abbildung
+\ospfigref{fig:inputdialogwindowsubuntu} zeigt den Dialog
+jeweils unter Windows und unter Linux.
+
+\ospfigure{0.6}{images/eingabedialoglist_windows_ubuntu}{Dialog mit Werte-Liste unter Windows (links) und Ubuntu (rechts)}{fig:inputdialogwindowsubuntu}
+
+\ospsubsubsection{Einen String einlesen}{Einen String einlesen}{sec:inputdialogstring}
+
+\index{QInputDialog!getText()}%
+Statt den Benutzer aus einer Liste auswählen zu lassen, kann man ihm
+auch einfach ein Texteingabefeld präsentieren. Dazu steht in
+\ospcmd{QInputDialog} die statische Methode \ospcmd{getText()} zur
+Verfügung:
+
+\begin{ospsimplelisting}
+eingabe, ok = QtGui.QInputDialog.getText(
+    self,
+    u"Schwierige Frage",
+    u"Was ist der höchste Berg der Welt?",
+    QtGui.QLineEdit.Normal, "")
+if ok:
+    eingabe = unicode(eingabe)
+    print eingabe
+\end{ospsimplelisting}
+
+Der Parameter nach dem Text-Label bestimmt per
+\ospcmd{QLineEdit.Normal}, dass die Texteingabe sichtbar ist.  Soll
+die Eingabe mit Sternchen verdeckt sein, beispielsweise zur
+Passworteingabe, kann hier \ospcmd{QLineEdit.Password} übergeben
+werden, oder auch \ospcmd{QLineEdit.NoEcho}, wenn die Eingabe gar
+nicht sichtbar sein soll. Der darauf folgende Parameter übergibt dem
+Dialog einen String, mit dem das Eingabefeld gefüllt wird. Dem
+Benutzer lässt sich so eine Vorgabe für die Eingabe anzeigen. Wiederum
+sollte unter PyQt die zurückgelieferte Zeichenkette per
+\ospcmd{unicode()} in einen Python-String umgewandelt werden.
+
+
+\ospsubsection{Eigene Dialoge erstellen}{Eigene Dialoge erstellen}{sec:customdialogs}
+
+\index{Dialoge}%
+\index{QDialog}%
+Neben den von Qt bereitgestellten Dialogen ist es natürlich jederzeit
+möglich, eigene Dialoge zu entwerfen und diese in der eigenen
+Anwendung anzuzeigen. Als Basis dient die Klasse
+\ospcmd{QDialog}, die ein Dialogfenster erstellt, das der Entwickler
+mit Inhalt füllt. Dafür gibt es unter Qt zwei mögliche
+Vorgehensweisen:
+
+\begin{osplist}
+\item für einfach gehaltene Dialoge wird ein \ospcmd{QDialog} erzeugt,
+  anschließend alle gewünschten GUI-Elemente und Layouts, die dem
+  Dialog zugewiesen werden;
+
+\item oder es wird, für komplexere Dialog, eine eigene Klasse von
+  \ospcmd{QDialog} abgeleitet. Die Klasse erzeugt alle GUI-Elemente
+  und Layouts selbst und speichert gegebenenfalls Rückgabewerte für
+  das Hauptfenster bzw. den Aufrufer.
+\end{osplist}
+
+Beide Methoden sollen hier vorgestellt werden.
+
+
+\ospsubsubsection{Dialoge direkt mit QDialog erstellen}{Dialoge direkt mit QDialog erstellen}{sec:customdialogbyobject}
+
+Die einfachste Art einen eigenen Dialog zu erstellen ist es, ein
+Objekt der Klasse \ospcmd{QDialog} zu erzeugen und dieses mit
+Elementen und einem Layout zu versehen. Dazu müssen Sie keine eigene
+Klasse erstellen -- das Dialog-Objekt und sein Inhalt lassen sich
+einfach im Programmfluss erzeugen. Im Gegensatz zum Hauptfenster
+braucht ein Dialog kein zentrales Widget, ein Layout kann ihm direkt
+zugewiesen werden. Sie sollten Ihren Dialogen immer ein Layout geben:
+Wenn Sie auf das Layout verzichten, stellt Qt alle Elemente an
+Position (0,0), also oben links, dar. Die Elemente überdecken sich
+dann und der Dialog ist für den Benutzer unbrauchbar.
+
+Für ein kleines Beispiel erzeugen wir einen Dialog mit einem
+Text-Label und einem Button, der das Fenster schließt. Der Dialog soll
+außerdem ein horizontales Layout bekommen, so dass beide Elemente
+nebeneinander angeordnet sind.
+
+\begin{osplisting}{Python}{Erzeugen eines Dialogs aus QDialog}{code:customdialogbyobject}
+dialog = QtGui.QDialog(self)
+label = QtGui.QLabel(u"Klicke den Button", dialog)
+button = QtGui.QPushButton(
+    u"Schließe mich", dialog)
+
+layoutDialog = QtGui.QHBoxLayout()
+layoutDialog.addWidget(label)
+layoutDialog.addWidget(button)
+dialog.setLayout(layoutDialog)
+
+dialog.setWindowTitle(u"Hallo Welt Dialog")
+button.clicked.connect(dialog.accept)
+dialog.exec_()
+\end{osplisting}
+
+\index{Dialoge!modale}%
+Wir erzeugen hier zunächst einen modalen Dialog, so dass der Benutzer
+erst nach Schließen des Dialogs mit dem Hauptfenster weiter arbeiten
+kann. Der Dialog bekommt bei der Erzeugung in der ersten Zeile per
+Parameter \ospcmd{self} das Hauptfenster als Elternobjekt übergeben.
+Die GUI-Elemente des Dialogs erzeugen wir gleich danach und übergeben
+bei der Erzeugung der Dialog-Elemente das Objekt \ospcmd{dialog} als
+Elternobjekt. Die Qt"=Objekthierarchie sorgt dann dafür, dass mit dem
+Schließen des Dialogs auch der Speicherplatz all seiner Elemente
+freigegeben wird (s. Abschnitt \ref{sec:objekthierarchie}). Das Layout
+wird analog zum Layout des Hauptfenster erzeugt und mit
+\ospcmd{setLayout()} zugewiesen. Den Titel des Dialogs setzen wir per
+\ospcmd{setWindowTitle}. Und schließlich sorgen wir mit einer
+Verbindung zwischen dem \ospcmd{clicked()}-Signal des Buttons und dem
+\ospcmd{accept()}-Slot des Hauptfensters noch dafür, dass der Button
+auch seinen Dienst tut. 
+
+Mit \ospcmd{exec\_()} wird der Dialog schließlich angezeigt. Der
+folgende Code wird erst abgearbeitet, wenn der Benutzer den Dialog
+geschlossen hat. Einen nicht-modalen Dialog können Sie mit einer
+kleinen Änderung in der letzten Zeile erzeugen: Dazu rufen Sie statt
+\ospcmd{exec\_} einfach \ospcmd{show()} auf; der Benutzer kann dann
+das Hauptfenster wieder in den Vordergrund holen, ohne den Dialog
+schließen zu müssen. Abbildung \ospfigref{fig:customdialogwindowsubuntu2}
+zeigt den Dialog unter Windows und Linux.
+
+\ospfigure{0.6}{images/eigenerdialog2_windows_ubuntu}{Eigener Dialog unter Windows (links) und Ubuntu (rechts)}{fig:customdialogwindowsubuntu2}
+
+\index{Dialoge!Slots}%
+\index{QDialog!accept()}%
+\index{QDialog!reject()}%
+Warum heißt der Slot aber nun \ospcmd{accept()} und nicht
+\ospcmd{close()}? Über die Art des Slots lässt sich mit
+\ospcmd{QDialog} zumindest eine sehr einfache Art von Rückgabewert
+realisieren. Neben den beiden genannten Slots existiert noch
+\ospcmd{reject()}. Wir könnten nun einen zweiten Button zum Dialog
+hinzufügen, den wir mit dem \ospcmd{reject()}-Slot verknüpfen.
+Anschließend lässt sich der Rückgabewert des Dialogs auswerten:
+
+\begin{ospsimplelisting}
+# [...] alles vor exec_ wie oben
+
+buttonAbbrechen = QtGui.QPushButton(
+    u"Abbrechen", dialog)
+layoutDialog.addWidget(buttonAbbrechen)
+buttonAbbrechen.clicked.connect(dialog.reject)
+
+result = dialog.exec_()
+if result == QtGui.QDialog.Accepted:
+    print u"OK, es wurde nicht abgebrochen"
+\end{ospsimplelisting}
+
+Falls der Button für Bestätigen gedrückt wurde, können wir nun
+z.\,B. Werte aus Eingabefeldern des Dialogs auslesen. Ein Dialog mit
+Eingabefeld ließe sich damit folgendermaßen realisieren:
+
+\begin{osplisting}{Python}{QDialog mit OK- und Abbrechen-Button}{code:qdialogokcancel}
+dialog = QtGui.QDialog(self)
+eingabe = QtGui.QLineEdit(dialog)
+buttonOk = QtGui.QPushButton(
+    u"OK", dialog)
+buttonAbbrechen = QtGui.QPushButton(
+    u"Abbrechen", dialog)
+layoutDialog = QtGui.QHBoxLayout()
+layoutDialog.addWidget(eingabe)
+layoutDialog.addWidget(buttonOk)
+layoutDialog.addWidget(buttonAbbrechen)
+dialog.setLayout(layoutDialog)
+buttonOk.clicked.connect(dialog.accept)
+buttonAbbrechen.clicked.connect(dialog.reject)
+result = dialog.exec_()
+if result == QtGui.QDialog.Accepted:
+    eingabe = unicode(eingabe.text())
+    print eingabe
+else:
+    print u"Abgebrochen"
+\end{osplisting}
+
+Auf diese Weise lassen sich auch durchaus komplexe Eingabedialoge
+erstellen. Eleganter geht das aber anders, nämlich indem man eine
+eigene Dialog-Klasse von \ospcmd{QDialog} ableitet.
+
+\ospsubsubsection{Dialoge als Ableitung von QDialog}{Dialoge als Ableitung von QDialog}{sec:customdialogsbyclass}
+
+Wenn zu einem Dialog noch mehr Elemente hinzukommen oder man ihn
+möglichst einfach an mehreren Stellen des Codes aufrufen möchte, dann
+ist die Erstellung einer eigenen Dialog-Klasse fast zwingend. Sie hat
+außerdem den Vorteil, dass analog zu unserem Programmgerüst des
+Hauptfensters wiederum logische Einheiten gebildet werden können: je
+eine Methode für Komponenten, Signal-Slot-Verknüpfungen usw. Dazu aber
+unten mehr.
+
+\index{Dialoge!von QDialog ableiten}%
+Für einen solchen Dialog implementiert man also zunächst eine eigene
+Klasse, die man von \ospcmd{QDialog} ableitet. Sie können weiterhin
+alles einfach in die schon vorhandene Python-Quellcode-Datei
+schreiben, dann haben Sie alle Klassen gleich parat.  Sollte die
+Anwendung später wachsen, können Sie natürlich jederzeit sinnvolle
+Gruppen von Klassen in eigene Python-Module auslagern. 
+
+Nun wollen wir aber unsere Dialogklasse samt GUI-Elementen definieren.
+Um den gleichen Dialog wie im vorhergehenden Abschnitt mit einer
+eigenen Klasse zu erzeugen, fügen Sie folgenden Code der
+Klasse \ospcmd{MeinDialog} samt ihrem Konstruktor in die
+Hallo-Welt-Python-Datei ein:
+
+\begin{osplisting}{Python}{Ableitung einer eigenen Dialog-Klasse von QDialog}{code:customdialogbyclass}
+class MeinDialog(QtGui.QDialog):
+    
+    def __init__(self, *args):
+        QtGui.QDialog.__init__(self, *args)
+        label = QtGui.QLabel(u"Klicke den Button")
+        button = QtGui.QPushButton(u"Schließe mich")
+        layoutDialog = QtGui.QHBoxLayout()
+        layoutDialog.addWidget(label)
+        layoutDialog.addWidget(button)
+        self.setLayout(layoutDialog)
+        button.clicked.connect(self.close)
+\end{osplisting}
+
+Der Dialog erhält zwei Widgets: ein Label und einen Button, der den
+Dialog schließt. In der Hauptfenster-Klasse können Sie diesen Dialog
+nun ausführen, d.\,h. darstellen lassen. Dazu ist ein Objekt der
+Klasse \ospcmd{MeinDialog} zu erzeugen und per \ospcmd{exec\_()} zu
+starten:
+
+\begin{ospsimplelisting}
+dialog = MeinDialog(self)
+dialog.exec_()
+\end{ospsimplelisting}
+
+Der Dialog tut nun erst einmal nichts anderes als der direkt per
+\ospcmd{QDialog}-Objekt erzeugte. Unsere eigene Klasse hat aber den
+Vorteil, dass sich wesentlich übersichtlicher mehr Code darin
+unterbringen lässt. So ist es bei vielen GUI-Elementen wiederum
+sinnvoll, die Initialisierung der GUI im Dialog auf mehrere Methoden
+zu verteilen. Als Beispiel erstellen wir die Komponenten und die
+Signal-Slot-Verbindung wie in unserem Hauptfenster mit entsprechenden
+Methoden. Außerdem lassen sich nun Attribute in der Klasse verwalten,
+die Sie später vom aufrufenden Objekt aus auslesen können. Dazu können
+Sie die Klasse \ospcmd{MeinDialog} folgendermaßen ändern:
+
+\begin{osplisting}{Python}{Eigene Dialog-Klasse mit Standardstruktur}{code:customdialogbyclassstructure}
+class MeinDialog(QtGui.QDialog):
+    
+    def __init__(self, *args):
+        QtGui.QDialog.__init__(self, *args)
+        self.createComponents()
+        self.createLayout()
+        self.createConnects()
+        
+    def createComponents(self):
+        self.lineeditEingabe = QtGui.QLineEdit()
+        self.button = QtGui.QPushButton(u"Schließe mich")
+        
+    def createLayout(self):
+        layoutDialog = QtGui.QHBoxLayout()
+        layoutDialog.addWidget(self.lineeditEingabe)
+        layoutDialog.addWidget(self.button)
+        self.setLayout(layoutDialog)
+        
+    def createConnects(self):
+        self.button.clicked.connect(self.accept)
+
+    @property
+    def eingabe(self):
+        eingabe = unicode(self.lineeditEingabe.text())
+        return eingabe
+\end{osplisting}
+
+\index{Dialoge!Werte zurückliefern}%
+Der Wert des Eingabefeldes kann nun über das \ospcmd{property}
+\ospcmd{eingabe} ausgelesen werden. Wir wandeln dieses Mal den
+\ospcmd{QString}-Rückgabewert von \ospcmd{text()} in unserer eigenen
+Klasse in einen Python-Unicode-String um, so dass sich der Aufrufer
+nicht mehr um die Konversion kümmern muss. Im Hauptfenster kann der
+Dialog dann folgendermaßen erzeugt und der Wert aus dem Eingabefeld
+ausgelesen werden:
+
+\begin{ospsimplelisting}
+dialog = MeinDialog(self)
+dialog.exec_()
+print dialog.eingabe
+\end{ospsimplelisting}
+
+Sie können die Klasse natürlich noch beliebig erweitern,
+beispielsweise um eigene Signale und Slots. Interaktionen mit dem
+Dialog lassen sich so mit unterschiedliche Objekten der Anwendung
+verknüpfen. Das Ableiten von \ospcmd{QDialog} stellt ein mächtiges
+Werkzeug des Qt-Frameworks dar, mit der sich eine Reihe
+GUI-Benutzer-Interaktionen verwirklichen lassen.
+
+
+\ospsection{Event-Handler}{Event-Handler}{sec:eventhandler}
+
+\index{Events}%
+\index{Event-Handler}%
+\index{QEvent}%
+Neben dem in Abschnitt \ref{sec:signalslot} beschriebenen
+Signal-Slot-Mechanismus existiert in Qt eine weitere Methode, den
+Programmablauf in der Anwendung zu steuern: Von \ospcmd{QObject}
+abgeleitet Klassen können Ereignisse (Events) generieren und
+bearbeiten. Events wiederum sind von \ospcmd{QEvent} abgeleitete
+Objekte, die alle Qt-Objekte über sogenannte \emph{Event-Handler}
+empfangen können. Diese Event-Handler reagieren damit auf bestimmte
+Ereignisse, wie z.\,B. das Schließen des Dialogs oder Fensters,
+Tastatureingaben usw. Während Signal-Slot-Verbindungen meist
+eingesetzt werden, um Benutzerinteraktionen mit der Oberfläche zu
+ermöglichen, sind Event-Handler das Mittel der Wahl, wenn es um die
+Modifikation des Verhaltens von Widgets und allgemein Objekten in Qt
+geht.
+
+\index{QApplication!postEvent()}%
+\index{QWidget!resizeEvent()}%
+\index{QObject!event()}%
+Qt schickt Ereignisse, wie beispielsweise eine Größenänderung des
+Darstellungsbereiches bei Änderungen der Hauptfenstergröße, über die
+Funktion \ospcmd{postEvent()} an alle relevanten Elemente der GUI.
+Diese Ereignisse können über eine spezielle Methode, den
+Event-Handler, in unserer Klasse verarbeitet werden. Für spezielle
+Ereignisse existiert dazu jeweils auch ein spezieller Event-Handler
+(im Falle der Größenänderung \ospcmd{resizeEvent()}), den wir einfach
+überschreiben können. Eine allgemeine Methode \ospcmd{event()}
+empfängt alle Ereignisse, und man kann in einer abgeleiteten Klasse in
+dieser Methode je nach dem Typ des übergebenen Ereignisobjekts den
+Programmablauf verzweigen.  Schließlich unterstützt Qt das Konzept des
+Ereignisfilters (Event-Filters), mit dem Objekte die Ereignisse andere
+Objekte überwachen und filtern. Alle drei Methoden wollen wir nun an
+Beispielen vorgestellen.
+
+
+\ospsubsection{Spezielle Event-Handler}{Spezielle Event-Handler}{sec:spezielleeventhandler}
+
+In Qt gibt es eine Reihe bestimmter, von \ospcmd{QEvent} abgeleiteter
+Ereignistypen, die beispielsweise an unsere Hauptfenster-Klasse
+geschickt werden. Standardmäßig werden alle diese Ereignisse, wie
+Tastatureingaben, Touch-Ereignisse usw., automatisch vom Hauptfenster
+und seinen GUI-Elementen verarbeitet, um z.\,B.  bestimmte Signale für
+den Signal-Slot-Mechanismus zu generieren. Für den Entwickler ist
+dieser Vorgang transparent, d.\,h. er muss sich zunächst nicht mit
+diesen Ereignissen beschäftigen, sondern knüpft einfach bestimmte
+Slots an die gesandten Signale. 
+
+Für bestimmte Vorgänge gibt es jedoch kein eigenes Signal. Außerdem
+ist es unter Umständen sinnvoller, einen Event-Handler statt eines
+Slots einzusetzen. Dazu sehen wir uns hier drei häufige Aufgaben an,
+die sich mit Event-Handler elegant implementieren lassen:
+
+\index{Events!Schließen des Fensters}%
+\index{Events!Statusänderungen}%
+\index{Events!Größenänderung des Widgets}%
+\index{QWidget!closeEvent()}%
+\index{QWidget!changeEvent()}%
+\index{QWidget!resizeEvent()}%
+
+\begin{osplist}
+\item das Speichern von Einstellungen beim Schließen des
+  Hauptfensters sowie die Wiederherstellung beim Start des Programms:
+  dazu überschreiben wir die \ospcmd{closeEvent()}-Methode;
+
+\item das Wechseln der Oberflächensprache, wenn die systemweite
+  Spracheinstellung geändert wurde: der Handler für Statusänderungen
+  ist \ospcmd{change\-Event()};
+
+\item die Vorbereitung für einen Layout-Wechsel bei einer
+  Größenänderung des Hauptfensters, per \ospcmd{resizeEvent()}.
+\end{osplist}
+
+Das Vorgehen beim Einsatz von Event-Handlern ist grundsätzlich immer
+gleich: Der Entwickler überschreibt in seinen eigenen, von den
+Qt-Klassen abgeleiteten Klassen bestimmte Methoden, die der
+Ereignisverarbeitung dienen, also die Event-Handler. Jede dieser
+Methoden hat einen Parameter vom Typ \ospcmd{QEvent} oder einem davon
+abgeleiteten Typ. So empfangen beispielsweise \ospcmd{resizeEvent()}
+und \ospcmd{closeEvent()} spezielle Ereignisse (nämlich
+\ospcmd{QResizeEvent} und \ospcmd{QCloseEvent}), während
+\ospcmd{changeEvent()} ein einfaches \ospcmd{QEvent}-Objekt erhält.
+
+Die übergebenen Objekte enthalten jeweils Daten über das Ereignis, die
+in den überschriebenen Methoden genutzt werden können. So erhält der
+\ospcmd{resizeEvent()}-Handler etwa Informationen über die
+neue Breite und Höhe des Widgets, die wir über die Methode
+\ospcmd{size()} des Event-Objekts abfragen. Dazu implementieren wir
+den Event-Handler in der Hauptfenster-Klasse unserer Beispielklasse
+folgendermaßen:
+
+\begin{ospsimplelisting}
+    def resizeEvent(self, event):
+        print u"Neue Breite: %i" % event.size().width()
+        print u"Neue Höhe: %i" % event.size().height()
+        QtGui.QMainWindow.resizeEvent(self, event)
+\end{ospsimplelisting}
+
+Innerhalb des Event-Handler sollte das Ereignis immer auch an die
+entsprechende Methode der Basisklasse (hier \ospcmd{QMainWindow})
+weitergeleitet werden, da andernfalls die Ereignisbehandlung von Qt
+massiv gestört werden kann. Wenn Sie die Anwendung nun starten und die
+Größe des Hauptfensters ändern, werden die neuen Werte für Breite und
+Höhe des Fensters ausgegeben. Sie können diese Angaben verwenden, um
+beispielsweise das Layout des Fensters dynamisch anzupassen: Ist die
+Breite größer als die Höhe, definieren Sie für das zentrale Layout
+ein horizontales Layout, sonst ein vertikales. Alle Qt-Widgets
+besitzen diesen Event-Handler, so dass Sie beispielsweise auch eigene
+Dialoge auf Größenänderungen überprüfen können.
+
+\index{QSettings}%
+\index{Einstellungen}%
+\index{Anwendung!Einstellungen speichern}%
+\index{QSettings!value()}%
+\index{QSettings!setValue()}%
+\index{QVariant}%
+Ein weiterer häufig verwendeter Event-Handler ist
+\ospcmd{closeEvent()}, der das Ereignis beim Schließen eines Fensters
+verarbeitet. In ihm können zum Beispiel automatisch
+Benutzereinstellungen gespeichert werden, die dann beim
+Start der Anwendung wieder hergestellt werden. Zum Speichern von
+Einstellungen stellt Qt die Klasse \ospcmd{QSettings} bereit. Je nach
+Betriebssystem werden die Einstellung in unterschiedlichen, aber immer
+standardkonformen Datenbereichen gespeichert: unter Windows in der
+Registry, unter Linux im \ospcmd{.config}-Ordner.
+
+Um die Daten mit der Anwendung zu verknüpfen, übergibt man dem
+Konstruktor von \ospcmd{QSettings} mindestens zwei Strings: den Namen
+der eigenen Organisation und den Namen der Anwendung. Jetzt können
+über das erzeugte Objekt per \ospcmd{setValue()} und \ospcmd{value()}
+Einstellungen gespeichert und geladen werden. Beide Methoden erwarten
+als ersten Parameter einen Key, unter dem die Einstellung
+abgespeichert wird. Dann folgt bei \ospcmd{setValue()} der zu
+speichernde Wert. Der Methode \ospcmd{value()} kann hier ein
+Default-Wert für die Einstellung übergeben werden, falls noch kein
+Wert gespeichert ist und darum keine Einstellung geladen werden
+konnte. 
+
+Die Werte werden als \ospcmd{QVariant} gespeichert. Dabei handelt es
+sich um eine Klasse, die vom eigentlichen Typ abstrahiert und somit
+eine Reihe von Qt-Typen aufnehmen und verarbeiten kann. Beim Speichern
+ist keine Typwandlung notwendig, das erledigt PyQt bzw. PySide
+automatisch; erst wenn wir den Wert beim Start der Anwendung wieder
+einlesen, müssen wir ihn unter PyQt zur Weiterverarbeitung wieder in
+einen konkreten Python-Typ wie z.\,B. in einen Unicode-String oder
+Integer umwandeln.  Dies erfolgt in zwei Schritten: Zunächst muss der
+Typ \ospcmd{QVariant} in einen konkreten Qt-Typ wie \ospcmd{QString}
+oder \ospcmd{int} umgewandelt werden, anschließend erfolgt für
+\ospcmd{QStrings} die schon bekannte Konversion in einen Python-Typ
+per \ospcmd{unicode()}. PySide versteckt die Qt-Typen wiederum
+vollständig vor dem Entwickler, so dass bei der Entwicklung mit PySide
+keine Konversion nötig ist, weder beim Speichern noch beim Laden der
+Werte.
+
+Der Einfachheit halber wollen wir den String aus dem Texteingabefeld
+der Anwendung speichern. Dazu implementieren wir folgende
+\ospcmd{closeEvent()}-Methode in \ospcmd{mainwindow.cpp}:
+
+\begin{ospsimplelisting}
+    def closeEvent(self, event):
+        settings = QtCore.QSettings("dasskript.com", "HalloWelt")
+        stringEingabe = self.editText.text()
+        settings.setValue("stringEingabe", stringEingabe);
+        event.accept()
+\end{ospsimplelisting}
+
+\index{QEvent!accept()}%
+Beachten Sie, dass hier der Event-Handler der Basisklasse nicht mehr
+aufgerufen wird. Stattdessen setzen wir das Ereignis per
+\ospcmd{accept()} auf akzeptiert, das Hauptfenster wird dann
+automatisch geschlossen. An dieser Stelle kann vor dem Abspeichern der
+Einstellungen und Schließen beispielsweise ein Dialog eingeblendet
+werden, ob der Benutzer die Einstellungen speichern oder nicht
+speichern oder das Schließen der Anwendung abbrechen und zum
+Hauptfenster zurückkehren will. Falls der Benutzer auf
+\ospmenu{Abbrechen} klickt, kann man mit dem Aufruf von
+\ospcmd{event.ignore()} das Schließen des Fensters verhindern. 
+
+Wir wandeln außerdem an dieser Stelle den String aus dem Eingabefeld
+\emph{nicht} in einen Python-String, da sein einziger Zweck hier die
+Weiterleitung an die Methode \ospcmd{setValue()} ist. Sobald Sie den
+String auch für andere Zwecke verwenden wollen, ist die Konversion
+dringend zu empfehlen.
+
+Um den Wert des Eingabefeldes beim Start der Anwendung auf den
+gespeicherten zu setzen, fügen Sie nun einfach folgenden Code an das
+Ende des Konstruktors der Hauptfenster-Klasse hinzu:
+
+\index{QVariant!toString()}%
+\begin{ospsimplelisting}
+settings = QtCore.QSettings("dasskript.com", "HalloWelt")
+stringEingabe = unicode(settings.value(
+    "stringEingabe", "Hallo Welt!").toString())
+self.editText.setText(stringEingabe)
+\end{ospsimplelisting}
+
+\index{PyQt vs. PySide}%
+Zunächst wandeln wir den in \ospcmd{stringEingabe} gespeicherten Wert
+vom Typ \ospcmd{QVariant} per Methode \ospcmd{toString()} in einen
+\ospcmd{QString}. In diesem Fall wandeln wir den String noch explizit
+in einen Python-Unicode-String um, auch wenn wir ihn schließlich nur
+weiter an das Eingabefeld schicken. Diese Umwandlung ist nicht
+dringend erforderlich, da wir den String sonst nicht verwenden.
+Häufig wird man jedoch die geladenen Werte in eigenen Anwendungen noch
+weiter verarbeiten wollen, darum sollte man sich beim Laden der Werte
+die Konversion von Anfang an angewöhnen. Wichtig ist, dass der Name
+der Organisation, der Anwendung, sowie der Key
+(\ospcmd{"{}stringEingabe"{}}) beim Speichern und Laden
+übereinstimmen.  PySide erleichtert die Sache ein wenig -- der
+entsprechende Code sieht hier so aus:
+
+\begin{ospsimplelisting}
+settings = QtCore.QSettings("dasskript.com", "HalloWelt")
+stringEingabe = settings.value(
+    "stringEingabe", "Hallo Welt!")
+self.editText.setText(stringEingabe)
+\end{ospsimplelisting}
+
+\index{QEvent!type()}%
+\index{QEvent!LanguageChange}%
+\index{Events!Typ bestimmten}%
+Zuletzt zeigen wir noch, wie man per \ospcmd{changeEvent()}-Handler
+die GUI-Sprache ändern kann, wenn der Benutzer die Sprache des Systems
+ändert. Wie oben beschrieben, bekommt der Event-Handler in diesem Fall
+ein allgemeines Ereignis-Objekt, nämlich \ospcmd{QEvent}, übergeben.
+Um herauszufinden, welche Einstellung sich denn nun geändert hat, ist
+zunächst der genaue Typ des Ereignisses über die Methode
+\ospcmd{type()} zu ermitteln, den man dann mit einem Wert des
+Enumerators \ospcmd{QEvent.Type} vergleicht. In unsere Fall
+vergleichen wir den Wert mit \ospcmd{QEvent.LanguageChange} und rufen
+im Fall der Übereinstimmung die von uns implementierte Methode
+\ospcmd{retranslateUi()} der Hauptfenster-Klasse unseres
+Programmgerüsts auf:
+
+\begin{ospsimplelisting}
+def changeEvent(self, event):
+    QtGui.QMainWindow.changeEvent(self, event)
+    if event.type() == QtCore.QEvent.LanguageChange:
+        print "Neue Sprache..."
+        self.retranslateUi()
+\end{ospsimplelisting}
+
+Auch hier wird wieder der entsprechende Event-Handler der Basisklasse
+aufgerufen, in diesem Fall bevor der Typ des Ereignisses ermittelt
+wird. Der \ospcmd{changeEvent()}-Handler bekommt eine Reihe von
+Ereignissen übermittelt, die Statusänderungen der Anwendung und des
+Systems betreffen und die gegebenenfalls von der Basisklasse
+verarbeitet werden müssen. Ein Beispiel für \ospcmd{retranslateUi()}
+könnte nun folgendermaßen aussehen -- der Einfachheit halber setzen
+wir hier nur die Aufschriften für das Label und den Button neu; in
+einer \dqo{}richtigen\dqc{} Anwendung müssen Sie natürlich alle
+sichtbaren Strings neu setzen:
+
+\begin{ospsimplelisting}
+def retranslateUi():
+    self.labelHalloWelt.setText(self.tr("Hello World!"))
+    self.buttonTextAktualisieren.setText(self.tr("Update"))
+\end{ospsimplelisting}
+
+Alle hier vorgestellten Event-Handler sind in der Klasse
+\ospcmd{QWidget} definiert, von der auch unsere Hauptfenster-Klasse
+erbt. Gleichzeitig erben auch alle Qt-Widgets, wie Eingabefelder,
+Labels usw., von ihr, so dass sich die Event-Handler für alle
+GUI-Elemente überschreiben und für eigene Zwecke verwenden lassen.
+
+
+\ospsubsection{Der allgemeine Event-Handler}{Der allgemeine Event-Handler}{sec:geneventhandler}
+
+\index{Events!alle Events abfangen}%
+\index{QEvent!type()}%
+Neben den spezialisierten Event-Handlern für das Schließen von
+Fenstern, Größenänderungen usw. gibt es mit \ospcmd{event()} einen
+allgemeinen Event-Handler, den das Qt-Framework bei allen auftretenden
+Ereignissen aufruft. Auch dieser stellt einen Ansatzpunkt für die
+Verarbeitung von Ereignissen dar. Wie der Handler
+\ospcmd{changeEvent()} bekommt er als Parameter ein Objekt des Typs
+\ospcmd{QEvent} übergeben, so dass auch hier zuerst per
+\ospcmd{type()} die Art des Ereignisses zu ermitteln ist, um dann in
+den passenden Code-Abschnitt zu verzweigen. In unserem Fall lassen
+sich so die drei oben dargestellten Event-Handler in einer Methode
+zusammenfassen.
+
+Im Gegensatz zu den vorgestellten spezialisierten Event-Handlern
+liefert der allgemeine Event-Handler einen Boolean-Wert zurück. Dieser
+gibt an, ob das Ereignis verarbeitet wurde. Wir müssen also dafür
+sorgen, dass wir hier den Wert \ospcmd{True} zurückliefern, wenn wir
+ein Ereignis verarbeitet haben. Außerdem sollte man nicht vergessen,
+auch wieder die entsprechende Methode \ospcmd{event()} der Basisklasse
+aufzurufen, falls das Ereignis nicht verarbeitet wurde. In unserem
+Fall sieht der allgemeine Event-Handler des Hauptfensters dann so aus:
+
+\index{QEvent!Resize}%
+\index{QEvent!Close}%
+\index{QEvent!LanguageChange}%
+\begin{osplisting}{Python}{Allgemeiner Event-Handler}{code:geneventhandler}
+def event(self, event):
+    if event.type() == QtCore.QEvent.Resize:
+        print u"Größenänderung"
+        return True
+    elif event.type() == QtCore.QEvent.Close:
+        print u"Fenster geschlossen"
+        return True
+    elif event.type() == QtCore.QEvent.LanguageChange:
+        print u"Sprache geändert"
+        return True
+            
+    return QtGui.QMainWindow.event(self, event)
+\end{osplisting}
+
+An die Stellen der \ospcmd{print()}-Ausgabe können Sie nun
+beispielsweise den Code der oben beschriebenen spezialisierten
+Event-Handler einsetzen. Ein Hinweis an dieser Stelle noch:
+Spezialisierte Event-Handler sind immer vorzuziehen, da sich hier
+gleich auf den ersten Blick ergibt, welche Ereignisse die Klasse
+verarbeitet. Außerdem steht dabei auch immer das spezialisierte
+Event-Objekt zur Verfügung, so dass der Typ des Ereignisses nicht mehr
+abgefragt werden muss.
+
+
+\ospsubsection{Event-Filter}{Event-Filter}{sec:eventfilter}
+
+\index{Events!Filter}%
+Eine dritte Möglichkeit, Ereignisse in Qt abzufangen und zu
+verarbeiten, sind die sogenannten Ereignisfilter. Mit diesen können
+Objekte Ereignisse von anderen Objekten filtern und wiederum je nach
+Ereignistyp in bestimmten Programmcode verzweigen. An einem solchen
+Event-Filter sind also stets zwei Objekte beteiligt: das überwachende
+Objekt, das den Event-Filter enthält, und das überwachte Objekt, das
+keine besonderen Voraussetzungen erfüllen muss, außer dass seine
+Klasse von \ospcmd{QObject} abgleitet ist. Überwachendes und
+überwachtes Objekt können sogar identisch sein; in diesem Fall ist
+aber der Einsatz der oben beschriebenen Event-Handler wesentlich
+einfacher und darum vorzuziehen.
+
+Der Einsatz von Event-Filtern bietet sich vor allem für
+\ospcmd{QWidgets} an, für die der Entwickler keine eigene Klasse
+ableiten will. Wenn man beispielsweise die Ereignisse eines Objekts
+der Klasse \ospcmd{QLineEdit} abfangen und verarbeiten möchte, kann
+man einerseits einfach eine eigene Klasse aus \ospcmd{QLineEdit}
+ableiten und die entsprechenden Event-Handler überschreiben, wie in
+den vorangegangen Abschnitten dargestellt. Wenn man außer den
+Event-Handlern aber an der Klasse nichts ändern will, dann ist es
+wesentlich eleganter, einen Event-Filter für \ospcmd{QLineEdit} zu
+installieren. In unserem Fall werden wir einen Event-Filter in der
+Hauptfenster-Klasse implementieren, der Ereignisse des Eingabefelds
+der Beispielanwendung überwacht.
+
+\index{QObject!eventFilter()}%
+\index{QEvent}%
+\index{QEvent!KeysPress}%
+\index{QKeyEvent}%
+\index{QKeyEvent!key()}%
+Dazu fügen wir der Klasse \ospcmd{MainWindow} eine Methode
+\ospcmd{eventFilter()} hinzu. Diese Methode empfängt zwei Objekte als
+Parameter: das überwachte Objekt und das Ereignis als allgemeinen
+Ereignistyp \ospcmd{QEvent}. Als Rückgabewert liefert der Event-Filter
+wie der allgemeine Event-Handler \ospcmd{event()} einen Boolean-Wert,
+der angibt, ob das Ereignis verarbeitet wurde. Als Beispiel wollen wir
+die Eingabe von Frage- und Ausrufezeichen im Eingabefeld verhindern.
+Dazu überprüfen wir im Ereignisfilter zunächst, ob das Ereignis vom
+Typ \ospcmd{QEvent.KeyPress} ist, und wandeln dann zu weiteren
+Verarbeitung das allgemeine \ospcmd{QEvent}-Objekt in ein Objekt vom
+Typ \ospcmd{QKeyEvent}. Über dieses erhalten wir per
+\ospcmd{key()}-Methode den Key-Code der gedrückten Taste. Um
+herauszufinden, welche Taste genau gedrückt wurde, können wir den
+empfangenen Key-Code mit einem Wert des Enumerators \ospcmd{Qt.Key}
+vergleichen. Der Event-Filter in der Hauptfenster-Klasse sieht dann
+folgendermaßen aus:
+
+\begin{osplisting}{Python}{Der Event-Filter in der Hauptfenster-Klasse}{code:eventfilter}
+def eventFilter(self, obj, event):
+    if event.type() == QtCore.QEvent.KeyPress:
+        if event.key() == QtCore.Qt.Key_Exclam or event.key() == QtCore.Qt.Key_Question:
+            print u"Zeichen abgefangen"
+            return True
+     
+    return QtGui.QMainWindow.eventFilter(self, obj, event)
+\end{osplisting}
+
+\index{QObject!installEventFilter()}%
+Die Methode liefert \ospcmd{True} zurück, sobald die Tastatureingabe
+verarbeitet wurde; so wird das Ereignis von anderen Event-Handlern
+nicht weiterverarbeitet, und das Eingabefeld zeigt die gefilterten
+Zeichen nicht an. In allen anderen Fällen muss der Event-Filter der
+Basisklasse aufgerufen werden. 
+
+Schließlich ist der Event-Handler für das Eingabefeld
+zu installieren, am besten direkt nach der Erzeugung in
+der Methode \ospcmd{createComponents()} des Hauptfensters. Dazu ruft
+man die Methode \ospcmd{installEventFilter()} des zu überwachenden
+Objekts auf und übergibt dieser das Objekt mit dem Event-Filter, in
+unserem Fall das Hauptfenster-Objekt:
+
+\begin{ospsimplelisting}
+def createComponents(self):
+   self.labelHalloWelt = QtGui.QLabel(self.tr("Hello World!"));
+   self.buttonTextAktualisieren = QtGui.QPushButton(self.tr("Update"));
+   self.editText = QtGui.QLineEdit()
+   self.editText.installEventFilter(self)
+\end{ospsimplelisting}
+
+\index{QLineEdit!keyPressEvent()}%
+Das gleiche Ergebnis hätte man, wie gesagt, erzielen können, indem man
+eine eigene Klasse von \ospcmd{QLineEdit} ableitet und dort den
+Event-Handler \ospcmd{QLineEdit.keyPressEvent()} überschreibt. Mit
+Event-Filtern kommt man in diesem Fall aber schneller zu einer Lösung,
+und man spart sich den Aufwand, eine neue Klasse erstellen zu müssen.
+
+
+\ospsection{Qt-Klassen und -Objekte}{Qt-Klassen und -Objekte}{sec:qtclassesandobjects}
+
+Nachdem nun die praktische Anwendung einiger Qt-Klassen vorgeführt
+wurde, wollen wir uns noch einmal genauer mit der Struktur des
+Qt"=Frameworks befassen. Einige grundlegende Konzepte, wie
+Signal-Slot"=Verbindungen, Speicherverwaltung in einer
+Objekt-Hierarchie und Ereignisbehandlung, wurden schon angesprochen.
+Da es sich um Qt-Grundlagen handelt, die meist schon in der
+Basisklasse \ospcmd{QObject} implementiert sind, soll nun noch einmal
+zusammenfassend auf die Klassenhierarchie des Qt-Frame\-work sowie die
+Objekthierarchien in einer Anwendung eingegangen werden. Ziel ist ein
+Gefühl dafür, wie Qt eigentlich \dqo{}tickt\dqc{}. Haben Sie diese
+grundlegenden Ideen einmal verinnerlicht, kommen Sie bei Aufgaben und
+Problemen rasch auch ohne ausführliche Konsultation der (dennoch sehr
+lesenswerten) Qt-Dokumentation voran.
+
+
+\ospsubsection{QObject, QWidget und abgeleitete Klassen}{QObject, QWidget und abgeleitete Klassen}{sec:klassenhierarchie}
+
+\index{Klassenhierarchie}%
+\index{QObject}%
+\index{QWidget}%
+\index{QLayout}%
+Die GUI-Klassen von Qt -- und einige andere hier nicht näher
+Vorgestellte -- sind alle von der Basisklasse \ospcmd{QObject}
+abgeleitet. Als Faustregel lässt sich außerdem festhalten, dass alle
+sichtbaren GUI-Klassen von \ospcmd{QWidget} abgeleitet sind, eine
+Kindklasse von \ospcmd{QObject}. Layout-Klassen gehören also nicht
+dazu, sie haben als Elternklasse \ospcmd{QLayout}. Wenn man eigene
+Layout- oder Widget-Klassen erstellen möchte, sollte man auch von
+diesen Basisklassen ableiten, da sie schon eine Reihe 
+grundlegender Verwaltungsroutinen bereitstellen.
+
+\osppagebreak
+
+Sowohl für Widgets als auch für Layouts werden nun wiederum eine Reihe
+konkreter und abstrakter Klassen abgeleitet. Konkrete Klassen sind
+solche, die sich in der Anwendung direkt benutzen lassen. Abstrakte
+hingegen stellen wie \ospcmd{QLayout} und \ospcmd{QWidget}
+Basisklassen für eine Menge an (konkreten oder abstrakten)
+Unterklassen dar. 
+
+Eine abstrakte Klasse ist z.\,B. \ospcmd{QBoxLayout}, aus der die oben
+vorgestellten Klassen \ospcmd{QHBoxLayout} und \ospcmd{QVBoxLayout}
+abgeleitet sind. Auf diese Art und Weise ergibt sich die
+\emph{Qt-Klassenhierarchie} für das \ospcmd{QtGui}-Modul, zu dem alle
+GUI-Klassen gehören. Abbildung \ospfigref{fig:qtklassenhierarchie} stellt
+einen Ausschnitt aus dieser Hierarchie dar, der einige der schon
+verwendeten Widgets enthält. 
+
+Wie schon gesehen, kann man mit dem Befehl \ospcmd{from PyQt4 import QtGui}
+das gesamte GUI-Modul mit all seinen Klassen auf einmal in eine
+Anwendung importieren. Darüber hinaus benötigt man immer auch das
+\ospcmd{QtCore}-Modul, das die nicht-sichtbaren Klassen und die
+zugehörigen Enumeratoren enthält.
+
+\ospfigure{0.9}{images/qtklassenhierarchie}{Qt-Klassenhierarchie für QObject als Basisklasse}{fig:qtklassenhierarchie}
+
+
+\ospsubsection{QString, QVariant, Container-Klassen und andere}{QString, QVariant, Container-Klassen und andere}{sec:qstringandothers}
+
+\index{QString}%
+\index{QVariant}%
+\index{QList}%
+\index{QHash}%
+Zwei weitere Klassen, die in Code-Beispielen schon verwendet wurden,
+sind \ospcmd{QString} und \ospcmd{QVariant}. Wie bereits erwähnt,
+spielen diese Klassen nur bei der Programmierung mit PyQt eine Rolle,
+dagegen versteckt PySide sie vor dem Entwickler und wandelt alle
+entsprechenden Objekte in Python-Typen um. \ospcmd{QString},
+\ospcmd{QVariant} und andere Klassen des \ospcmd{QtCore}-Moduls sind
+nicht von \ospcmd{QObject} abgeleitet, sondern stellen eigenständige
+Klassen dar. Qt stellt diese Datentypen bereit, um dem Entwickler die
+Arbeit zu erleichtern. Ähnlich wie andere Frameworks, z.\,B. Boost,
+steigert der Einsatz der Qt-Datentypen häufig die Produktivität beim
+Programmieren. Man muss beispielsweise bei der Behandlung von
+Zeichenketten nicht mehr selbst alle Algorithmen entwerfen, da die
+Klasse \ospcmd{QString} schon eine Vielzahl von Methoden für deren
+Verarbeitung bereitstellt. Qt abstrahiert dabei auch von den in C++
+vorhandenen Typen. Strings, Listen, Arrays, Hashes usw. lassen sich
+alle per Qt-Objekt erzeugen und stellen dem Entwickler eine Reihe von
+Funktionen bereit. 
+
+Nützlich sind diese Qt-Datentypen vor allem bei der Entwicklung mit
+C++. Unter Python sollte man hingegen immer die Python-Typen (wie
+Unicode-Strings) und Container-Typen und -Klassen (wie \ospcmd{list}
+und \ospcmd{dict}) verwenden, da sie sich besser in die
+Programmiersprache integrieren. Es ist für nur in Spezialfällen
+sinnvoll, Klassen wie \ospcmd{QList} oder \ospcmd{QHash} zu verwenden,
+da die entsprechenden Python-Klassen eine umfangreiche Schnittstelle
+bieten und wesentlich allgemeiner in Python verwendet werden können
+(z.\,B. in \ospcmd{for}-Schleifen). PyQt und PySide kümmern sich dann
+im Hintergrund automatisch um die Konversion in Python-Strukturen, so
+dass der Entwickler sich keine Gedanken über die Qt-Klassen machen
+muss, sondern in Python Listen und Dictionaries erzeugt und
+verarbeitet.
+
+Das gleiche gilt für die in Qt zur Verfügung gestellten Iteratoren.
+Auch sie bedeuten in C++ eine enorme Erleichterung für die
+Anwendungsentwicklung. Python hingegen bietet von Haus aus komfortable
+Iteratoren für seine Typen, so dass der Python-Entwickler getrost auf
+diese zurückgreifen kann.
+
+
+\ospsubsection{Objekthierarchie und Speicherverwaltung}{Objekthierarchie und Speicherverwaltung}{sec:objekthierarchie}
+
+\index{Objekthierarchie}%
+Wie in in den bisherigen Abschnitten schon das ein oder andere mal
+erwähnt, basiert das Qt-Objektmodell in einer laufenden Anwendung auf
+einer Hierarchie, die sich unter anderem um die Speicherverwaltung
+kümmert. Auch diese Funktionalität wird von der Basisklasse
+\ospcmd{QObject} bereitgestellt, so dass alle von ihr abgeleiteten
+Klassen und deren Objekte davon profitieren. Voraussetzung dafür ist,
+dass das Objekt ein Elternobjekt zugewiesen bekommt, häufig passiert
+das schon bei der Erzeugung durch Übergabe eines
+\ospcmd{parent}-Arguments an den Konstruktor.
+
+\index{QMainWindow!setCentralWidget()}%
+In unseren Beispielen sah das bisher so aus: In der
+Hauptfenster-Klasse erzeugen wir ein zentrales Widgets, dem wir ein
+Basis-Layout für das Hauptfenster zuweisen. Per
+\ospcmd{setCentralWidget()} weist man dem Hauptfenster das zentrale
+Widget zu, das dadurch ebenso wie sein Layout Kindobjekt in der
+Hierarchie des Hauptfensters wird. 
+
+Sobald das Hauptfenster geschlossen und damit der Destruktor der
+Klasse ausgeführt wird, löscht Qt automatisch auch das Layout sowie
+das zentrale Widget aus dem Speicher. Das gleiche gilt für alle
+Widgets und Layouts, die wir dem Layout des Hauptfensters per
+\ospcmd{addWidget()} oder \ospcmd{addLayout()} zuweisen. Da
+Layout-Klassen allerdings die Elternschaft nicht übernehmen können,
+übernimmt in diesem Fall das zentrale Widget die Elternschaft und
+nicht sein Layout. Für das Programmgerüst in Kapitel
+\ref{sec:hauptfenster} ergibt sich damit eine Hierarchie, wie in
+Abbildung \ospfigref{fig:qtobjekthierarchie} dargestellt. Der
+Einfachheit halber wurden einige Objekte weggelassen: Es fehlen das
+Menü sowie seine Menüpunkte. Diese haben direkt das Hauptfenster als
+Elternobjekt.
+
+\osppagebreak
+
+\ospfigure{0.9}{images/qtobjekthierarchie}{Qt-Objekthierarchie in der Beispielanwendung}{fig:qtobjekthierarchie}
+
+Es gibt bei GUI-Elemente meist zwei Wege, auf denen ein Objekt die
+Elternschaft übernehmen kann. Der erste, schon angesprochene Weg ist,
+dem Layout eines Widgets oder einer GUI-Sammelklasse wie
+\ospcmd{QButtonGroup}, die mehrere Widgets verwaltet, die einzelnen
+Elemente per \ospcmd{add}-Methode zuzuweisen. Alternativ kann die
+Elternschaft auch schon bei der Erzeugung des Objekts festgelegt
+werden, indem man dem Konstruktor des Widgets das Elternobjekt im
+Konstruktor übergibt. Der Button des Programms in Kapitel
+\ref{sec:hauptfenster} ließe sich damit auch folgendermaßen erzeugen:
+
+\begin{ospsimplelisting}
+buttonTextAktualisieren = QPushButton(self)
+\end{ospsimplelisting}
+
+Damit würde das Hauptfenster zunächst die Elternschaft übernehmen.
+Dabei muss natürlich sichergestellt sein, dass das Elternobjekt schon
+initialisiert wurde. Beispielsweise könnte an der Stelle, an der der
+Button erzeugt wird, das zentrale Widget die Elternschaft noch nicht
+übernehmen, da es erst nach dem Button in der Methode
+\ospcmd{createLayout()} erzeugt wird.
+
+\index{QObject}%
+Die Objekthierarchie lässt sich auch für eigene Klassen und Objekte
+verwenden, indem man sie von \ospcmd{QObject} ableitet. Das bietet
+sich grundsätzlich an, denn solche Objekte fügen sich besser in die
+Qt-Anwendung ein.
+
+\index{Garbage Collection}%
+Wiederum spielt diese Technik vor allem unter C++ eine Rolle, da das
+Qt-Framework hier automatisch die komplette Speicherverwaltung
+übernimmt und der Entwickler einmal erzeugte Objekte nicht mehr
+manuell löschen muss. Unter Python dagegen existiert der Garbage
+Collector des Interpreters, der sich um die Speicherverwaltung
+kümmert. Im Gegensatz zu C++ werden dadurch aber neu referenzierte
+Objekte automatisch gelöscht, z.\,B. in folgendem Fall:
+
+\begin{ospsimplelisting}
+buttonTextAktualisieren = QPushButton()
+buttonTextAktualisieren = QPushButton()
+\end{ospsimplelisting}
+
+Das erste erzeugte Objekt wird unter Python durch den Garbage
+Collector gelöscht, unter C++ wäre das Objekt noch im Speicher
+vorhanden, auch wenn mangels Referenz nicht mehr darauf zugegriffen
+werden kann. Hat man jedoch ein Elternobjekt spezifiziert, dann
+übernimmt automatisch das Elternobjekt die Referenzierung des
+Objekts, so dass das Objekt auch in Python weiter existiert:
+
+\begin{ospsimplelisting}
+buttonTextAktualisieren = QPushButton(self)
+buttonTextAktualisieren = QPushButton(self)
+\end{ospsimplelisting}
+
+Dies unter der Annahme, dass \ospcmd{self} ein Objekt einer von
+\ospcmd{QObject} abgeleiteten Klasse ist, wie unser Hauptfenster.
+Dieses Objekt speichert Zeiger auf beide erzeugten Objekte und würde
+diese erst wieder freigeben, sobald es selbst gelöscht wird.
+Grundsätzlich sollte man solche Objekte aber als je eigenes Attribut
+im Elternobjekt erzeugen, so dass man später über den Attributnamen
+wieder darauf zugreifen kann:
+
+\begin{ospsimplelisting}
+self.buttonTextAktualisieren1 = QPushButton()
+self.buttonTextAktualisieren2 = QPushButton()
+\end{ospsimplelisting}
+
+
+\ospsection{Übersicht über die Qt-Dokumentation}{Übersicht über die Qt-Dokumentation}{sec:qtdocumentation}
+
+\index{Dokumentation}%
+\index{Online-Dokumentation}%
+Die Dokumentation des Qt-Frameworks lässt sich durchaus als exzellent
+beschreiben. Für jeden Entwickler ist sie daher erste Anlaufstelle bei
+Fragen und Problemen mit allen Qt-Klassen. Die Klassen werden im
+Detail beschrieben, für viele gibt es außerdem einen Einführungstext,
+der ihren Einsatz an Beispielen erklärt.  Außerdem enthält die
+Dokumentation eine Reihe nach Themen sortierter Artikel sowie
+Beispielanwendungen, so dass für die tägliche Arbeit meist keine
+Fragen offen bleiben. 
+
+Die vollständige Qt-Dokumentation wird mit dem Nokia Qt SDK
+ausgeliefert, ist aber auch online
+verfügbar.\ospfootnote{fn:qtdoc}{\ospurl{http://doc.qt.nokia.com/4.7/index.html}}
+Für Python-Entwickler gibt es eine an Python angepasste Version der
+gesamten Dokumentation sowohl auf der Webseite des
+PyQt-Projekts,\ospfootnote{fn:pyqtdoku}{\ospurl{http://www.riverbankcomputing.co.uk/static/Docs/PyQt4/html/index.html}}
+als auch auf der Website des
+PySide-Projekts.\ospfootnote{fn:pysidedoku}{\ospurl{http://www.pyside.org/docs/pyside/contents.html}}
+Beide beschreiben Klassen und Code in einem an Python angepassten
+Stil, wobei aber in den meisten Fällen eine automatische Konversion
+des Quellcodes von Beispielen und Methodendefinitionen von C++ nach
+Python zum Einsatz kommt. Nur in bestimmten Fällen (wie der
+Beschreibung von \ospcmd{QVariant}) gibt es weitergehende Antworten
+auf spezielle Python-Fragen. Zudem enthält die Dokumenation beider
+Python-Bibliotheken Beschreibungen von Dingen wie automatische
+Konversionen von Qt-Typen, Speicherverwaltung usw. In vielen Fällen
+greift aber auch der Python"=Entwickler gern auf die zentrale
+(C++-)Dokumentation bei Nokia zurück, da sich Klassen- und
+Methoden-Beschreibung in den allermeisten Fällen eins zu eins auf
+Python übertragen lassen.  Wir gehen darum hier nur kurz auf den
+Aufbau dieser Dokumentation ein; die Python-spezifischen Seiten haben
+einen analogen Aufbau. Abbildung \ospfigref{fig:qtdocumentation} zeigt
+einen Screenshot der Einstiegsseite der
+Qt-Dokumentation,\ospfootnote{fn:docscreenshot}{\ospurl{http://doc.qt.nokia.com/4.7/index.html}}
+über die sich die einzelnen Teile der Dokumentation am einfachsten
+erreichen lassen.
+
+\osppagebreak
+
+\ospfigure{0.87}{images/qtdocumentation}{Einstiegsseite der Qt-Dokumentation bei Nokia}{fig:qtdocumentation}
+
+Die wichtigste Anlaufstelle dürfte wohl die \emph{Qt Reference
+  Documentation} sein. Unter der Überschrift \emph{Qt API} finden Sie
+einige Links, die Sie zumindest einmal durchschauen sollten. Hier
+finden Sie vor allem die Klassen-Referenz, indem Sie auf \menu{All
+  Classes} klicken. Es erscheint dann eine Liste aller Qt-Klassen,
+unter anderem auch die im obigen Beispielprogramm verwendeten.
+
+Oben links befindet sich ein Suchfeld, so dass Sie gezielt
+beispielsweise nach der Klasse \ospcmd{QPushButton} suchen können. Die
+Referenzseiten haben für alle Klassen denselben Aufbau.  Nach dem
+einzubindenden Header für diese Klasse folgen Informationen über
+Basisklassen und abgeleitete Klassen, danach die Eigenschaften und
+Methoden, Signale und Slots der Klasse (nicht die geerbten Methoden:
+diese finden Sie hinter dem Link \menu{List of all members, including
+  inherited members} nach der Liste der abgeleiteten Klassen). Es
+folgt die ausführliche Beschreibung der Klasse, die Sie bei noch nicht
+verwendeten Klassen durchaus einmal durchlesen sollten. Häufig findet
+man hier schon Code-Beispiele und Tipps, die man leicht abgewandelt in
+seiner eigenen Anwendung verwenden kann.
+
+Neben der Klassenreferenz finden Sie im Inhaltsverzeichnis auf der
+Einstiegsseite der Qt-Dokumentation die Hilfeseiten zu den Qt-Tools,
+wie dem Designer und dem Linguist, die Gegenstand des nächsten
+Kapitels sind. Es lohnt sich, zunächst einmal ein bisschen Zeit
+in die Erforschung der Qt-Dokumentation zu investieren. Später wird
+sich das Wissen um schnelle Nachschlagemöglichkeiten in einer erhöhten
+Produktivität bei der Soft\-ware\-entwicklung niederschlagen.
+
+\ospvacat
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "pyqt"
+%%% End: 
