@@ -11,6 +11,11 @@ PDF-Version soll folgen. Zur Erstellung des PDFs fehlen leider ein paar
 verlagsinterne TeX-Dateien, so dass nicht alles Styles verfügbar sind. Wer
 mir helfen möchte die Styles zu ersetzen sei herzlich dazu eingeladen!
 
+Update: Es gibt jetzt eine aktualisierte Version der TeX-Quellen, bei der die
+Verlags-Styles ersetzt wurden. Die liegt bis jetzt im Branch "develop", da
+noch ein paar kleinere Änderungen gemacht werden müssen. Danke dafür an
+[Michael Palmer](http://www.science.uwaterloo.ca/~mpalmer/)!
+
 
 ## Lizenz
 
