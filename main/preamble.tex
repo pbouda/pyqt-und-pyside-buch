@@ -1,0 +1,283 @@
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+
+% Use Lucida Bright font family (commercial)
+\usepackage[scale=0.9]{lucimatx}
+% Latin modern looks o.k., too, and it has decent fixed width fonts. 
+% most free font packages don't.
+% \usepackage{lmodern}
+
+\usepackage[hmargin=1.25in,vmargin=1in]{geometry}
+
+\usepackage[defaultlines=2,all]{nowidow}
+
+\usepackage[small]{titlesec}
+
+\usepackage{
+    boxedminipage,
+    calc,
+    emptypage,
+    environ,
+    flushend,
+    % graphicx,
+    hyphenat,
+    listings,
+    needspace,
+    relsize,
+    tocbibind,
+    imakeidx,
+    setspace,
+    xcolor
+}
+\usepackage[export]{adjustbox} % also loads graphicx
+
+\setstretch{1.05}
+
+\newcommand*{\vstretch}[1][1]{\vspace*{\stretch{#1}}}
+
+\RequirePackage[
+    justification=justified,
+    font={normalsize},
+    labelfont=bf,
+    tableposition=above,
+    figureposition=below,
+%    singlelinecheck=false,
+    labelsep=quad,
+    skip=\baselineskip
+]{caption}
+
+\captionsetup[lstlisting]{
+    justification=justified,
+    font={normalsize},
+    labelfont=bf,
+    singlelinecheck=false,
+    labelsep=quad,
+    skip=0.75\baselineskip
+}
+
+\makeindex[intoc]
+
+\setcounter{secnumdepth}{6}
+
+% adjust the toc
+\usepackage{titletoc}
+
+\contentsmargin[12pt]{30pt}
+
+\newlength{\tocindent}
+\setlength{\tocindent}{32pt}
+
+\newcommand{\tocleader}%
+{\titlerule*[8pt]{.}\contentspage}
+
+\newcommand{\tocindentedline}[2][\normalfont]%
+{\contentspush{\makebox[#2][r]{#1\thecontentslabel\hspace{8pt}}}}
+
+\titlecontents{chapter}%
+[0pt]%                            left indent
+{\addvspace{9pt}\bfseries}%       above code
+{\contentspush{\makebox[48pt][l]{\bfseries\chaptername}%        format chapter name
+\makebox[2\tocindent-48pt][l]{\bfseries\thecontentslabel}}}%    format chapter number
+{}%                               number-less entry format
+{\tocleader}%
+[\addvspace{3pt}]
+
+\titlecontents{section}%
+[0pt]%
+{}%
+{\tocindentedline{0.8\tocindent}}%
+{}%
+{\tocleader}%
+[]
+
+\titlecontents{subsection}%
+[0.8\tocindent]%
+{}%
+%{\contentspush{\makebox[1.2\tocindent][l]{\thecontentslabel}}}%
+{\tocindentedline{1.2\tocindent}}%
+{}%
+{\tocleader}%
+[]
+
+\titlecontents{figure}%
+[0\tocindent]%
+{}%
+%{\contentspush{\makebox[1.2\tocindent][l]{\thecontentslabel}}}%
+{\tocindentedline{1.2\tocindent}}%
+{}%
+{\tocleader}%
+[]
+
+% for some unfathomable reason, this blows up. so we use an 
+% \immediatewrite18 hack instead to format the LOL like the LOF
+%\titlecontents{lstlisting}%
+%[0\tocindent]%
+%{}%
+%%{\contentspush{\makebox[1.2\tocindent][l]{\thecontentslabel}}}%
+%{\tocindentedline{1.2\tocindent}}%
+%{}%
+%{\tocleader}%
+%[]
+
+\definecolor{cobalt}{RGB}{1,78,162}
+\colorlet{linkcolor}{cobalt}
+
+\usepackage[
+    colorlinks,
+    linkcolor=linkcolor,
+    citecolor=linkcolor,
+    urlcolor=linkcolor,
+    bookmarks=true,
+    bookmarksdepth=3
+]{hyperref}
+
+\usepackage[all]{hypcap}
+
+%% PREAMBLE -- BITTE NICHT BEARBEITEN!
+
+% Formatvorlage einbinden
+
+%\IfFileExists{osp-intern/osp_main_v2.sty}{%
+%    \usepackage{osp-intern/osp_main_v2}
+%  }{%
+%    \usepackage{autorenhinweise/opensourcepress_v2}
+%}
+
+%% END PREAMBLE
+
+
+% map osp custom macros to standard latex
+\newcommand*{\plainheading}[2]{}
+\newcommand*{\ospperson}[2]{#1 #2{}}
+\newcommand*{\dqo}{``}
+\newcommand*{\dqc}{''}
+\let\bsl\textbackslash
+
+% these commands are no longer used
+
+%\newcommand*{\ospchapter}[3]{\chapter[#1]{#2}\label{#3}}
+%\newcommand*{\ospsection}[3]{\section[#1]{#2}\label{#3}}
+%\newcommand*{\ospsubsection}[3]{\subsection[#1]{#2}\label{#3}}
+%\newcommand*{\ospsubsubsection}[3]{\subsubsection[#1]{#2}\label{#3}}
+
+\newcommand{\ospfootnote}[2]{\footnote{\label{#1}#2}}
+\newcommand{\ospurl}[1]{\url{#1}}
+
+\newcommand{\ospcmd}[1]{\texttt{#1}}
+\let\cmd\ospcmd
+\let\ospfile\ospcmd
+
+\let\ospmenu\emph
+\let\menu\ospmenu
+\let\ospmultimenu\ospmenu
+\newcommand*{\sm}{$\rightarrow$}
+
+\let\ospcoderef\ref
+\let\ospfigref\ref
+\let\osplistingref\ref
+
+
+% no-ops
+\newcommand*{\ospvacat}{}
+\newcommand*{\osppagebreak}{}
+\newcommand*{\osplinebreak}{}
+
+% be more flexible about combining text and floats on a page
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.01}
+\renewcommand{\textfraction}{0.01}
+\renewcommand{\floatpagefraction}{0.9}
+
+% prevent at least some of those silly overfull boxes
+\setlength{\emergencystretch}{5pt}
+\RequirePackage[stretch=12]{microtype}
+
+% figures
+% \ospfigure{0.4}{images/hallowelt2}{Hauptfenster der ersten Hallo-Welt-Anwendung mit Layout}{fig:hallowelt2}
+\newcommand{\ospfigure}[4]%
+{\begin{figure}\centering\includegraphics[scale=#1,max height=0.8\textheight, max width=\textwidth]{#2}\caption{#3}\label{#4}\end{figure}}
+
+% custom list environments - we just use the standard ones, but we also adjust the spacing and indentation with pkg enumitem
+
+\usepackage{enumitem}
+
+\newlength{\listhspace}
+\setlength{\listhspace}{\parindent}
+\newlength{\listvspace}
+\setlength{\listvspace}{0.5\baselineskip}
+
+\setlist[enumerate]{
+    labelsep=0.20\listhspace,
+    leftmargin=\listhspace,
+    itemindent=0pt,
+    labelwidth=0.8\listhspace,
+    listparindent=0pt,
+    itemsep=0.2\listvspace,
+    parsep=0.4\listvspace,
+    partopsep=0\listvspace,
+    topsep=\listvspace
+}
+
+\setlist[itemize]{
+    labelsep=0.25\listhspace,
+    leftmargin=\listhspace,
+    itemindent=0pt,
+    labelwidth=0.8\listhspace,
+    align=right,
+    listparindent=0pt,
+    itemsep=0.2\listvspace,
+    parsep=0.4\listvspace,
+    partopsep=0\listvspace,
+    topsep=\listvspace
+}
+
+\setlist[description]{
+    leftmargin=\parindent,
+    labelindent=0pt,
+    listparindent=0pt,
+    itemsep=0.2\listvspace,
+    parsep=0.4\listvspace,
+    partopsep=0\listvspace,
+    topsep=\listvspace
+}
+
+\newenvironment{ospdeflist}{\begin{description}}{\end{description}}
+\newcommand{\ospdefitem}[1]{\item [#1]}
+\let\ospadditem\ospdefitem % not sure what the difference is supposed to be
+
+\newenvironment{osplist}{\begin{enumerate}}{\end{enumerate}}
+\newenvironment{ospitemlist}{\begin{itemize}}{\end{itemize}}
+
+\lstset{% general command to set parameter(s)
+    basicstyle=\small\ttfamily,
+    breaklines=false,
+    keywordstyle=\color{cobalt}\bfseries,
+    identifierstyle=,
+    commentstyle=\color{black!50},
+    % stringstyle=\ttfamily,
+    showstringspaces=false,
+    xleftmargin=\parindent
+}
+
+
+\lstnewenvironment{osplisting}[3]%
+%{\needspace{5\baselineskip}%
+{\lstset{float=false,mathescape,language=#1,caption={#2},label=#3,xleftmargin=\parindent}}
+{}
+
+\lstnewenvironment{ospsimplelisting}[1][]%
+{\lstset{basicstyle=\ttfamily\small,nolol,mathescape,#1}}{}% don't include in list of listings
+
+% some custom mini languages
+\lstdefinelanguage{NSIS}{%
+    morekeywords={Name,Outfile,InstallDir,InstallDirRegKey,Page,UninstPage},
+    sensitive=false,
+    morecomment=[l]{;},
+}
+
+% some custom mini languages
+\lstdefinelanguage{QML}{%
+    morekeywords={import, Rectangle, id, width, height, color},
+    sensitive=false,
+%    morecomment=[l]{;}, not sure about this
+}

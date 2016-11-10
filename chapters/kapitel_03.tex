@@ -1,4 +1,6 @@
-\ospchapter{Die Qt-Tools und Python}{Die Qt-Tools und Python}{chap:qttools}
+% !TeX spellcheck = de_DE_frami
+\chapter{Die Qt-Tools und Python}
+\label{chap:qttools}
 
 Die Entwicklung von GUI-Anwendungen stellt neben der reinen
 Code"=Produktion eine Reihe weiterer Anforderungen. So wird man
@@ -6,7 +8,7 @@ beispielsweise die Anwendung rasch einem internationalen Benutzerkreis
 zugänglich machen und die Oberfläche in mehreren Sprachen anbieten
 wollen. Alle in der GUI sichtbaren Strings müssen also im Quellcode
 übersetzt werden, wobei die Übersetzungen zentral verwaltet werden
-sollten, um die Arbeit besser delegieren zu können. 
+sollten, um die Arbeit besser delegieren zu können.
 
 Auch bei der GUI-Erstellung selbst ist es oft hilfreich, nicht das
 gesamte Layout im Quellcode zu implementieren. Grafische Editoren
@@ -17,7 +19,7 @@ die eigentliche Funktionalität, also beispielsweise die Reaktion auf
 einen Klick des Benutzers auf einen Button, per Python-Code
 implementieren.  Die Erstellung der GUI-Objekte und ihre Darstellung
 übernimmt das Framework direkt aus den gespeicherten Dateien des
-grafischen Editors. 
+grafischen Editors.
 
 Nicht zuletzt verwenden Anwendungen häufig externe Ressourcen, wie
 etwa Icons für Menüleisten.  Solche Dateien lassen sich einerseits
@@ -39,7 +41,7 @@ also die GUI-Dateien des grafischen Editors, die Ressourcendateien und
 die Übersetzungsdateien -- unabhängig von der Programmiersprache. Das
 offizielle Qt SDK unterstützt jedoch die Anbindung dieser Dateien nur
 an C++-Projekte, wobei der Qt Creator als C++-IDE das Bindeglied
-zwischen allen Tools ist und viele Schritte automatisiert. 
+zwischen allen Tools ist und viele Schritte automatisiert.
 
 Der Python-Entwickler vertraut da zunächst einmal auf Handarbeit.
 Sowohl PyQt als auch PySide enthalten jeweils
@@ -52,7 +54,8 @@ Projekte integrieren, so dass auch bei der Qt-Entwicklung mit Python
 möglichst viele Schritte automatisiert ablaufen.
 
 
-\ospsection{Internationalisierung und Lokalisierung}{Internationalisierung und Lokalisierung}{sec:lokalisierung}
+\section{Internationalisierung und Lokalisierung}
+\label{sec:lokalisierung}
 
 \index{Lokalisierung}%
 \index{Internationalisierung}%
@@ -84,39 +87,31 @@ GUI bzw. im Quelltext der String auftaucht.
 \index{Dialoge!Übersetzungen}%
 Das Qt-Framework enthält für die Lokalisierung das Tool \emph{Qt
   Linguist}. Es verwaltet alle Strings des Projekts sowie deren
-Übersetzungen in verschiedene Sprachen. Qt enthält außerdem noch
+Übersetzungen in verschiedene Sprachen. Qt enthält au\ss{}erdem noch
 eigene Übersetzungsdateien für alle Standard-Dialoge des Frameworks.
-
-Die Buttons der in Kapitel \ref{sec:dialoge} vorgestellten Dialoge
-haben standardmäßig englische Beschriftungen; Abbildung
-\ospfigref{fig:messageboxquestion2} zeigt noch einmal den
-Ja-Nein-Abfragedialog. 
-
 
 \ospfigure{0.5}{images/messageboxquestion}{Frage in einem Dialog, mit englischen Buttons}{fig:messageboxquestion2}
 
-
-Demgegenüber werden die Dateidialoge aus
+Die Buttons der in Kapitel \ref{sec:dialoge} vorgestellten Dialoge
+haben standardmä\ss{}ig englische Beschriftungen; Abbildung
+\ospfigref{fig:messageboxquestion2} zeigt noch einmal den
+Ja-Nein-Abfragedialog. Im Unterschied dazu werden die Dateidialoge aus
 Kapitel \ref{sec:filedialogs} in der Systemsprache angezeigt -- zum
 Vergleich der Datei-Öffnen-Dialog unter Windows in Abbildung
-\ospfigref{fig:openfilewindows}. 
-
+\ospfigref{fig:openfilewindows}.
 
 \ospfigure{0.8}{images/dateioeffnen_windows_links}{\dqo{}Datei öffnen\dqc{} unter Windows, in der Sprache des Betriebssystems}{fig:openfilewindows}
 
-
-
-Das liegt daran, dass Qt für diese
-Art von Dialogen auf Systemdialoge setzt, unter Windows etwa eben den
-betriebssystemweiten Datei-Öffnen-Dialog. Das Betriebssystem selbst
+Das liegt daran, dass Qt für solche Aufgaben auf Systemdialoge setzt, unter Windows etwa eben den betriebssystem\hyp weiten Datei-Öffnen-Dialog. Das Betriebssystem selbst
 sorgt hier für die Übersetzung. Für alle anderen Dialoge, vor allem
-auch für die selbst implementierten, muss sich der Entwickler aber nun
+auch für die selbst implementierten, muss sich der Entwickler aber selbst
 um die Übersetzung kümmern. Am besten sollten alle Strings gleich in
 der Oberflächensprache des Betriebssystems angezeigt werden, so wie es
 der Datei-Öffnen-Dialog vormacht. Genau das wollen wir nun Schritt für
 Schritt in den nächsten Kapiteln zeigen.
 
-\ospsubsection{Quellcode für die Übersetzung vorbereiten}{Quellcode für die Übersetzung vorbereiten}{sec:preparesource}
+\subsection{Quellcode für die Übersetzung vorbereiten}
+\label{sec:preparesource}
 
 \index{Lokalisierung!tr()-Methode}%
 \index{QObject!tr()}%
@@ -124,15 +119,17 @@ Schritt in den nächsten Kapiteln zeigen.
 Die Vorbereitung des Quellcodes zur Übersetzung erfordert vom
 Entwickler keine zusätzliche Arbeit. Wie in Kapitel
 \ref{sec:erstesprojekt} schon erwähnt, genügt es, alle sichtbaren
-Strings des Projekts mit einem Aufruf von \ospcmd{tr()} zu
-umschließen. Die Methode \ospcmd{tr()} ist schon im Basisobjekt
-\ospcmd{QObject} implementiert und steht so in allen davon
+Strings des Projekts mit einem Aufruf von \ospcmd{.tr()} zu
+umschlie\ss{}en. Die Methode \ospcmd{.tr()} ist schon im Basisobjekt
+\ospcmd{QObject} implementiert und steht somit in allen davon
 abgeleiteten Klassen zur Verfügung. Speziell besitzen alle
 Widget-Klassen diese Methode. Ihr übergibt man den zu übersetzenden
 String. Da der String keine Unicode-Sonderzeichen enthalten darf,
 bietet es sich an, zunächst alle Strings auf Englisch einzutragen. Das
 erste, vollständige Beispielprogramm aus Kapitel
-\ref{sec:erstesprojekt} sieht dann zusammengefasst folgendermaßen aus:
+\ref{sec:erstesprojekt} sieht dann zusammengefasst folgenderma\ss{}en aus:
+
+% what is the point of repeating this listing yet again?
 
 \begin{osplisting}{Python}{Hallo-Welt-Anwendung mit i18n}{code:hallowelti18n}
 import sys
@@ -152,7 +149,7 @@ class MyMainWindow(QtGui.QMainWindow):
         self.createLayout()
 
         self.setWindowTitle(self.tr("Hello World"))
-        
+
     def createComponents(self):
         self.labelHalloWelt = QtGui.QLabel(self.tr("Hello World!"))
         self.buttonTextAktualisieren = QtGui.QPushButton(self.tr("Update"))
@@ -163,11 +160,10 @@ class MyMainWindow(QtGui.QMainWindow):
         layoutZentral.addWidget(self.labelHalloWelt)
         layoutZentral.addWidget(self.editText)
         layoutZentral.addWidget(self.buttonTextAktualisieren)
-        
+
         widgetZentral = QtGui.QWidget()
         widgetZentral.setLayout(layoutZentral)
         self.setCentralWidget(widgetZentral)
-
 
 if __name__ == "__main__":
     main(sys.argv)
@@ -194,12 +190,11 @@ self.labelHalloWelt = QtGui.QLabel(self.tr("Hello {0}!").format(name))
 \end{ospsimplelisting}
 
 Wichtig ist, dass Sie den Aufruf von \ospcmd{format()} erst
-\emph{nach} dem Aufruf von \ospcmd{tr()} durchführen, und nicht direkt
-am String. Solche variablen Strings werden wir nun analog zu allen
-anderen übersetzen.
+\emph{nach} dem Aufruf von \ospcmd{tr()} durchführen, nicht vorher. Solche variablen Strings werden wir nun analog zu allen anderen übersetzen.
 
 
-\ospsubsection{Übersetzungsdateien erzeugen}{Übersetzungsdateien erzeugen}{sec:createts}
+\subsection{Übersetzungsdateien erzeugen}
+\label{sec:createts}
 
 \index{lupdate}%
 \index{pylupdate4|see{lupdate}}%
@@ -215,7 +210,7 @@ breit. Die beiden Tools unterscheiden sich  nur im
 Namen; PyQt-Entwickler rufen \ospcmd{pylupdate4} auf,
 PySide"=Entwickler entsprechend \ospcmd{pyside-lupdate}. Beide Tools
 speichern die zu übersetzenden Strings in einer XML-Datei mit der
-Endung \ospcmd{.ts}, die sich anschließend im Qt Linguist öffnen
+Endung \ospcmd{.ts}, die sich anschlie\ss{}end im Qt Linguist öffnen
 lässt. Ohne weitere Vorbereitung können Sie das jeweilige
 Kommandozeilen-Programm mit der Python-Datei als Parameter aufrufen;
 den gewünschten Namen der Ausgabedatei übergeben Sie über den
@@ -225,13 +220,13 @@ gespeichert haben und PyQt verwenden, geben Sie in der
 Kommandozeile jetzt folgenden Befehl ein:
 
 \begin{ospsimplelisting}
-$ <bf>pylupdate4 lokalisierung.py -ts lokalisierung_de.ts</bf>
+$\$$ pylupdate4 lokalisierung.py -ts lokalisierung_de.ts
 \end{ospsimplelisting}
 
 Der entsprechende Befehl bei der Entwicklung mit PySide lautet:
 
 \begin{ospsimplelisting}
-$ <bf>pyside-lupdate lokalisierung.py -ts lokalisierung_de.ts</bf>
+$\$$ pyside-lupdate lokalisierung.py -ts lokalisierung_de.ts
 \end{ospsimplelisting}
 
 Das Tool erzeugt eine Datei \ospfile{lokalisierung\_de.ts}; Das Suffix
@@ -241,31 +236,29 @@ weitere Sprachen wünschen,  müssen Sie an dieser Stelle für jede
 Sprache eine neue Datei erzeugen, indem Sie nacheinander
 \ospcmd{pylupdate4} aufrufen. Wir werden aber gleich noch eine
 elegantere Variante kennenlernen, die gleichzeitig mehrere
-Code-Dateien und mehrere Übersetzungsdateien unterstützt. 
+Code-Dateien und mehrere Übersetzungsdateien unterstützt.
 
 Schauen Sie mit einem Editor ruhig einmal in die erzeugte Datei
-hinein. Es handelt sich um übersichtliches XML, das sich im Prinzip
+hinein. Sie enth\"alt recht übersichtliches XML, das sich im Prinzip
 auch per Hand editieren lässt.
 
 Falls Sie Windows verwenden, finden Sie die
 Kommandozeilen-Programme im Pfad des installierten Moduls. Falls Sie
 PyQt unter Python 2.7 verwenden, rufen Sie \ospcmd{pylupdate4.exe}
-folgendermaßen auf:
+folgenderma\ss{}en auf:
 
 \begin{ospsimplelisting}
-<bf>C:\Python27\Lib\site-packages\PyQt4\bin\pylupdate4.exe</bf>
+C:\Python27\Lib\site-packages\PyQt4\bin\pylupdate4.exe
 \end{ospsimplelisting}
 
 Der entsprechende Aufruf für PySide-Benutzer ebenfalls unter Python 2.7 ist:
 
 \begin{ospsimplelisting}
-<bf>C:\Python27\Lib\site-packages\PySide\pyside-lupdate.exe</bf>
+C:\Python27\Lib\site-packages\PySide\pyside-lupdate.exe
 \end{ospsimplelisting}
 
-Nun ist ja selten so, dass eine Python-Anwendung nur in einer einzigen
-Quellcode-Datei implementiert. Häufig lagert man Klassen in eigene
-Dateien aus oder sammelt gar ganze Klassen in Modulen. Gleichzeitig
-soll die Anwendung in mehr als eine Sprache übersetzt werden. In
+Nun ist ja selten so, dass man eine Python-Anwendung nur in einer einzigen
+Quellcode-Datei implementiert. Häufig lagert man einzelne oder  mehrere Klassen in separate Module aus.  In
 diesem Fall müsste man analog zum bisherigen Vorgehen für alle
 Kombinationen aus Quellcode-Datei und Sprache einmal das
 \ospcmd{lupdate}-Tool aufrufen. Einfacher geht das aber, wenn man für
@@ -283,7 +276,7 @@ Eine Qt-Projektdatei sollte immer die Endung \ospfile{.pro} haben und
 in unserem Fall zwei Variablen \ospcmd{SOURCES} und
 \ospcmd{TRANSLATIONS} mit jeweils einer Liste von Dateinamen
 enthalten. Um für die Datei \ospfile{lokalisierung.py} Übersetzungen
-ins Deutsche und Portugiesische durchzuführen, benötigen wir 
+ins Deutsche und Portugiesische durchzuführen, benötigen wir
 folgende Datei \ospfile{lokalisierung.pro}:
 
 \begin{ospsimplelisting}
@@ -300,7 +293,7 @@ funktionieren an dieser Stelle leider nicht. Die Datei übergeben Sie
 nun einfach dem \ospcmd{lupdate}-Tool ohne weitere Parameter:
 
 \begin{ospsimplelisting}
-$ <bf>pylupdate4 lokalisierung.pro</bf>
+$\$$ pylupdate4 lokalisierung.pro
 \end{ospsimplelisting}
 
 Ergebnis sind zwei \ospfile{.ts}-Dateien, die wir gleich mit dem Qt
@@ -318,19 +311,20 @@ Strings noch übersetzt werden müssen und für welche Strings schon
 Übersetzungen vorliegen.
 
 
-\ospsubsection{Übersetzen mit dem Qt Linguist}{Übersetzen mit dem Qt Linguist}{sec:qtlinguist}
+\subsection{Übersetzen mit dem Qt Linguist}
+\label{sec:qtlinguist}
 
 \index{Qt Linguist}%
 Nachdem nun die gewünschten Übersetzungsdateien erzeugt sind, fügen
 wir den enthaltenen Strings Übersetzungen hinzu. Dazu dient im Qt SDK
 der \emph{Qt Linguist}, eine GUI-Anwendung zur Verwaltung und
-Bearbeitung von Übersetzungen. 
+Bearbeitung von Übersetzungen.
 
 Wenn Sie mit Linux arbeiten und Qt bzw.  PyQt oder PySide aus einem
 Repository installiert haben, ist die Dateiendung \ospfile{.ts}
 höchstwahrscheinlich schon mit dem Qt Linguist verknüpft, und Sie
 können die Dateien direkt aus einem Dateimanager per Doppelklick
-starten. Die ausführbare Datei heißt \ospfile{linguist(.exe)} oder
+starten. Die ausführbare Datei hei\ss{}t \ospfile{linguist(.exe)} oder
 \ospfile{linguist-qt4(.exe)}, diese können Sie alternativ per
 Kommandozeile starten. Die Windows-Version von PyQt wiederum
 installiert die Software in das Verzeichnis, aus dem heraus Sie auch
@@ -364,12 +358,11 @@ Ausgangssprache notwendig sind (z.\,B. für ein System zur automatischen
 
 Nach Angabe der Sprachinformationen sehen Sie nun das Hauptfenster des
 Qt Linguist vor sich. Abbildung \ospfigref{fig:qtlinguist_main} zeigt
-die Aufteilung der insgesamt fünf Bereiche des Hauptfensters. 
+die Aufteilung der insgesamt fünf Bereiche des Hauptfensters. Von
+links nach rechts bzw. oben nach unten sind dies:
 
 \ospfigure{0.75}{images/qtlinguist_main}{Das Hauptfenster des Qt Linguist}{fig:qtlinguist_main}
 
-Von
-links nach rechts bzw. oben nach unten sind dies:
 
 \index{Lokalisierung!Übersetzungskontext}%
 \begin{osplist}
@@ -392,22 +385,20 @@ links nach rechts bzw. oben nach unten sind dies:
 
 \end{osplist}
 
-
-
 Sie können nun mit der Übersetzung des ersten Strings beginnen.
 Klicken Sie dazu den String in der Liste an (der Bereich oben in der
 Mitte) und tragen Sie dann in das Feld \ospmenu{German translation}
 die Übersetzung ein. Das Fragezeichen in der Liste neben dem String
 wird dann die Farbe von blau zu gelb wechseln. Das bedeutet, dass nun
 zwar eine Übersetzung eingetragen ist, diese aber noch nicht überprüft
-wurde. Um die Überprüfung des Strings abzuschließen, klicken Sie auf
+wurde. Um die Überprüfung des Strings abzuschlie\ss{}en, klicken Sie auf
 das Symbol mit dem grünen Pfeil in der Symbolleiste.  Das gelbe
 Fragezeichen in der String-Liste wird dann zu einem grünen Haken, die
 Übersetzung ist abgeschlossen. Somit lässt sich hier also ein
 zweistufiger Workflow realisieren: Während ein Übersetzer zunächst die
 Übersetzungen einträgt, kann der Projektleiter bzw. ein weiterer
 Übersetzer diese noch einmal überprüfen und sein OK zur
-Übersetzung geben. 
+Übersetzung geben.
 
 Wie wir noch sehen werden, übernimmt Qt die Übersetzung auch ohne
 abgeschlossene Überprüfung in die GUI.  Allerdings wird im nächsten
@@ -418,21 +409,22 @@ Der zweite String in unserer Liste ist nun jener mit dem Platzhalter.
 Übersetzen Sie diese Einträge genau wie alle anderen, wobei Sie den
 Platzhalter an die Stelle schreiben, an die er in der Zielsprache
 gehört. In unserem Fall wird aus \ospcmd{Hallo \{0\}!} ein \ospcmd{Hello
-  \{0\}!}, denkbar wäre aber auch \ospcmd{\{0\} sei gegrüßt!}. Wenn Sie
+  \{0\}!}, denkbar wäre aber auch \ospcmd{\{0\} sei gegrü\ss{}t!}. Wenn Sie
 alle Übersetzungen eingetragen bzw. überprüft haben, müssen Sie die
-Datei schließlich speichern. Die Übersetzungen und
+Datei schlie\ss{}lich speichern. Die Übersetzungen und
 Informationen zum Stand der Überprüfung werden alle in der gegebenen
 \ospfile{.ts}-Datei gespeichert. Die Übersetzungen müssen nun noch in
 der Anwendung geladen werden.
 
 
-\ospsubsection{Übersetzungen im Quellcode laden}{Übersetzungen im Quellcode laden}{sec:loadtranslations}
+\subsection{Übersetzungen im Quellcode laden}
+\label{sec:loadtranslations}
 
 Um die erzeugten und bearbeiteten Übersetzungsdateien für die
 Anwendung zu aktivieren, müssen sie zunächst \dqo{}kompiliert\dqc{}
 werden.  Dabei wird aus den XML-Dateien mit der Endung \ospfile{.ts}
 ein binäres Format mit der Dateiendung \ospfile{.qm}. Diese Dateien
-werden schließlich in der Anwendung geladen.
+werden schlie\ss{}lich in der Anwendung geladen.
 
 \index{lrelease}%
 Um das binäre Format zu erzeugen, gibt es in Qt parallel zu
@@ -459,7 +451,7 @@ Um aus einer einzelnen \ospfile{.ts}-Datei eine binäre
 Dateinamen der \ospfile{.ts}-Datei als Parameter auf:
 
 \begin{ospsimplelisting}
-$ <bf>lrelease lokalisierung_de.ts</bf>
+$\$$ lrelease lokalisierung_de.ts
 \end{ospsimplelisting}
 
 Erzeugt wird damit eine Datei \ospfile{lokalisierung\_de.qm} im
@@ -468,7 +460,7 @@ Arbeitsverzeichnis. Sie können dem Tool auch einen zweiten Parameter
 diese vom Namen der \ospfile{.ts}-Datei unterscheiden soll:
 
 \begin{ospsimplelisting}
-$ <bf>lrelease lokalisierung_de.ts -qm localization_de.qm</bf>
+$\$$ lrelease lokalisierung_de.ts -qm localization_de.qm
 \end{ospsimplelisting}
 
 \index{Projektverwaltung!Projektverwaltungsdatei}%
@@ -477,7 +469,7 @@ Zudem ist es möglich, wiederum eine Projektdatei als Parameter zu
 der \ospfile{.ts}-Datei (s. Kapitel \ref{sec:createts}):
 
 \begin{ospsimplelisting}
-$ <bf>lrelease lokalisierung.pro</bf>
+$\$$ lrelease lokalisierung.pro
 \end{ospsimplelisting}
 
 In diesem Fall werden (in unserem Beispiel) zwei
@@ -494,12 +486,12 @@ Anwendung geladen werden. Erst dadurch werden die Übersetzungen für
 die \ospfile{tr()}-Methode verfügbar. Zum Laden der Übersetzung
 erzeugt man in der Anwendung zunächst ein Objekt der Klasse
 \ospcmd{QTranslator}, das dann die \ospfile{.qm}-Datei lädt.
-Anschließend muss das Objekt in der Hauptanwendung \dqo{}installiert\dqc{}
+Anschlie\ss{}end muss das Objekt in der Hauptanwendung \dqo{}installiert\dqc{}
 werden. Dazu besitzt die Klasse \ospcmd{QApplication} die Methode
 \ospcmd{install\-Translator()}. Alle Schritte führt man am besten gleich
 nach der Erzeugung des Anwendungsobjekts in der
 \ospcmd{main()}-Funktion durch. Passen Sie \ospcmd{main()} dazu
-folgendermaßen an:
+folgenderma\ss{}en an:
 
 \begin{osplisting}{Python}{Start der Anwendung mit Übersetzungen}{code:mainwithtranslations}
 def main(argv):
@@ -527,7 +519,7 @@ Ende in Kapitel \ref{sec:preparesource} beschrieben. Die Methode
 diese wird stattdessen als zweiter Parameter übergeben, falls die
 \ospfile{.qm}-Datei in einem anderen Verzeichnis liegt.
 
-\ospfigure{0.4}{images/lokalisierung_deutsch}{Übersetztes Hauptfenster der Beispielanwendung}{fig:lokalisierung_deutsch}
+\ospfigure{0.6}{images/lokalisierung_deutsch}{Übersetztes Hauptfenster der Beispielanwendung}{fig:lokalisierung_deutsch}
 
 \index{Lokalisierung!mehrere Sprachen}%
 Nun wurde in der Beispiel-Projektdatei neben der deutschen Version
@@ -566,7 +558,7 @@ beides zusammen an die Methode \ospcmd{load()} des Übersetzungsobjekts
     myappTranslator.load("lokalisierung_{0}".format(language))
 \end{ospsimplelisting}
 
-Der an \ospcmd{load()} übergebene String heißt nun aber
+Der an \ospcmd{load()} übergebene String hei\ss{}t nun aber
 \ospcmd{lokalisierung\_de\_DE}. Das Qt-Framework kümmert sich von
 selbst um die Auflösung dieser Angabe in einen Dateinamen, wobei
 unterschiedliche Varianten in einer festen Reihenfolge durchprobiert
@@ -583,7 +575,7 @@ werden. Diese Varianten sind der Reihe nach:
 
 In unserem Fall wird also die dritte Variante erfolgreich geladen.
 Übrigens ist diese Automatik auch der Grund, warum Pfadangaben als
-zusätzlicher Parameter übergeben werden müssen. Schließlich handelt es
+zusätzlicher Parameter übergeben werden müssen. Schlie\ss{}lich handelt es
 sich beim ersten Parameter für \ospcmd{load()} nicht um einen
 konkreten Dateinamen, Pfadangaben sind da wenig sinnvoll.
 
@@ -596,7 +588,7 @@ Nun sind schon alle eigenen Strings der Beispielanwendung
 Dialog-Fenster aus Kapitel \ref{sec:dialoge} in der Anwendung zu
 öffnen, beispielsweise \ospcmd{QMessageBox.critical} mit einem
 \ospmenu{Close}- und \ospmenu{Ignore}-Button. Sie werden sehen: Hier
-stehen noch die englischen Strings, schließlich steht in unserer
+stehen noch die englischen Strings, schlie\ss{}lich steht in unserer
 Übersetzungsdatei dafür keine Übersetzung zur Verfügung.
 
 Dankenswerterweise liefert das Qt-Framework für alle im Framework
@@ -612,7 +604,7 @@ Qt-Frameworks. Der Basisdateiname der Übersetzungen ist \ospcmd{qt\_},
 den wir als ersten Parameter übergeben. Möchten Sie die
 Qt-Übersetzungen durch eigene Varianten überschreiben, sollten Sie
 Ihre eigenen Dateien immer zuletzt laden. Die gesamte Methode
-\ospcmd{main()} sieht dann folgendermaßen aus:
+\ospcmd{main()} sieht dann folgenderma\ss{}en aus:
 
 \begin{osplisting}{Python}{Erzeugung der Anwendung mit allen Übersetzungen}{code:mainwithalltranslations}
 def main(argv):
@@ -668,7 +660,8 @@ auch die Übersetzungsdateien zu aktualisieren!
 \ospfigure{0.8}{images/qtlinguist_main_changes}{Qt Linguist nach Änderungen im Quellcode}{fig:qtlinguist_main_changes}
 
 
-\ospsubsection{Übersetzungen und Kontext}{Übersetzungen und Kontext}{sec:translationcontext}
+\subsection{Übersetzungen und Kontext}
+\label{sec:translationcontext}
 
 \index{Lokalisierung!Übersetzungskontext}%
 In Kapitel \ref{sec:qtlinguist} wurde bereits erwähnt, dass Qt für
@@ -678,10 +671,11 @@ Klasse handelt, in dem der String auftritt.  Probleme entstehen unter
 Python dann, wenn eine Klasse von einer anderen erbt. Folgendes
 Beispiel soll das verdeutlichen:
 
+\clearpage
+
 \index{Lokalisierung!Vererbung}%
 \begin{osplisting}{Python}{Übersetzungskontext und Vererbung}{code:contextandinheritance}
 # -*- coding: utf-8 -*-
-
 import sys
 from PyQt4 import QtCore, QtGui
 
@@ -722,7 +716,7 @@ Die Lösung ist in diesem Falle, den Kontext der Übersetzung manuell zu
 spezifizieren. Dazu bietet die Klasse \ospcmd{QCoreApplication} die
 statische Methode \ospcmd{translate()}, die vor dem Parameter des zu
 übersetzenden Strings die Angabe des Kontextes erwartet. Klasse
-\ospcmd{A} sieht dann folgendermaßen aus:
+\ospcmd{A} sieht dann folgenderma\ss{}en aus:
 
 \begin{ospsimplelisting}
 class A(QtCore.QObject):
@@ -745,21 +739,21 @@ in der abgleiteten Klasse ohne manuelles Editieren der
 empfiehlt darum auch, immer nur die statische
 \ospcmd{translate()}-Methode zu verwenden und auf den Einsatz von
 \ospcmd{self.tr()} zu verzichten. So weit wollen wir hier nicht gehen:
-Vor allem bei kleineren Anwendungen ist 
+Vor allem bei kleineren Anwendungen ist
 \ospcmd{self.tr()} wesentlich einfacher und übersichtlicher. Auch wenn
 Sie häufig Refactoring mit Änderungen in Klassennamen bei der
 Anwendungsentwicklung einsetzen, müssen Sie nicht jedes Mal den
 Kontext jedes einzelnen Strings ändern. Im praktischen Einsatz sind
 die zu erwartenden Probleme nicht so häufig, wie es auf den ersten
-Blick aussieht. Schließlich erscheinen die sichtbaren Strings einer
+Blick aussieht. Schlie\ss{}lich erscheinen die sichtbaren Strings einer
 Anwendung häufig in GUI-Klassen, die selten eine komplexe
 Ableitungshierarchie erfordern. Wenn Sie jedoch komplexe Anwendungen
 mit Vererbung von Klassen (z.\,B. eine Ableitungshierarchie mit eigenen
 Widget-Klassen) planen, dann sollten Sie von Anfang an und konsequent
 auf die manuelle Angabe von Kontexten setzen.
 
-
-\ospsection{Qt Designer}{Qt Designer}{sec:qtdesigner}
+\section{Qt Designer}
+\label{sec:qtdesigner}
 
 \index{Qt Designer}%
 \index{GUI}%
@@ -791,9 +785,10 @@ Stelle der Hinweise auf die umfangreiche Hilfe-Funktion der Software
 sowie auf die Dokumentation auf der
 Qt-Website.\ospfootnote{fn:qtdesignerdoku}{\ospurl{http://doc.qt.nokia.com/4.7/index.html}} Wenn Sie einmal
 nicht weiterkommen, sind dies die beiden ersten Anlaufstellen.
- 
 
-\ospsubsection{GUI der Beispielanwendung mit dem Qt Designer entwerfen}{GUI der Beispielanwendung mit dem Qt Designer entwerfen}{sec:qtdesignerhelloworld}
+
+\subsection{GUI der Beispielanwendung mit dem Qt Designer entwerfen}
+\label{sec:qtdesignerhelloworld}
 
 \index{Hauptfenster}%
 \index{GUI!Hauptfenster}%
@@ -808,14 +803,14 @@ des zu erstellenden Formulars in einem Dialog ab (s. Abbildung
 für alle in Qt verfügbaren Dialogarten dar, also beispielsweise
 Abfragedialoge, eigene Widgets und Hauptfenster. Wir wollen zunächst
 ein Hauptfenster entwerfen -- wählen Sie also aus der Liste
-\ospmenu{Main Window} aus.  
+\ospmenu{Main Window} aus.
 
 
 \ospfigure{0.6}{images/qtdesigner_new1_createmain}{Erstellung eines Hauptfensters im Qt Designer}{fig:qtdesigner_new1_createmain}
 
 
-Die Einstellung für die \ospmenu{Bildschirmgröße} belassen Sie auf
-\ospmenu{Vorgabe}.  Die Einstellung erlaubt Ihnen, die Größe des
+Die Einstellung für die \ospmenu{Bildschirmgrö\ss{}e} belassen Sie auf
+\ospmenu{Vorgabe}.  Die Einstellung erlaubt Ihnen, die Grö\ss{}e des
 Hauptfensters fest vorzugeben. Um das Hauptfenster zu erstellen,
 klicken Sie auf \ospmenu{Neu von Vorlage}.  Sie haben dann das
 Hauptfenster des Qt Designers mit dem noch leeren, gerade erzeugten
@@ -825,14 +820,14 @@ Hauptfenster vor sich (s. Abbildung
 \ospfigure{0.98}{images/qtdesigner_new2_emptymain}{Die Oberfläche des Qt Designers mit neu erzeugtem Hauptfenster}{fig:qtdesigner_new2_emptymain}
 
 \index{Qt Designer!Oberfläche}%
-Die Oberfläche des Qt Designers ist in drei große Bereiche geteilt.
+Die Oberfläche des Qt Designers ist in drei gro\ss{}e Bereiche geteilt.
 Links befinden sich die verfügbaren Qt-Widgets, die sich mit der Maus
 in das neu erzeugte Hauptfenster in der Mitte platzieren lassen. Der
 mittlere Bereich ist der Arbeitsbereich, in dem das zu
 bearbeitende Formular angezeigt wird. Bisher sehen Sie dort nur das
 leere Hauptfenster, das aber schon einmal eine Titelleiste, eine
 Menüleiste und eine Statusleiste besitzt. Rechts daneben befindet sich
-schließlich eine Leiste mit verschiedenen Tools zur Bearbeitung
+schlie\ss{}lich eine Leiste mit verschiedenen Tools zur Bearbeitung
 des Formulars. Rechts oben finden Sie die sogenannte
 \emph{Objektanzeige}, die alle schon im Formular vorhandenen Widgets
 in einer Baumdarstellung auflistet. Darunter befindet sich der
@@ -840,7 +835,7 @@ in einer Baumdarstellung auflistet. Darunter befindet sich der
 aktuell ausgewählten Elements bearbeiten lassen. Zur Auswahl des
 aktuellen Elements haben Sie zwei Möglichkeiten: Entweder Sie klicken
 das entsprechende Element im Arbeitsbereich in der Mitte an oder Sie
-wählen das Element aus der Baumstruktur der Objektanzeige. 
+wählen das Element aus der Baumstruktur der Objektanzeige.
 
 Der Eigenschaften-Editor listet die verfügbaren Eigenschaften des
 Elements auf, sortiert nach geerbten und für das Widget spezifischen
@@ -851,14 +846,14 @@ werden. Wenn Sie die Eigenschaften des Hauptfensters durchsehen,
 finden Sie dort einige schon bekannte Einstellungen, beispielsweise
 die Werte der \ospmenu{Size Policy}, wie sie in Kapitel
 \ref{sec:hvlayout} vorgestellt wurden. Zur Erinnerung: Diese geben an,
-wie sich das Element bei Größenänderung des Fensters verhält. Über den
+wie sich das Element bei Grö\ss{}enänderung des Fensters verhält. Über den
 Eigenschaften-Editor können alle Einstellungen bequem in der
 Oberfläche des Qt Designers vorgenommen werden, so dass kein eigener
 Python-Code mehr notwendig ist. Natürlich lassen sich diese Werte aber
 später (nach Laden der Oberfläche in der eigenen Anwendung)
 überschreiben.
 
-\ospfigure{0.45}{images/qtdesigner_new3_windowtitle}{Ändern des Fenstertitels im Eigenschaften-Editor}{fig:qtdesigner_new3_windowtitle}
+\ospfigure{0.6}{images/qtdesigner_new3_windowtitle}{Ändern des Fenstertitels im Eigenschaften-Editor}{fig:qtdesigner_new3_windowtitle}
 
 
 \index{Qt Designer!Objekteigenschaften}%
@@ -895,13 +890,13 @@ Hierarchie darunter stehenden zentralen Widget. Dieses Vorgehen kennen
 Sie schon aus der manuellen Implementierung des Hauptfensters: Damit
 dem Hauptfenster ein Layout zugeordnet werden kann, muss es zunächst
 ein zentrales Widget besitzen. Diesem werden alle Elemente
-untergeordnet, und diesem wird schließlich auch das Layout zugeordnet.
+untergeordnet, und diesem wird schlie\ss{}lich auch das Layout zugeordnet.
 
 \ospfigure{0.9}{images/qtdesigner_new4_widgetsandlayout}{Die ersten Widgets im Hauptfenster}{fig:qtdesigner_new4_widgetsandlayout}
 
 \index{Qt Designer!Qbjektanzeige}%
 In der Objektanzeige sehen Sie nun auch gleich die automatisch
-zugewiesenen Objektnamen der hinzugefügten Widgets. Der Button heißt
+zugewiesenen Objektnamen der hinzugefügten Widgets. Der Button hei\ss{}t
 zunächst \ospcmd{pushButton}. Diese Objektnamen werden später wichtig,
 wenn wir beispielsweise per \ospcmd{connect()} das Signal des Buttons
 mit einer Aktion verknüpfen oder den Text aus dem Eingabefeld
@@ -916,7 +911,7 @@ Alternativ suchen Sie im Eigenschaften-Editor den Eintrag
 \ospmenu{objectName} und ändern seinen Wert. Für statische Elemente
 wie Labels, die man im Python-Code später wohl selten anspricht,
 können Sie aber auch die Standardnamen belassen. In unserem Fall
-lassen wir alle Objektnamen beim Standard, schließlich arbeiten wir
+lassen wir alle Objektnamen beim Standard, schlie\ss{}lich arbeiten wir
 nur mit drei Widgets.
 
 \index{Qt Designer!Layout}%
@@ -946,27 +941,27 @@ Kapitel \ref{sec:qtdesignerlocalization} mit dem Qt Linguist übersetzt
 werden sollen. Alternativ können Sie im Eigenschaften-Editor die
 Eigenschaft \ospmenu{text} suchen (in diesem Fall eine Eigenschaft der
 Klasse \ospcmd{QAbtractButton}, von der \ospcmd{QPushButton} erbt) und
-den Wert dort ändern. Auch für das Label heißt die Eigenschaft
+den Wert dort ändern. Auch für das Label hei\ss{}t die Eigenschaft
 \ospmenu{text}, ist hier allerdings eine Eigenschaft der Klasse
 \ospcmd{QLabel}.
 
 Nun haben wir zwar alle Widgets im Hauptfenster beschriftet und in
 einem Layout angeordnet, allerdings ist das Hauptfenster für die
-wenigen Elemente doch etwas groß geraten. Sie können nun einerseits
-die Größe des Hauptfensters manuell anpassen, indem Sie im
+wenigen Elemente doch etwas gro\ss{} geraten. Sie können nun einerseits
+die Grö\ss{}e des Hauptfensters manuell anpassen, indem Sie im
 Arbeitsbereich den Rahmen des Fensters bei gedrückter Maustaste in die
-richtige Größe ziehen (wie bei jedem beliebigen Desktop-Fenster). Der
-Qt Designer kann aber auch automatisch eine passende Größe berechnen,
-und zwar aus den Vorgaben der Elemente wie Mindestgröße, Länge der
+richtige Grö\ss{}e ziehen (wie bei jedem beliebigen Desktop-Fenster). Der
+Qt Designer kann aber auch automatisch eine passende Grö\ss{}e berechnen,
+und zwar aus den Vorgaben der Elemente wie Mindestgrö\ss{}e, Länge der
 Aufschrift, Size Policy usw. Klicken Sie dazu in der Objektanzeige
 zunächst auf das Hauptfenster, um es als aktuelles Element
 auszuwählen. Dann wählen Sie im Menü des Qt Designers die Funktion
-\ospmultimenu{Formular\sm{}Größe anpassen}. Die Größe des
+\ospmultimenu{Formular\sm{}Grö\ss{}e anpassen}. Die Grö\ss{}e des
 Hauptfensters wird automatisch im Arbeitsbereich angepasst.  Abbildung
 \ospfigref{fig:qtdesigner_new5_sizeandtexts} zeigt den Qt Designer
 nach allen bisher besprochenen Arbeitsschritten.
 
-\ospfigure{0.99}{images/qtdesigner_new5_sizeandtexts}{Das Hauptfenster mit allen Widgets und automatischer Größe}{fig:qtdesigner_new5_sizeandtexts}
+\ospfigure{0.99}{images/qtdesigner_new5_sizeandtexts}{Das Hauptfenster mit allen Widgets und automatischer Grö\ss{}e}{fig:qtdesigner_new5_sizeandtexts}
 
 \index{Menü}%
 \index{Qt Designer!Menü}%
@@ -978,7 +973,7 @@ können Sie die Menüleiste schon im Hauptfenster sehen, sie versteckt
 sich hinter der Aufschrift \ospmenu{Geben Sie Text ein} direkt unter
 der Titelleiste. Klicken Sie doppelt auf diese Aufschrift, um den
 ersten Hauptmenüpunkt zu erzeugen. Geben Sie als ersten Menüpunkt
-\ospcmd{File} ein. Untermenüpunkte erzeugen Sie anschließend, indem
+\ospcmd{File} ein. Untermenüpunkte erzeugen Sie anschlie\ss{}end, indem
 Sie auf \ospmenu{File} klicken und wiederum doppelt auf \ospmenu{Geben
   Sie Text ein} im aufgeklappten \ospmenu{File}-Menü. Für Trenner
 zwischen Menüpunkten steht die Funktion \ospmenu{Trenner einfügen}
@@ -1004,7 +999,7 @@ Eine Kleinigkeit wollen wir noch bereinigen. Neben der Menüleiste hat
 der Qt Designer dem Hauptfenster auch eine Statusleiste verpasst.  Sie
 ist in der Objektanzeige als Objekt der Klasse \ospcmd{QStatusBar}
 aufgelistet. Da wir diese in unserer Beispielanwendung nicht
-benötigen, wollen wir sie aus der GUI entfernen. Klicken Sie 
+benötigen, wollen wir sie aus der GUI entfernen. Klicken Sie
 mit der rechten Maustaste auf das Objekt \ospcmd{statusbar} in der
 Objektanzeige und wählen Sie \ospmenu{Löschen} (s. Abbildung
 \ospfigref{fig:qtdesigner_new7_delstatusbar}).
@@ -1018,17 +1013,14 @@ Objekte wieder aus dem gerade bearbeiteten Formular entfernen.
 Alternativ können Sie das entsprechende Element auch im Arbeitsbereich
 mit der rechten Maustaste auswählen und \ospmenu{Löschen}.
 
-
-Speichern Sie nun die fertige GUI. Als Dateinamen wählen wir in diesem
-Fall \ospfile{helloworld.ui}. Sie können die gespeicherte
-\ospfile{.ui}-Datei einmal probehalber in einem Editor öffnen: Wie bei
-den Übersetzungsdateien handelt es sich um eine XML-Datei, die auch
+Speichern Sie nun die fertige GUI. Als Dateinamen verwenden wir \ospfile{helloworld.ui}. Sie können die gespeicherte \ospfile{.ui}-Datei einmal probehalber in einem Editor öffnen: Wie bei den Übersetzungsdateien handelt es sich um eine XML-Datei, die auch
 mit jedem Editor bearbeitet werden kann. Um diese Datei nun in einer
 Anwendung als GUI laden zu können, muss im nächsten Schritt aus diesem
 XML Python-Code erzeugt werden.
 
 
-\ospsubsection{GUI in das Hauptprogramm integrieren}{GUI in das Hauptprogramm integrieren}{sec:qtdesignerintegration}
+\subsection{GUI in das Hauptprogramm integrieren}
+\label{sec:qtdesignerintegration}
 
 \index{GUI!.ui-Datei verwenden}%
 \index{GUI!uic}%
@@ -1040,7 +1032,7 @@ uns die fertige \ospfile{.ui}-Datei vor. Sie muss in Python-Code
 umgewandelt werden, den wir dann per \ospcmd{import} in unserem
 Hauptprogramm laden. Für die Umwandlung in C++-Code stellt das Qt
 Framework ein Tool namens \ospfile{uic} (Qt user interface compiler)
-zur Verfügung. Die Python-Variante heißt unter PyQt \ospfile{pyuic4},
+zur Verfügung. Die Python-Variante hei\ss{}t unter PyQt \ospfile{pyuic4},
 unter PySide \ospfile{pyside-uic}. Beide Varianten sind
 interessanterweise in Python geschrieben und greifen auf bestimmte
 Qt-Klassen zu. Qt selbst bietet nämlich die Möglichkeit, über das
@@ -1051,7 +1043,7 @@ werden, bei Interesse werfen Sie einen Blick in das
 PySide-Skript im Python-weiten \ospfile{scripts}-Verzeichnis, also
 beispielsweise unter \ospfile{C:\bsl{}Python27\bsl{}scripts}. PyQt
 installiert seine Version in seinem \ospfile{bin}"=Verzeichnis als
-\ospfile{C:\bsl{}Python27\bsl{}Lib\bsl{}site-packages\bsl{}PyQt4\bsl{}bin\bsl{}pyuic4.bat},\osplinebreak{}
+\ospfile{C:\bsl{}Python27\bsl{}Lib\bsl{}site-packages\bsl{}PyQt4\bsl{}bin\bsl{}pyuic4.bat},
 diese Batch-Datei enthält den Aufruf des entsprechenden
 Python-Skripts.
 
@@ -1063,14 +1055,14 @@ der in Kapitel \ref{sec:qtdesignerhelloworld} erzeugten
 \ospfile{ui\_helloworld.py} um:
 
 \begin{ospsimplelisting}
-$ <bf>pyuic4 helloworld.ui > ui_helloworld.py</bf>
+$\$$ pyuic4 helloworld.ui > ui_helloworld.py
 \end{ospsimplelisting}
 
 Den Namen der Ausgabedatei können Sie alternativ mit dem Parameter
 \ospcmd{-o} übergeben:
 
 \begin{ospsimplelisting}
-$ <bf>pyuic4 -o ui_helloworld.py helloworld.ui</bf>
+$\$$ pyuic4 -o ui_helloworld.py helloworld.ui
 \end{ospsimplelisting}
 
 Das Präfix \ospfile{ui\_} wählen wir, um die so erzeugten
@@ -1082,6 +1074,8 @@ und wiederum per \ospfile{uic} in Python-Code geschrieben. Der
 interessante Teil des Python-Codes findet sich gleich am Anfang der
 Datei:
 
+\clearpage
+
 \begin{osplisting}{Python}{Automatisch erzeugte GUI-Klasse}{code:uicclass}
 from PyQt4 import QtCore, QtGui
 
@@ -1092,7 +1086,7 @@ class Ui_MainWindow(object):
 \end{osplisting}
 
 Zunächst werden die Module \ospcmd{QtCore} und \ospcmd{QtGui}
-eingebunden, um alle Widgets erzeugen zu können. Anschließend wird die
+eingebunden, um alle Widgets erzeugen zu können. Anschlie\ss{}end wird die
 Klasse \ospcmd{Ui\_MainWindow} deklariert. Beachten Sie, dass es sich
 \emph{nicht} um eine von \ospcmd{QObject}, \ospcmd{QWidget} oder gar
 \ospcmd{QMainWindow} abgeleitet Klasse handelt. Stattdessen wird sie
@@ -1106,7 +1100,7 @@ Objekt der Klasse \ospcmd{Ui\_MainWindow}. Das erste wird dann
 letzterem in der Methode \ospcmd{setupUi()} übergeben. Darauf werden
 wir gleich zurückkommen.
 
-Außer der Methode \ospcmd{setupUi()} besitzt \ospcmd{Ui\_MainWindow}
+\ospcmd{Ui\_MainWindow} besitzt au\ss erdem
 noch die Methode \ospcmd{retranslateUi()}. Darin werden \emph{alle}
 Aufschriften der GUI gesetzt. Die Trennung der Erzeugung von Widgets
 und der Änderung der Aufschriften erlaubt es, die Übersetzung der
@@ -1127,7 +1121,7 @@ GUI erzeugen. Die einfachste Variante ist, in unserem Hauptprogramm
 sowohl ein Objekt der Klasse \ospcmd{QMainWindow} also auch von
 \ospcmd{Ui\_MainWindow} zu erzeugen und dann \ospcmd{setupUi()} mit
 dem Hauptfenster-Objekt als erstem Parameter aufzurufen. Das komplette
-Python-Skript dazu sieht folgendermaßen aus:
+Python-Skript dazu sieht folgenderma\ss{}en aus:
 
 \begin{osplisting}{Python}{Erzeugung eines Hauptfensters mit GUI aus dem Qt Designer}{code:qtdesignermainwithuicgui}
 import sys
@@ -1141,7 +1135,7 @@ def main(argv):
     ui = Ui_MainWindow()
     ui.setupUi(mainwindow)
     mainwindow.show()
-    
+
     sys.exit(app.exec_())
 
 if __name__ == "__main__":
@@ -1157,7 +1151,7 @@ Lediglich ein \ospcmd{import}-Aufruf ist hinzugekommen, der die Klasse
 \index{Signale und Slots}%
 Nun erscheint zwar das Hauptfenster mit richtiger GUI auf dem
 Bildschirm, allerdings sollen die Widgets und das Menü noch mit der
-entsprechenden Funktionen verknüpft werden. Das heißt unter Qt, wir
+entsprechenden Funktionen verknüpft werden. Das hei\ss{}t unter Qt, wir
 müssen die entsprechenden Signale mit den richtigen Slots verbinden
 und gegebenenfalls diese Slots noch implementieren. Dazu muss das
 Hauptfenster, genau wie bei der manuellen Implementierung, als eigene
@@ -1169,7 +1163,7 @@ dieses Objekt als Attribut in \ospcmd{self}. So können wir jederzeit
 auf das Objekt, seine Widgets und Menüeinträge zugreifen und damit
 beispielsweise Signal-Slot-Verbindungen wieder in eine eigene Methode
 ausgelagern. Ein komplettes Beispiel für diese Vorgehensweise
-sieht folgendermaßen aus:
+sieht folgenderma\ss{}en aus:
 
 \begin{osplisting}{Python}{Qt-Designer-GUI und eigene Hauptfenster-Klasse}{code:qtdesignerguiwithmainwindowclass}
 import sys
@@ -1181,7 +1175,7 @@ def main(argv):
 
     mainwindow = MyMainWindow()
     mainwindow.show()
-    
+
     sys.exit(app.exec_())
 
 class MyMainWindow(QtGui.QMainWindow):
@@ -1195,7 +1189,7 @@ class MyMainWindow(QtGui.QMainWindow):
     def createConnects(self):
         self.ui.pushButton.clicked.connect(self.textAktualisieren)
         self.ui.lineEdit.textChanged.connect(self.ui.label.setText)
-    
+
     @QtCore.pyqtSlot()
     def textAktualisieren(self):
         self.ui.label.setText(self.ui.lineEdit.text())
@@ -1209,7 +1203,7 @@ Der Code von \ospcmd{main()} entspricht jenem aus Kapitel
 manuell in der Hauptfenster-Klasse erzeugt, sondern aus der
 automatisch erzeugten Python-Code-Datei geladen. Die Widgets können
 nun über \ospcmd{self.ui.objektname} referenziert werden.
-Bei\osplinebreak{} \ospcmd{objektname} handelt es sich jeweils um den
+Bei \ospcmd{objektname} handelt es sich jeweils um den
 Namen des Widget-Objekts, wie er in der Objektanzeige im Qt Designer
 aufgelistet wird. In unserem Fall ist der Button beispielsweise unter
 \ospcmd{self.ui.pushbutton} ansprechbar.
@@ -1220,7 +1214,7 @@ eigene Hauptfenster-Klasse erbt sowohl von \ospcmd{QMainWindow} als
 auch von \ospcmd{Ui\_Main\-Window}. Die Widgets können dann direkt über
 Objekt-Attribute referenziert werden, der Umweg über ein
 \ospcmd{ui}-Objekt entfällt. Der Code der Hauptfenster-Klasse sieht
-dann folgendermaßen aus:
+dann folgenderma\ss{}en aus:
 
 \begin{osplisting}{Python}{Eigene Hauptfenster-Klasse mit Mehrfachvererbung}{code:qtdesignerguiwithmainwindowclass2}
 class MyMainWindow(QtGui.QMainWindow, Ui_MainWindow):
@@ -1233,7 +1227,7 @@ class MyMainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def createConnects(self):
         self.pushButton.clicked.connect(self.textAktualisieren)
         self.lineEdit.textChanged.connect(self.label.setText)
-    
+
     @QtCore.pyqtSlot()
     def textAktualisieren(self):
         self.label.setText(self.lineEdit.text())
@@ -1247,7 +1241,8 @@ in die Klassen-Implementierung bevorzugt, kann sich das
 \ospcmd{ui}-Attribut sparen und erbt direkt von der UI-Klasse.
 
 
-\ospsubsection{Lokalisierung der Qt-Designer-GUI}{Lokalisierung der Qt-Designer-GUI}{sec:qtdesignerlocalization}
+\subsection{Lokalisierung der Qt-Designer-GUI}
+\label{sec:qtdesignerlocalization}
 
 \index{Lokalisierung}%
 \index{Lokalisierung!Qt Designer}%
@@ -1255,7 +1250,7 @@ in die Klassen-Implementierung bevorzugt, kann sich das
 \index{QApplication!translate()}%
 Nun hat die Beispielanwendung zwar eine Qt-Designer-GUI, allerdings
 sind die Übersetzungen aus Kapitel \ref{sec:lokalisierung} nicht mehr
-zu gebrauchen. Schließlich stehen alle Strings nicht mehr in der
+zu gebrauchen. Schlie\ss{}lich stehen alle Strings nicht mehr in der
 Haupt-Python-Datei, sondern stattdessen einmal in der vom Qt Designer
 erzeugten \ospfile{.ui}-Datei und ein zweites Mal in der daraus
 erzeugten Python-Code-Datei -- in dieser aber immerhin eingebettet in
@@ -1285,28 +1280,24 @@ dann das \ospcmd{lupdate}-Tool auf, wie in Kapitel
 \ref{sec:lokalisierung} beschrieben:
 
 \begin{ospsimplelisting}
-$ <bf>pylupdate4 helloworld.pro</bf>
+$\$$ pylupdate4 helloworld.pro
 \end{ospsimplelisting}
 
 \index{lrelease}%
 Wenn Sie die damit erzeugte Datei \ospfile{helloworld\_de.ts} nun im
 Qt Linguist öffnen, können Sie die Strings der Qt-Designer-Oberfläche
-bequem übersetzen. 
-
-
-
+bequem übersetzen.
+%
 \ospfigure{0.9}{images/qtdesigner_linguist}{Qt Linguist zur Übersetzung einer Qt-Designer-GUI}{fig:qtdesigner_linguist}
-
-
-
+%
 Abbildung \ospfigref{fig:qtdesigner_linguist}
 zeigt, dass Sie dabei auch immer die GUI selbst im Blick behalten.
 Statt des Code-Ausschnitts wird rechts nun die Qt-Designer-Datei
 eingeblendet. Übersetzen Sie so alle Strings wie gehabt und erzeugen
-Sie anschließend die kompilierte Übersetzungsdatei:
+Sie anschlie\ss{}end die kompilierte Übersetzungsdatei:
 
 \begin{ospsimplelisting}
-$ <bf>lrelease helloworld.pro</bf>
+$\$$ lrelease helloworld.pro
 \end{ospsimplelisting}
 
 Die erzeugten \ospcmd{.qm}-Dateien müssen nun noch im Hauptprogramm
@@ -1314,7 +1305,8 @@ geladen werden, und schon ist auch eine Qt-Designer-GUI in die
 gewünschte Sprache übersetzt.
 
 
-\ospsubsection{Der Anwendung weitere Dialoge hinzufügen}{Der Anwendung weitere Dialoge hinzufügen}{sec:qtdesignerdialogs}
+\subsection{Der Anwendung weitere Dialoge hinzufügen}
+\label{sec:qtdesignerdialogs}
 
 \index{Qt Designer!Dialoge}%
 \index{Dialoge}%
@@ -1323,7 +1315,7 @@ Qt Designer entworfen wurde, soll der Anwendung nun noch der in
 Kapitel \ref{sec:customdialogs} eingeführte eigene Dialog hinzugefügt
 werden.  Das Vorgehen entspricht dem zur Erstellung des Hauptfensters:
 zunächst wird der Dialog im Qt Designer zusammengestellt, dann per
-\ospfile{uic}-Tool in Python-Code umgewandelt, und schließlich laden
+\ospfile{uic}-Tool in Python-Code umgewandelt, und schlie\ss{}lich laden
 wir die GUI in unserer Anwendung per \ospcmd{setupUi()} in ein
 Dialog-Objekt. Aber der Reihe nach.
 
@@ -1331,12 +1323,12 @@ Zunächst starten Sie also wieder den Qt Designer. Bei der Abfrage nach
 der Formularart beim Start des Designers wählen Sie dieses Mal
 \ospmenu{Dialog without Buttons} und erzeugen damit einen leeren
 Dialog vom Typ \ospcmd{QDialog} (s. Abbildung
-\ospfigref{fig:qtdesigner_newdialog1}). 
+\ospfigref{fig:qtdesigner_newdialog1}).
 
 \ospfigure{0.6}{images/qtdesigner_newdialog1}{Neuen Dialog im Qt Designer erstellen}{fig:qtdesigner_newdialog1}
 
 Der Qt Designer bietet in der
-Liste außerdem zwei weitere Dialogarten an, die schon Buttons
+Liste au\ss{}erdem zwei weitere Dialogarten an, die schon Buttons
 enthalten. Wir wollen aber dem Dialog gleich selbst einen Button
 hinzufügen, also wählen wir den leeren Dialog. Fügen Sie nun dem
 Dialog im Qt Designer zwei Elemente hinzu, links ein \ospmenu{Label}
@@ -1344,8 +1336,8 @@ und rechts einen \ospmenu{Push Button}. Wählen Sie das Objekt
 \ospmenu{Dialog} in der Objektanzeige und setzen Sie das Layout auf
 horizontal. Die beiden Elemente werden dann automatisch nebeneinander
 angeordnet. Wie das Hauptfenster lassen Sie auch hier den Qt Designer
-die Größe des Dialogs automatisch setzen, indem Sie
-\ospmultimenu{Formular\sm{}Größe anpassen} auswählen. Anschließend
+die Grö\ss{}e des Dialogs automatisch setzen, indem Sie
+\ospmultimenu{Formular\sm{}Grö\ss{}e anpassen} auswählen. Anschlie\ss{}end
 passen Sie noch den Titel des Dialogs (per Eigenschaften-Editor,
 Eigenschaft \ospcmd{windowTitle} des Dialogs) sowie die Aufschriften
 der beiden Widgets an. Im Zweifelsfall schlagen Sie noch einmal in
@@ -1364,13 +1356,13 @@ im Verzeichnis des Hauptprogramms. Im nächsten Schritt wandeln wir die
 \ospfile{.ui}-Datei per \ospfile{uic} in Python-Code um:
 
 \begin{ospsimplelisting}
-$ <bf>pyuic4 hellodialog.ui > ui_hellodialog.py</bf>
+$\$$ pyuic4 hellodialog.ui > ui_hellodialog.py
 \end{ospsimplelisting}
 
 Die erzeugte Datei enthält im Prinzip denselben Code wie die Datei des
 Hauptfensters. Ein kleiner Unterschied liegt lediglich darin, dass der
 an \ospcmd{setupUi()} übergebene Parameter nicht mehr
-\ospcmd{MainWindow} heißt, sondern \ospcmd{Dialog}. Der übrige Aufbau
+\ospcmd{MainWindow} hei\ss{}t, sondern \ospcmd{Dialog}. Der übrige Aufbau
 der Datei ist identisch mit dem des Hauptfensters. Auch das Laden der
 Oberfläche unterscheidet sich kaum. Zunächst muss die Klasse aus der
 Python-Code-Datei importiert werden. Fügen Sie Ihrem Hauptprogramm
@@ -1381,10 +1373,10 @@ from ui_hellodialog import Ui_Dialog
 \end{ospsimplelisting}
 
 \index{QDialog}%
-Anschließend können Sie ein Objekt der Klasse \ospcmd{QDialog}
+Anschlie\ss{}end können Sie ein Objekt der Klasse \ospcmd{QDialog}
 erzeugen und dieses an die \ospcmd{setupUi()}-Methode übergeben. Die
 einfachste Variante erzeugt den Dialog direkt im Programmfluss und
-sieht folgendermaßen aus:
+sieht folgenderma\ss{}en aus:
 
 \begin{osplisting}{Python}{Erzeugung eines Dialogs mit Qt-Designer-GUI}{code:qtdesignerdialogloadgui}
 dialog = QtGui.QDialog(self)
@@ -1397,7 +1389,7 @@ dialog.exec_()
 Mit diesem Code zeigen Sie den Dialog samt GUI auf dem Bildschirm an.
 Auch der Button ist schon benutzbar, er wurde über sein
 \ospcmd{clicked()}-Signal mit dem \ospcmd{accept()}-Slot des Dialogs
-verbunden. Ein Klick auf den Button schließt den Dialog. Bei
+verbunden. Ein Klick auf den Button schlie\ss{}t den Dialog. Bei
 komplexeren Dialogen mit mehreren Rückgabewerten bietet es sich
 wiederum an, eine eigene Dialog-Klasse von \ospcmd{QDialog}
 abzuleiten. Zum Laden der GUI stehen Ihnen dann wieder die beiden in
@@ -1410,25 +1402,26 @@ Ergebnis und nutzen die Vorteile eines mächtigen Werkzeugs zum
 Erstellen der kompletten GUI Ihrer Anwendung.
 
 
-\ospsection{Ressourcen}{Ressourcen}{sec:ressourcen}
+\section{Ressourcen}
+\label{sec:ressourcen}
 
 \index{Ressourcen}%
 Neben dem Quellcode bestehen Softwareprojekte, vor allem wenn es sich
-um GUI-Anwendungen handelt, auch aus weiteren Dateien wie Icons,
+um GUI\hyp Anwendungen handelt, auch aus weiteren Dateien wie Icons,
 Konfigurationsdateien oder auch den in Kapitel \ref{sec:lokalisierung}
-schon besprochenen Übersetzungsdateien. Je größer die Anwendung, desto
-mehr solcher Dateien muss der Entwickler schließlich schon während der
+schon besprochenen Übersetzungsdateien. Je grö\ss{}er die Anwendung, desto
+mehr solcher Dateien muss der Entwickler schlie\ss{}lich schon während der
 Entwicklung des Projekts verwalten. Spätestens beim Erstellen von
 Installationspaketen wird es aber schnell unübersichtlich, wenn man
 neben der Anwendungen mehrere zusätzliche Dateien unterschiedlichen
-Typs laden möchte. Außerdem ist dann darauf zu achten, dass die Pfade
+Typs laden möchte. Au\ss{}erdem ist dann darauf zu achten, dass die Pfade
 der Dateien unter Umständen nicht mehr mit den Dateipfaden im
 Entwicklersystem übereinstimmen und die Anwendung die Dateien
 folglich von unterschiedlichen Pfaden laden muss.
 
 \index{Ressourcen!Verwaltung}%
 All diese Probleme lassen sich mit einer vernünftigen
-\emph{Ressourcenverwaltung} größtenteils in den Griff bekommen. Dabei
+\emph{Ressourcenverwaltung} grö\ss{}tenteils in den Griff bekommen. Dabei
 handelt es sich meist zunächst um eine GUI-Anwendung, mit deren Hilfe
 man alle externen Dateien in einer Liste oder Baumstruktur verwaltet.
 Bei der Kompilierung und Paketerstellung kümmert sich die
@@ -1445,7 +1438,8 @@ ausführt. Die Anwendung bindet diese Datei per \ospcmd{import} ein und
 kann dann auf alle Ressourcen zugreifen. Aber der Reihe nach.
 
 
-\ospsubsection{Erstellung der Ressourcendatei}{Erstellung der Ressourcendatei}{sec:createressourcefile}
+\subsection{Erstellung der Ressourcendatei}
+\label{sec:createressourcefile}
 
 \index{Ressourcen!Ressourcendatei}%
 Zunächst muss eine Ressourcendatei erzeugt werden. Die GUI der
@@ -1453,7 +1447,7 @@ Ressourcenverwaltung ist bei Qt in den Qt Designer eingebettet.
 Starten Sie also zunächst den Qt
 Designer.\ospfootnote{fn:designerpfad}{PyQt-Entwickler unter Windows
   finden die Anwendung unter
-  \ospfile{C:\bsl{}Python27\bsl{}""Lib\bsl{}site-packages\bsl{}PyQt4\bsl{}bin}.} 
+  \ospfile{C:\bsl{}Python27\bsl{}""Lib\bsl{}site-packages\bsl{}PyQt4\bsl{}bin}.}
 Unter PySide oder anderen Betriebssystemen müssen Sie das Qt
 SDK oder die Qt-Entwicklerpakete aus dem Repository installieren, der
 Qt Designer wird dann automatisch mit installiert.
@@ -1496,7 +1490,7 @@ Wurzelverzeichnis des Quellcodes bzw. der Ressourcen an.
 
 Es wurde nun eine leere \ospfile{.qrc}-Datei erzeugt, und wir können
 der Datei Ressourcen hinzufügen, in unserem Fall drei. Zunächst eine
-Bilddatei, die wir dann im Hauptfenster anzeigen wollen; außerdem die
+Bilddatei, die wir dann im Hauptfenster anzeigen wollen; au\ss{}erdem die
 beiden in Kapitel \ref{sec:qtdesignerlocalization} erzeugten
 Übersetzungsdateien. Wenn man mehrere Dateien unterschiedlichen Typs
 als Ressourcen verwalten will, bietet es sich an, diese in einer Art
@@ -1512,7 +1506,7 @@ bei Änderungen im Dateisystem lediglich die Ressourcendatei angepasst
 werden, im Quellcode bleibt der Zugriff auf die Dateien unverändert.
 Hier legen wir zwei Präfixe für \ospfile{images} und
 \ospfile{translations} an, wobei in diesem Fall alle
-Projektdateien im selben Ordner liegen.  
+Projektdateien im selben Ordner liegen.
 
 \ospfigure{0.45}{images/rcc_newqrc3_newprefix}{Präfixe für Ressourcen hinzufügen}{fig:rcc_newqrc3_newprefix}
 
@@ -1530,7 +1524,7 @@ Symbol dazu finden Sie rechts neben dem Symbol zum Hinzufügen der
 Präfixe. Wählen Sie zunächst das gewünschte Präfix aus der Liste aus
 und klicken Sie dann auf \ospmenu{Dateien hinzufügen}. Abbildung
 \ospfigref{fig:rcc_newqrc4_addfile} zeigt den Tooltip sowie den Dialog
-mit den schon vorhandenen Präfixen. 
+mit den schon vorhandenen Präfixen.
 
 
 \ospfigure{0.45}{images/rcc_newqrc4_addfile}{Dateien zu den Ressourcen hinzufügen}{fig:rcc_newqrc4_addfile}
@@ -1586,7 +1580,8 @@ Qt finden Sie weitere Informationen über das direkte Editieren von
 Ressourcendateien.
 
 
-\ospsubsection{Ressourcen in einer Python-Anwendung verwenden}{Ressourcen in einer Python-Anwendung verwenden}{sec:useressources}
+\subsection{Ressourcen in einer Python-Anwendung verwenden}
+\label{sec:useressources}
 
 \index{rcc}%
 \index{Ressourcen!Ressourcendatei verwenden}%
@@ -1595,13 +1590,13 @@ Ressourcendateien, analog zur Einbindung der GUI-Datei in Kapitel
 \ref{sec:qtdesignerintegration}, zunächst mit einem Qt-Tool in Code
 gewandelt werden. Da das Standard-Qt-Tool \ospfile{rcc} (Resource
 Compiler) nur C++-Code erzeugt, liefern sowohl PyQt als auch PySide
-eine eigene Variante des Tools mit. Unter PyQt heißt es
+eine eigene Variante des Tools mit. Unter PyQt hei\ss{}t es
 \ospfile{pyrcc4}, unter PySide
 \ospfile{pyside-rcc}.\ospfootnote{fn:pyrcc}{Windows-Benutzer finden
   die Tools jeweils im Ordner
   \ospfile{C:\bsl{}Python27\bsl{}Lib\bsl{}""site-packages\bsl{}PyQt4\bsl{}bin}
   bzw.
-  \ospfile{C:\bsl{}Python27\bsl{}Lib\bsl{}site-packages\bsl{}PySide}.} 
+  \ospfile{C:\bsl{}Python27\bsl{}Lib\bsl{}site-packages\bsl{}PySide}.}
 Unter Linux installieren Sie das Tool am einfachsten über den
 Paketmanager Ihrer Distribution.
 
@@ -1612,11 +1607,11 @@ alternativ einen Dateinamen angeben, in die dann der Code geschrieben
 wird. Es bietet sich an, die erzeugten Dateien mit einem Präfix wie
 \ospfile{rc\_} zu versehen. Um die so automatisch erzeugten
 Python-Dateien von eigenem Code unterscheiden zu können. Rufen Sie für
-unser Beispiel das Tool also folgendermaßen auf, um die Datei
+unser Beispiel das Tool also folgenderma\ss{}en auf, um die Datei
 \ospfile{rc\_helloworld.py} zu erzeugen:
 
 \begin{ospsimplelisting}
-$ <bf>pyrcc4 helloworld.qrc > rc_helloworld.py</bf>
+$\$$ pyrcc4 helloworld.qrc > rc_helloworld.py
 \end{ospsimplelisting}
 
 Die so erzeugte Datei besteht aus einer Variablen
@@ -1638,7 +1633,9 @@ die Übersetzungen nicht mehr aus der Datei im Dateisystem laden,
 sondern direkt aus den Ressourcen. Man verweist Qt einfach auf die
 Ressourcendatei, indem man dem Präfix und Dateinamen der Ressource
 einen Doppelpunkt voranstellt. Mehr ist nicht notwendig, um die Ressource
-zu laden. Im Code sieht das dann folgendermaßen aus:
+zu laden. Im Code sieht das dann folgenderma\ss{}en aus:
+
+\clearpage
 
 \begin{osplisting}{Python}{Laden der Übersetzungsdatei aus der Ressourcendatei}{code:loadtranslationfromresource}
 def main(argv):
@@ -1652,7 +1649,7 @@ def main(argv):
 
     mainwindow = MyMainWindow()
     mainwindow.show()
-    
+
     sys.exit(app.exec_())
 \end{osplisting}
 
@@ -1664,11 +1661,11 @@ zuerst die Szene aus der Klasse \ospcmd{QGraphicsScene} erzeugen, der
 wir dann das eingebunden Bild per Objekt der Klasse
 \ospcmd{QGraphicsPixmapItem} übergeben. Dieses Objekt öffnet aber noch
 immer nicht die Bilddatei direkt, sondern erwartet bei der Erzeugung
-ein Objekt der Klasse \ospcmd{QPixmap}. Dieses ist schließlich das
+ein Objekt der Klasse \ospcmd{QPixmap}. Dieses ist schlie\ss{}lich das
 Objekt, das durch die Übergabe des Dateinamens im Konstruktor die
 Bilddatei öffnet. Das Ganze passiert am besten am Ende des
 Konstruktors unserer Hauptfenster-Klasse, der dann in kompletter Form
-folgendermaßen aussieht:
+folgenderma\ss{}en aussieht:
 
 \begin{osplisting}{Python}{Laden der Bilddatei aus den Ressourcen}{code:loadimagefromresource}
     def __init__(self, *args):
@@ -1686,7 +1683,7 @@ folgendermaßen aussieht:
 Das war es auch schon. Wenn Sie das Hauptprogramm nun starten, sehen
 Sie das Hauptfenster mit allen Übersetzungen sowie dem Bild unterhalb
 des Buttons. Abbildung \ospfigref{fig:rcc_newqrc7_app} zeigt das
-Ergebnis. 
+Ergebnis.
 
 \ospfigure{0.5}{images/rcc_newqrc7_app}{Hauptfenster der fertigen Anwendung mit geladenen Ressourcen}{fig:rcc_newqrc7_app}
 
@@ -1703,15 +1700,13 @@ beispielsweise Bilddateien installieren. Die Qt"=Ressourcenverwaltung
 nicht vergessen: Bei Änderungen an den Dateien müssen Sie jedes Mal
 wieder das \ospfile{rcc}-Tool aufrufen. Im nächsten Kapitel werden wir
 sehen, wie man diesen Aufruf in einen Workflow einbindet und
-schließlich auch aus einem Entwicklungsprojekt die Pakete zur
+schlie\ss{}lich auch aus einem Entwicklungsprojekt die Pakete zur
 Installation unter verschiedenen Betriebssystemen erstellt.
-
-
 
 
 \ospvacat
 
-%%% Local Variables: 
+%%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "pyqt"
-%%% End: 
+%%% End:

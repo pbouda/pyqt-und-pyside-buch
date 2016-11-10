@@ -1,54 +1,53 @@
-\documentclass{book}
+% !TeX spellcheck = de_DE_frami
+\documentclass[letterpaper,11pt]{book}
 
-\usepackage{makeidx}
-\makeindex
+\input{main/preamble}
+\input{main/hyphenation}
 
-
-%% PREAMBLE -- BITTE NICHT BEARBEITEN!
-
-% Formatvorlage einbinden
-
-\IfFileExists{osp-intern/osp_main_v2.sty}{%
-    \usepackage{osp-intern/osp_main_v2}
-  }{%
-    \usepackage{autorenhinweise/opensourcepress_v2}
-}
-
-%% END PREAMBLE
-
-\hyphenation{%
-Py-Side
-Py-Qt}
+\setlength{\overfullrule}{5pt}
 
 \begin{document}
 
-\include{pyqt_titelei}
+\input{main/titlepage}
+\clearpage
+\frontmatter
+\tableofcontents\clearpage
 
-\tableofcontents
-\ospvacat
+%\begin{doublespacing}
+\listoffigures\clearpage
+%\end{doublespacing}
 
-\include{kapitel_01}
+% unsavory hack to apply LOF line format to list of listings also:
+% replace '{lstlisting}' with '{figure}' in auxiliary file
+\immediate\write18{sed -i 's/{lstlisting}/{figure}/g' \jobname.lol}
 
-\include{kapitel_02}
+\lstlistoflistings
 
-\include{kapitel_03}
 
-\include{kapitel_04}  
+\input{chapters/kapitel_01}% Vorwort
 
-\include{kapitel_05} 
+\mainmatter
 
-%\include{kapitel_06} % nicht in 1ed
+\input{chapters/kapitel_02}
 
-\include{kapitel_07}
+\input{chapters/kapitel_03}
 
-\include{kapitel_08}
+\input{chapters/kapitel_04}  
 
-%\include{kapitel_09} %nicht in 1ed
+\input{chapters/kapitel_05} 
 
+% \input{chapters/kapitel_06} % nicht in 1ed
+
+\input{chapters/kapitel_07}
+
+
+\input{chapters/kapitel_08}
+
+%\input{chapters/kapitel_09} %nicht in 1ed
+
+\backmatter
+
+\printindex
 
 \end{document}
 
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: t
-%%% End: 

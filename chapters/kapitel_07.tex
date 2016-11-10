@@ -1,13 +1,15 @@
-\ospchapter{WebKit}{WebKit}{chap:webkit}
+% !TeX spellcheck = de_DE_frami
+\chapter{WebKit}
+\label{chap:webkit}
 
 \index{WebKit}%
-Der Siegeszug von WebKit scheint unaufhaltsam: Praktisch alle großen
+Der Siegeszug von WebKit scheint unaufhaltsam: Praktisch alle gro\ss{}en
 Computer"= und Internetfirmen (mit Ausnahme von Microsoft), kleine und
-große Open-Source-Projekte sowie Hobby-Entwickler setzen mittlerweile
+gro\ss{}e Open-Source-Projekte sowie Hobby-Entwickler setzen mittlerweile
 WebKit ein, um Webseiten darzustellen und Webanwendungen auszuführen.
-Mit Chrome und Safari existieren zwei große Browser auf WebKit-Basis,
+Mit Chrome und Safari existieren zwei gro\ss{}e Browser auf WebKit-Basis,
 auf mobilen Geräten ist die Verbreitung mit Android, iOS, Symbian und
-WebOS sogar noch größer. Und auch in KDE und Gnome wird WebKit zur
+WebOS sogar noch grö\ss{}er. Und auch in KDE und Gnome wird WebKit zur
 Grundlage aller Anwendungen, die mit HTML und Javascript zu tun haben.
 
 Dabei begann das Projekt nicht sehr offen: Apple suchte nach einer
@@ -15,9 +17,9 @@ vernünftigen Grundlage für die HTML-Darstellung in MacOS und seinem
 Webbrowser. Da der Mozilla-Code als schlechter organisiert und wartbar
 als der von KHTML galt, nutzte Apple eben dieses KDE-Projekt als
 Grundlage zur Entwicklung von WebKit. Der Quellcode wurde nach
-Vorstellung des Produkts schließlich auch nach den Bedingungen der
+Vorstellung des Produkts schlie\ss{}lich auch nach den Bedingungen der
 KDE-Lizenzen veröffentlicht, wobei das Verhalten von Apple in der
-Open-Source-Szene schnell auf Kritik stieß. Die Quellcode-Pakete waren
+Open-Source-Szene schnell auf Kritik stie\ss{}. Die Quellcode-Pakete waren
 kaum mehr in KHTML zu integrieren und der Code damit für eine
 Weiterentwicklung in der Community unbrauchbar. Apple nahm sich die
 Kritik jedoch zu Herzen und öffnete 2005 den Entwicklungsprozess samt
@@ -34,7 +36,7 @@ WebKit-Element in QML zur Verfügung stellt. Beides lässt sich auf
 einfache Weise in eigene Anwendungen integrieren und bietet so eine
 bequeme Möglichkeit, Webseiten und Javascript in Qt-Anwendungen zu
 integrieren und mit anderen Qt-Technologien interagieren zu lassen.
-Auf diesem Weg hat WebKit schließlich auch wieder zurück zu KDE
+Auf diesem Weg hat WebKit schlie\ss{}lich auch wieder zurück zu KDE
 gefunden, so dass der Browser und andere Komponenten des Projekts
 jetzt direkt auf WebKit aufsetzen. Qt selbst ist derzeit auf dem Weg
 der Modularisierung, wobei als eines der ersten Module die
@@ -43,9 +45,9 @@ wohl unabhängiger von der Qt-Basis werden und damit schnellere
 Entwicklungszyklen durchlaufen.  Damit stellt WebKit einen der
 wichtigsten Bausteine in Qt dar und bietet dem Anwendungsentwickler
 die Möglichkeit zur Integration von Webtechnologien, wie sie auch in
-anderen Frameworks und Betriebssystemen immer größeren Einfluss haben.
+anderen Frameworks und Betriebssystemen immer grö\ss{}eren Einfluss haben.
 HTML5 und Javascript werden in Zukunft sicher die Basis für einen
-großen Teil aller mobilen und Desktop-Anwendungen sein.
+gro\ss{}en Teil aller mobilen und Desktop-Anwendungen sein.
 
 Dieses Kapitel stellt Ihnen anhand von drei Beispielen die Integration
 von WebKit als Qt-Widget bzw. QML-Element in eine Qt-Anwendung vor.
@@ -58,7 +60,8 @@ Benutzung bestimmter Qt-Klassen zur Implementierung der
 Anwendungslogik (z.\,B. beim Speichern von Cookies).
 
 
-\ospsection{Ein Webbrowser in Python}{Ein Webbrowser in Python}{sec:pythonwebbrowser}
+\section{Ein Webbrowser in Python}
+\label{sec:pythonwebbrowser}
 
 Als erstes Beispielprojekt bauen wir aus dem WebKit-Widget einen
 einfachen Webbrowser in Python. Der Browser soll erst einmal nicht
@@ -74,7 +77,8 @@ Webseite.
 
 \ospfigure{0.9}{images/webkit1_app}{Webbrowser in Python}{fig:webkit1_app}
 
-\ospsubsection{Erstellen der Oberfläche mit dem Qt Designer}{Erstellen der Oberfläche mit dem Qt Designer}{sec:pythonbrowserdesigner}
+\subsection{Erstellen der Oberfläche mit dem Qt Designer}
+\label{sec:pythonbrowserdesigner}
 
 \index{Qt Designer}%
 Wir nutzen für unser Beispiel den Qt Designer zur Erstellung der
@@ -84,7 +88,7 @@ zunächst den Qt Designer aus dem PyQt- oder PySide-Verzeichnis Ihrer
 Python-Installation. Als erstes Fenster zeigt der Designer wieder den
 Wizard zur Erstellung eines neuen Formulars.  Wählen Sie hier als
 Template \ospmenu{Widget} (s. Abbildung
-\ospfigref{fig:webkit1_newproject}). 
+\ospfigref{fig:webkit1_newproject}).
 
 
 \ospfigure{0.5}{images/webkit1_newproject}{Neues Designer-Projekt für Hautpfenster-Widget}{fig:webkit1_newproject}
@@ -92,10 +96,10 @@ Template \ospmenu{Widget} (s. Abbildung
 
 Wir erstellen das Hauptfenster aus einem einfachen \ospcmd{QWdiget},
 da wir keine Menü- und Statusleiste benötigen. Klicken Sie
-anschließend auf den Button \ospmenu{Neu von Vorlage}.
+anschlie\ss{}end auf den Button \ospmenu{Neu von Vorlage}.
 
 Im nächsten Schritt müssen die einzelnen GUI-Elemente und das Layout
-in das Hauptfenster-Widget eingefügt werden. Das Fenster enthält
+in das Hauptfenster\hyp Widget eingefügt werden. Das Fenster enthält
 insgesamt fünf Widgets: die drei Buttons, die Eingabezeile für die
 URL sowie den WebKit-View zur Darstellung der Webseite. Angeordnet
 sind die Elemente zunächst vertikal untereinander, nur die drei Buttons
@@ -145,16 +149,16 @@ entweder Sie lassen es direkt in das Widget fallen oder Sie fügen es
 dem Objektbaum rechts in der Objektanzeige hinzu. Bei komplexeren
 Layouts ist meist Letzteres die einfachere Methode. Zum Anordnen im
 Layout können Sie die Widgets dann im grafischen Editor in der Mitte
-hin und her schieben. Das Widget für die Eingabezeile heißt
+hin und her schieben. Das Widget für die Eingabezeile hei\ss{}t
 \ospmenu{Line Edit}, für die Anzeige der Webseite fügen Sie einen
 \ospmenu{QWebView} hinzu. Am Ende sollte es dann wie in Abbildung
 \ospfigref{fig:webkit1_ui} aussehen.
 
-Anschließend müssen die einzelnen Widgets mit sinnvollen Objektnamen
+Anschlie\ss{}end müssen die einzelnen Widgets mit sinnvollen Objektnamen
 versehen werden. Die in unserem Beispiel verwendeten Namen sehen Sie
 wiederum in Abbildung \ospfigref{fig:webkit1_ui} rechts oben in der
 Objektanzeige: Die Eingabeleiste ist von der Klasse \ospcmd{QLineEdit}
-abgeleitet und heißt \ospcmd{editAddress} usw.  Klicken Sie doppelt
+abgeleitet und hei\ss{}t \ospcmd{editAddress} usw.  Klicken Sie doppelt
 auf den jeweiligen Objektnamen und tragen Sie dann den neuen Namen
 ein.
 
@@ -172,7 +176,8 @@ uns an die Implementierung der Anwendungslogik machen: die Eingabe von
 URLs, das Laden der Webseite und die Steuerung über die Buttons.
 
 
-\ospsubsection{Der Browser in Python}{Der Browser in Python}{sec:pythonbrowsercode}
+\subsection{Der Browser in Python}
+\label{sec:pythonbrowsercode}
 
 \index{uic}%
 Dank Python, Qt und \ospcmd{QWebKit} beginnt nun der angenehme Teil:
@@ -184,7 +189,7 @@ einfach mit der UI-Datei als Parameter und geben Sie das Ergebnis in
 die Datei \ospfile{ui\_main.py} aus:
 
 \begin{ospsimplelisting}
-$ <bf>pyuic4 main.ui > ui_main.py</bf>
+$\$$ pyuic4 main.ui > ui_main.py
 \end{ospsimplelisting}
 
 Der Webbrowser selbst beginnt dann mit dem Einbinden der notwendigen
@@ -207,7 +212,7 @@ Variante, mit \ospcmd{self.ui} als UI-Objekt). Die Klasse nennen wir
 \ospcmd{BrowserWindow} und speichern das erzeugte UI-Objekt in
 \ospcmd{self.ui}, so dass wir innerhalb der Klasse über dieses
 Attribut Zugriff auf alle GUI-Elemente haben. Die Deklaration und der
-Konstruktor des Hauptfensters sehen dann folgendermaßen aus:
+Konstruktor des Hauptfensters sehen dann folgenderma\ss{}en aus:
 
 \begin{osplisting}{Python}{Start der Hauptfenster-Klasse}{code:webkit1mainwindow1}
 class BrowserWindow(QtGui.QWidget):
@@ -238,7 +243,7 @@ dem Aufruf von Methoden des \ospcmd{QWebView} verbinden. Er stellt mit
 \ospcmd{back()}, \ospcmd{forward()} und \ospcmd{reload()} die drei
 Funktionen bereit, die wir für die Buttons benötigen. Für die beiden
 anderen Signale müssen wir noch eigene Slots implementieren. Die
-Methode \ospcmd{createConnects()} sieht folgendermaßen aus:
+Methode \ospcmd{createConnects()} sieht folgenderma\ss{}en aus:
 
 \begin{osplisting}{Python}{Signale und Slots verbinden}{code:webkit1mainwindow2}
 def createConnects(self):
@@ -249,9 +254,9 @@ def createConnects(self):
     self.ui.buttonReload.clicked.connect(self.ui.webView.reload)
 \end{osplisting}
 
-Das Signal für das Drücken von Return in der Eingabezeile heißt
-also\osplinebreak{} \ospcmd{returnPressed()}. Wenn der Web-View eine
-neue URL lädt, sendet er\osplinebreak{} \ospcmd{urlChanged()} mit der
+Das Signal für das Drücken von Return in der Eingabezeile hei\ss{}t
+also \ospcmd{returnPressed()}. Wenn der Web-View eine
+neue URL lädt, sendet er \ospcmd{urlChanged()} mit der
 neuen URL als Parameter. Diese beiden Signale sind nun mit unseren
 eigenen Slots verbunden. Das Aktualisieren der Adresszeile besteht nur
 aus dem Aufruf von \ospcmd{setText()} für das Objekt
@@ -309,12 +314,13 @@ sich, wie in Abbildung \ospfigref{fig:webkit1_app} bereits
 dargestellt.  Sie können so mit Ihrem eigenen Browser durch das
 Internet surfen.  Persönliche Daten speichert der Browser zunächst
 nicht permanent. Zwar werden Cookies gesetzt, allerdings nach
-Schließen des Fensters wieder gelöscht. Das nächste Kapitel zeigt
-Ihnen nun, wie Sie alle oder auch nur bestimmte Cookies beim Schließen
+Schlie\ss{}en des Fensters wieder gelöscht. Das nächste Kapitel zeigt
+Ihnen nun, wie Sie alle oder auch nur bestimmte Cookies beim Schlie\ss{}en
 des Browser-Fensters speichern.
 
 
-\ospsection{Cookies verwalten per Netzwerkmanager}{Cookies verwalten per Netzwerkmanager}{sec:pythoncookies}
+\section{Cookies verwalten per Netzwerkmanager}
+\label{sec:pythoncookies}
 
 \index{Cookies}%
 \index{WebKit!Cookies verwalten}%
@@ -350,14 +356,14 @@ Browser für Google Tasks her.
 
 \index{QWebView}%
 Ein vollständiger Webbrowser ist in diesem Fall aber gar nicht
-notwendig, schließlich besteht der Dienst nur aus einer Webseite.
-Diese ließe sich hervorragend in einem einfachen \ospcmd{QWebView}
+notwendig, schlie\ss{}lich besteht der Dienst nur aus einer Webseite.
+Diese lie\ss{}e sich hervorragend in einem einfachen \ospcmd{QWebView}
 darstellen, ohne weitere GUI-Elemente. Allerdings verlangt Google für
 den Dienst ein Login samt Passwort, wobei bei erfolgreichem Login
 einige Cookies übertragen werden, so dass der Browser beim nächsten
 Zugriff auf den Dienst den Zugang sofort erhält, ohne dass sich der
 Benutzer ein weiteres Mal einloggen muss. Die Idee ist nun, diese
-Cookies beim Schließen des Web-Views zu speichern und beim nächsten
+Cookies beim Schlie\ss{}en des Web-Views zu speichern und beim nächsten
 Öffnen wieder zu laden. So hätte man eine wirklich einfache Oberfläche
 für Google Tasks, wobei man sich nur beim allerersten Besuch der
 Webseite einloggen müsste. Genau das wollen wir hier in Python
@@ -391,7 +397,7 @@ Oberfläche hinzufügen, sondern gleich in der Klasse
 Zugriff auf die Cookies. Die Klasse \ospcmd{BrowserWindow} ist unser
 Hauptfenster und wird direkt von der Klasse \ospcmd{QWebView}
 abgeleitet. Das Hauptfenster besteht demnach nur aus dem Web-View. Im
-Konstruktor setzen wir zunächst Fenstergröße und -titel, dann
+Konstruktor setzen wir zunächst Fenstergrö\ss{}e und -titel, dann
 erzeugen wir den sogenannten \emph{Cookie Jar}:
 
 \begin{osplisting}{Python}{Deklaration und Konstruktor des Hauptfensters}{code:webkitcookies2}
@@ -452,21 +458,21 @@ Melden Sie sich mit Ihrem Google Account an, erscheint die
 Aufgabenliste, die der Benutzer beliebig editieren kann (s. Abbildung
 \ospfigref{fig:webkit2_app}). Alle Eingaben werden bei Google
 gespeichert, der Qt-Web-View unterstützt die volle Funktionalität der
-Webanwendung.  Wenn der Benutzer das Fenster schließt und die
+Webanwendung.  Wenn der Benutzer das Fenster schlie\ss{}t und die
 Anwendung erneut startet, muss er allerdings seine Login-Daten erneut
 eingeben.
 
 \index{QSettings}%
 \index{Anwendung!Einstellungen speichern}%
-\index{Events!Schließen des Fensters}%
+\index{Events!Schlie\ss{}en des Fensters}%
 \index{QWidget!closeEvent()}%
-Im nächsten Schritt sollen die Cookies von Google Tasks beim Schließen
+Im nächsten Schritt sollen die Cookies von Google Tasks beim Schlie\ss{}en
 des Fensters gespeichert werden. Alle dafür notwendigen Techniken
 wurden schon in Kapitel \ref{sec:spezielleeventhandler} vorgestellt:
 Wir nutzen die Klasse \ospcmd{QSettings} zum Speichern von
 Einstellungen und überschreiben den Event-Handler
 \ospcmd{closeEvent()} unseres Hauptfensters, um die Daten genau beim
-Schließen speichern zu können.  Der fehlende Teil ist dann nur der
+Schlie\ss{}en speichern zu können.  Der fehlende Teil ist dann nur der
 Zugriff auf die eigentlichen Cookie-Daten sowie die Umwandlung dieser
 Daten in ein zum Speichern geeignetes Format.
 
@@ -476,7 +482,7 @@ Daten in ein zum Speichern geeignetes Format.
 
 
 Cookies sind eine spezielle Eigenschaft des HTTP-Protokolls und
-bestehen jeweils aus einem Namen und einem Wert. Außerdem sind sie
+bestehen jeweils aus einem Namen und einem Wert. Au\ss{}erdem sind sie
 jeweils einer URL zugeordnet. Der Server überträgt diese drei Angaben
 an den Client, der entscheidet, ob er das Cookie annimmt oder
 ignoriert. Beim nächsten Zugriff auf die URL oder eine Unterseite der
@@ -499,30 +505,30 @@ der Cookies benutzen wir hier das Standard-Python-Modul
 diesen Strings auch wieder das Objekt erzeugt. Leider gibt es dabei
 zwei Probleme: Das Ganze funktioniert nicht mit Qt-Objekten, da diese
 zusätzliche Laufzeit-Informationen speichern, die beim Serialisieren
-in diesem Fall verlorengehen; außerdem erzeugt \ospcmd{pickle}
+in diesem Fall verlorengehen; au\ss{}erdem erzeugt \ospcmd{pickle}
 ASCII-Strings, die beim Speichern über \ospcmd{QSettings} zumindest
 unter Windows Probleme bereiten, da sie auch Zeichen für \dqo{}neue
 Zeile\dqc{} und Ähnliches enthalten können. Wir müssen also zwei
-zusätzliche Schritte durchführen.  
+zusätzliche Schritte durchführen.
 
 Zuerst wandeln wir die Cookies aus Objekten der Klasse
 \ospcmd{QNetworkCookie} in einfache Python-Tupel aus Name und Wert
 um und speichern diese statt in einem Cookie Jar in einer
 Python-Liste. Diese Liste serialisieren wir zwar dann per
-\ospcmd{pickle}, kodieren den String aber anschließend noch per
+\ospcmd{pickle}, kodieren den String aber anschlie\ss{}end noch per
 Python-Modul \ospcmd{base64}, so dass nur die druckbaren Zeichen aus
 dem ASCII-Inventar enthalten sind (Base64-Encoding). Der folgende
 Event-Handler führt beide Schritte durch, wobei die Umwandlung in eine
 Python-Liste in eine private Methode
 \ospcmd{\_cookieListFromCookies()} ausgegliedert ist:
 
-\begin{osplisting}{Python}{Event-Handler für das Schließen des Hauptfensters}{code:webkitcookies3}
+\begin{osplisting}{Python}{Event-Handler für das Schlie\ss{}en des Hauptfensters}{code:webkitcookies3}
 def closeEvent(self, event):
     cookies = self.cookiejar.cookiesForUrl(
                    QtCore.QUrl("https://mail.google.com/tasks/ig")
               )
     cookie_list = self._cookieListFromCookies(cookies)
-    
+
     settings = QtCore.QSettings("dasskript.com", "GoogleTasks")
     settings.setValue("cookies", QtCore.QString(
         base64.b64encode(pickle.dumps(cookie_list))));
@@ -544,7 +550,7 @@ verwendet, beispielsweise Dateien in \ospfile{.config} unter
 Unix-Systemen, die Registry unter Windows. Zuletzt ruft der
 Event-Handler die \ospcmd{accept()}-Methode des Ereignisses auf,
 um das Ereignis als akzeptiert zu kennzeichnen und das Fenster zu
-schließen.
+schlie\ss{}en.
 
 \index{QNetworkCookie}%
 \index{QNetworkCookie!name()}%
@@ -556,7 +562,7 @@ die Cookies in eine Python-Liste ablegen, und zwar in ein Tupel aus
 Name und Wert pro Cookie. \ospcmd{QNetworkCookie} stellt dazu zwei
 Methoden \ospcmd{name()} und \ospcmd{value()} bereit, die wir für
 jedes Cookie aufrufen. Der komplette Code der privaten Methode
-sieht dann folgendermaßen aus:
+sieht dann folgenderma\ss{}en aus:
 
 \begin{osplisting}{Python}{Umwandlung der Cookies in Tupel}{code:webkitcookies4}
 def _cookieListFromCookies(self, cookies):
@@ -594,7 +600,7 @@ Sie dazu die beiden Zeilen im Konstruktor unter dem Kommentar
 
 \index{QNetworkCookieJar!setCookiesForUrl()}%
 \index{QNetworkAccessManager!setCookieJar()}%
-\begin{osplisting}{Python}{Laden der Coookies im Konstruktor}{code:webkitcookies6}
+\begin{osplisting}{Python}{Laden der Cookies im Konstruktor}{code:webkitcookies6}
 # Cookies laden
 self.cookiejar = QtNetwork.QNetworkCookieJar(self)
 settings = QtCore.QSettings("dasskript.com", "GoogleTasks")
@@ -616,20 +622,21 @@ Anwendungseinstellungen geladen. Falls der Wert der Einstellung
 Cookie-Objekten aus dem geladenen String erzeugt und per
 \ospcmd{setCookiesFromUrl()} in den Cookie Jar geladen.
 Die Webanwendung Google Tasks erhält damit automatisch alle beim
-letzten Schließen des Fensters gespeicherten Cookies. Wenn sich der
+letzten Schlie\ss{}en des Fensters gespeicherten Cookies. Wenn sich der
 Benutzer nun einmal eingeloggt hat, wird diese Information beim
 nächsten Öffnen der Anwendung an die Webanwendung übermittelt und der
 Benutzer bekommt sofort die Aufgabenliste angezeigt.
 
 Dieses Beispiel lässt sich natürlich an beliebige andere
 Webanwendungen anpassen. Die Bedienung des Dienstes ohne vollständige
-Browser"=Oberfläche ist meist einfacher und intuitiver. Außerdem lässt
-sich die Fenstergröße optimal an den darzustellenden Inhalt anpassen.
+Browser"=Oberfläche ist meist einfacher und intuitiver. Au\ss{}erdem lässt
+sich die Fenstergrö\ss{}e optimal an den darzustellenden Inhalt anpassen.
 Mit Qt und seiner WebKit-Komponente lassen sich auf diese einfache
 Weise Desktop-Anwendungen aus Webseiten erstellen.
 
 
-\ospsection{WebKit in QML}{WebKit in QML}{sec:pythonwebkitqml}
+\section{WebKit in QML}
+\label{sec:pythonwebkitqml}
 
 \index{WebKit!QML}%
 \index{QML!WebKit}%
@@ -653,7 +660,7 @@ soll dabei im Vordergrund stehen.
 Durch die Javascript-Unterstützung in QML und WebKit kann der
 Qt"=Entwickler auf eine Reihe von Javascript-Bibliotheken
 zurückgreifen. Diese lassen sich zum einen per HTML-Seite in WebKit
-einbinden, wobei die HTML-Seite den Javascript-Code lädt. Außerdem
+einbinden, wobei die HTML-Seite den Javascript-Code lädt. Au\ss{}erdem
 bietet QML die Möglichkeit zum direkten Einbinden externer
 Javascript-Dateien. Hier nutzen wir die erste Methode: die Einbettung
 einer HTML-Seite samt Javascript in dem QML-Web-View und die
@@ -678,7 +685,7 @@ Intern führt processing.js den Code in einem HTML5-Canvas aus, wobei
 die Grafikausgabe per Javascript erfolgt. Mit all dem brauchen wir uns
 zunächst aber gar nicht weiter auseinanderzusetzen, die Bibliothek und
 WebKit stellen alles bereit.  Wir konzentrieren uns auf die GUI und
-das Senden des Processing-Codes an die WebKit-Komponente. 
+das Senden des Processing-Codes an die WebKit-Komponente.
 
 Abbildung \ospfigref{fig:webkit3_qml_app} zeigt die fertige Anwendung.
 Das hier vorgestellte Beispiel ist in etwas erweiterter Form auch als
@@ -690,10 +697,11 @@ beizutragen.
 
 \osppagebreak
 
-\ospfigure{0.7}{images/webkit3_qml_app}{Hauptfenster des Processing-Interpreters}{fig:webkit3_qml_app}
+\ospfigure{0.5}{images/webkit3_qml_app}{Hauptfenster des Processing-Interpreters}{fig:webkit3_qml_app}
 
 
-\ospsubsection{Hauptanwendung in Python}{Hauptanwendung in Python}{sec:webkit3python}
+\subsection{Hauptanwendung in Python}
+\label{sec:webkit3python}
 
 Die Hauptanwendung in Python kann wieder minimal gehalten werden, da
 alles Weitere in QML und HTML implementiert wird. Es soll an dieser
@@ -711,7 +719,7 @@ im Vollbild-Modus, so dass wir unserer Python-Anwendung einen
 Parameter zum Start im Vollbildmodus hinzufügen wollen. Erst bei
 Angabe dieses Parameters versucht dann die Anwendung die
 Qt-Quick-Umgebung zum OpenGL-Rendering zu überreden. Der Python-Code
-sieht folgendermaßen aus:
+sieht folgenderma\ss{}en aus:
 
 \index{Anwendung!Template}%
 \index{optparse}%
@@ -732,9 +740,9 @@ def main(argv):
     parser.add_option("-f", "--fullscreen", dest="fullscreen", \
         help="Anwendung im Vollbildmodus starten.", \
         action="store_true", default=False)
-    
+
     (options, args) = parser.parse_args()
-    
+
     app = QtGui.QApplication(argv)
     view = QtDeclarative.QDeclarativeView()
     view.setSource(QtCore.QUrl("main.qml"))
@@ -753,50 +761,51 @@ if __name__ == "__main__":
 \end{osplisting}
 
 Das Skript benutzt \ospcmd{optparse.OptionParser()} zum Auslesen der
-Kommandozeilenargumente. Der Parameter für den Vollbildmodus heißt in
+Kommandozeilenargumente. Der Parameter für den Vollbildmodus hei\ss{}t in
 diesem Fall einfach \ospcmd{-f} oder \ospcmd{-{}-fullscreen}. Als
 Standard ist der Vollbildmodus ausgeschaltet.
 
 Als Hauptfenster verwenden wir das QML-Widget
 \ospcmd{QDeclarativeView}, da wir sonst keine weiteren Qt-Widgets in
 der Oberfläche benötigen. Streng genommen bräuchten wir für die
-Anwendung gar keinen Python-Code, sie ließe sich mit dem QML-Viewer
+Anwendung gar keinen Python-Code, sie lie\ss{}e sich mit dem QML-Viewer
 ausführen. Wenn Sie eine solche Anwendung aber später per
 Installationspaket vertreiben wollen, wie in Kapitel
 \ref{fig:webkit3_qml_app} beschrieben, geht das eben am einfachsten
 mit einer kleinen Python-Rahmen-Anwendung. Den Resize Mode setzt das
 Skript gleich auf \ospcmd{Size\-RootObjectToView}, da der Benutzer die
-Fenstergröße ändern können soll. Die Grafikprogrammierung in
+Fenstergrö\ss{}e ändern können soll. Die Grafikprogrammierung in
 Processing erfolgt normalerweise auf Basis eines fest vorgegebenen
 \dqo{}Malbereichs\dqc{}. Wir wollen dem Benutzer aber die Wahl lassen,
-diesen Bereich zunächst manuell durch die Größe des QML-Views
-festzulegen. Wenn dann die gewünschte Fenstergröße festgelegt wurde,
+diesen Bereich zunächst manuell durch die Grö\ss{}e des QML-Views
+festzulegen. Wenn dann die gewünschte Fenstergrö\ss{}e festgelegt wurde,
 kann der Benutzer im Processing-Code den gesamten QML-View für die
 Darstellung verwenden. Der QML-Inhalt des Fensters passt sich durch
-die Einstellung des Resize Mode immer an die Fenstergröße an.
+die Einstellung des Resize Mode immer an die Fenstergrö\ss{}e an.
 
-Schließlich versuchen wir, bei Start der Anwendung im Vollbildmodus
+Schlie\ss{}lich versuchen wir, bei Start der Anwendung im Vollbildmodus
 den Ausgabebereich des QML-Views auf ein OpenGL-Widget zu lenken. Dazu
 erzeugen wir eine solches Widget aus der Klasse \ospcmd{QGLWiget} und
 setzen das erzeugte Objekt per Methode \ospcmd{setViewport()} als
-Darstellungsfläche des QML-Views. Anschließend wird die Anwendung per
+Darstellungsfläche des QML-Views. Anschlie\ss{}end wird die Anwendung per
 \ospcmd{showFullScreen()} im Vollbildmodus gestartet.
 
 
-\ospsubsection{Der QML-View der Anwendung}{Der QML-View der Anwendung}{sec:webkit3qml}
+\subsection{Der QML-View der Anwendung}
+\label{sec:webkit3qml}
 
 Der QML-Code befindet sich wieder in der Datei \ospcmd{main.qml}. Der
 Kopf der Datei ist den bisherigen QML-Beispielen sehr ähnlich: Es wird
-ein Rechteck als Haupt-QML-Element deklariert; es hat  die Größe
+ein Rechteck als Haupt-QML-Element deklariert; es hat  die Grö\ss{}e
 640 mal 480 Pixel und einen schwarzen Hintergrund:
 
 \begin{osplisting}{QML}{Kopf der QML-Hauptdatei}{code:webkit3_qml1}
 import Qt 4.7
 import QtWebKit 1.0
- 
+
 Rectangle {
     id: mainScreen
-    
+
     width: 640
     height: 480
 
@@ -815,20 +824,21 @@ Item {
 \end{ospsimplelisting}
 
 
-\ospsubsubsection{Die Kopfleiste}{Die Kopfleiste}{sec:webkit3header}
+\subsubsection{Die Kopfleiste}
+\label{sec:webkit3header}
 
 \index{QML!Kopfleiste}%
 \index{QML!Hyperlinks}%
 Dann folgt schon die im Screenshot in Abbildung
 \ospfigref{fig:webkit3_qml_app} sichtbare obere Leiste: Links steht
-die jeweils aktuelle Fenstergröße (damit der Benutzer die Größe des
+die jeweils aktuelle Fenstergrö\ss{}e (damit der Benutzer die Grö\ss{}e des
 Processing-Malbereichs anpassen kann), rechts ein Link \ospmenu{Über}
 auf die Projektwebseite. Das Ganze wird als \ospcmd{Rectangle}-Element
 deklariert, das zwei \ospcmd{Text}-Elemente enthält, und zwar alles
 innerhalb des gestarteten \ospcmd{Item} mit der ID \ospcmd{codeView}:
 
 \begin{osplisting}{QML}{Kopfleiste des Hauptfensters}{code:webkit3_qml2}
-Rectangle {        
+Rectangle {
     width: parent.width
 
     Text {
@@ -859,7 +869,8 @@ eine Hilfsfunktion im QML-Modul \ospcmd{Qt}. Die Variable
 \ospcmd{link} stellt der Event-Handler zur Verfügung, der Inhalt ist
 die URL des jeweils angeklickten Links.
 
-\ospsubsubsection{Der Code-Editor}{Der Code-Editor}{sec:webkit3codeeditor}
+\subsubsection{Der Code-Editor}
+\label{sec:webkit3codeeditor}
 
 Im nächsten Schritt werden bereits Code-Editor und Button
 deklariert.  Dazu erzeugen wir zunächst ein Rechteck, um den im
@@ -878,8 +889,8 @@ Rectangle {
     radius: 10
 \end{osplisting}
 
-Anschließend gruppieren wir die beiden Elemente Editor und Button noch
-einmal durch ein \ospcmd{Item}-Element. Das hat hier ausschließlich
+Anschlie\ss{}end gruppieren wir die beiden Elemente Editor und Button noch
+einmal durch ein \ospcmd{Item}-Element. Das hat hier ausschlie\ss{}lich
 Layout"=Gründe, da wir so am einfachsten beide Elemente
 direkt im übergeordneten Rechteck zentrieren können. Das \ospcmd{Item}
 hat darum auch keine ID, sondern nur eine Angabe für die
@@ -895,7 +906,7 @@ Item {
 Nun erst folgt der Editor. Das zentrale Element wird ein
 \ospcmd{TextEdit} sein, allerdings müssen wir zur schöneren
 Darstellung und um das Scrollen im Editor zu ermöglichen das Element
-wiederum in zwei übergeordnete Elemente einschließen. Für das erste
+wiederum in zwei übergeordnete Elemente einschlie\ss{}en. Für das erste
 reicht ein Rechteck, dem wir Rahmen und Abstände zuweisen. Das
 Scrollen ermöglichen wir durch ein Element \ospcmd{Flickable}. Ohne
 \ospcmd{Flickable} würde längerer Code einfach aus dem Editor unten
@@ -904,7 +915,7 @@ jemals zu Gesicht zu bekommen. Zum einen wollen wir dem Benutzer das
 manuelle Scrollen im Editor erlauben. Das Element \ospcmd{Flickable}
 ist an den Einsatz auf Touchscreens angepasst, so dass auf dem Desktop
 zunächst nur mit Maustaste-Klicken-Halten-Und-Verschieben gescrollt
-werden kann. Das ist für unseren Fall zunächst ausreichend.  Außerdem
+werden kann. Das ist für unseren Fall zunächst ausreichend.  Au\ss{}erdem
 wollen wir aber automatisch Scrollen, sobald der Cursor beim Schreiben
 unten oder oben den Bildschirm verlässt. Wir müssen also bei einer
 Änderung der Cursor-Position dafür sorgen, dass der Cursor immer im
@@ -935,7 +946,7 @@ in unserem Fall sind das genau Höhe und Breite des später zu
 deklarierenden \ospcmd{TextEdit}-Elements. Dazu greifen wir auf die
 Eigenschaften \ospcmd{paintedWidth} und \ospcmd{paintedHeight} dieses
 Elements zu, das uns die genaue Höhe und Breite auf dem Bildschirm
-liefert. Außerdem definieren wir für das \ospcmd{Flickable} gleich
+liefert. Au\ss{}erdem definieren wir für das \ospcmd{Flickable} gleich
 eine Funktion \ospcmd{ensureVisible()}, der ein beliebiges Element
 übergeben werden kann. Die Funktion scrollt dann den Inhalt des
 \ospcmd{Flickable} so weit, dass das übergebene Element sichtbar
@@ -963,18 +974,18 @@ Flickable {
     }
 \end{osplisting}
 
-Die Eigenschaft \ospcmd{clip} sorgt dafür, dass sich das Element 
-nicht über den eigenen Rand hinaus zeichnet. Bei großen
+Die Eigenschaft \ospcmd{clip} sorgt dafür, dass sich das Element
+nicht über den eigenen Rand hinaus zeichnet. Bei gro\ss{}en
 nicht-sichtbaren Bereichen hat das deutliche
 Geschwindigkeitsvorteile. Die Funktion \ospcmd{ensureVisible()}
 überprüft für das übergebene Element, ob sich dessen x- oder
-y-Position außerhalb des dargestellten Bereichs befindet. Dieser
+y-Position au\ss{}erhalb des dargestellten Bereichs befindet. Dieser
 Bereich ist über die Eigenschaften \ospcmd{contentX} und
 \ospcmd{contentY} abfragbar -- sie enthalten die jeweilige x- und
 y-Koordinate des Inhalts von \ospcmd{Flickable} an dessen linker
 oberer Ecke. Der rechte und untere Rand ist demnach über diese
 Eigenschaften plus jeweils Breite oder Höhe des \ospcmd{Flickable} zu
-berechnen. Liegt das Element außerhalb dieses Bereichs, wird der
+berechnen. Liegt das Element au\ss{}erhalb dieses Bereichs, wird der
 Inhalt entsprechend verschoben, indem den Eigenschaften
 \ospcmd{contentX} und \ospcmd{contentY} neue Werte zugewiesen werden.
 Diese neuen Werte ergeben sich aus den Positionsangaben des an die
@@ -988,7 +999,7 @@ immer sichtbar zu machendes Element übergeben.
 Darüber hinaus müssen wir nur Angaben zum Layout des Text-Editors und
 seines Inhalts machen, z.\,B. dass das Element die Höhe und Breite des
 \ospcmd{Flickable} einnimmt und dass der Text ohne Formatierung in
-einer bestimmten Schriftgröße dargestellt wird. Dazu deklarieren wir
+einer bestimmten Schriftgrö\ss{}e dargestellt wird. Dazu deklarieren wir
 innerhalb des \ospcmd{Flickable} folgendes Element:
 
 \begin{osplisting}{QML}{Der Code-Editor}{code:webkit3_qml7}
@@ -1008,17 +1019,18 @@ innerhalb des \ospcmd{Flickable} folgendes Element:
 \end{osplisting}
 
 Als Textinhalt verwenden wir zunächst einen Blindtext, den der
-Benutzer durch Processing-Code ersetzen muss. Der Event-Handler für
-Änderungen der Cursor-Position heißt nun
+Benutzer durch Processing\hyp Code ersetzen muss. Der Event-Handler für
+Änderungen der Cursor-Position hei\ss{}t nun
 \ospcmd{onCursorRectangleChanged}, und wir weisen ihm unsere
 Hilfsfunktion aus dem \ospcmd{Flickable} zu. Das Cursor-Objekt stellt
 der Event-Handler in der Variablen \ospcmd{cursorRectangle} zur
 Verfügung. Damit haben wir den Editor implementiert. Vergessen Sie
 nicht, die beiden einbettenden Elemente \ospcmd{Flickable} und
-\ospcmd{Rectangle} zu schließen.
+\ospcmd{Rectangle} zu schlie\ss{}en.
 
 
-\ospsubsubsection{Der Startknopf}{Der Startknopf}{sec:webkit3button}
+\subsubsection{Der Startknopf}
+\label{sec:webkit3button}
 
 \index{QML!Button selbst gemacht}%
 \index{QML!MouseArea}%
@@ -1029,7 +1041,7 @@ Klick auf den Button auch etwas passiert. Das Vorgehen ist exakt
 dasselbe wie bei den Beispielen aus Kapitel \ref{chap:qtquick},
 wiederum wechseln wir bei einem Mausklick den Zustand. Die
 Zustandsübergänge und was genau bei einem solchen passiert werden wir
-anschließend deklarieren. Hier ist der Code für den Button:
+anschlie\ss{}end deklarieren. Hier ist der Code für den Button:
 
 \begin{osplisting}{QML}{Button zum Start des Processing-Codes}{code:webkit3_qml8}
 Rectangle {
@@ -1061,13 +1073,13 @@ Rectangle {
 
 Neben Angaben zum Layout enthält der Button nur den Event-Handler
 \ospcmd{onClicked()}, über den wir hier den Mausklick verarbeiten. Der
-Zustand wird in diesem Fall nach \ospcmd{Webview} geändert, außerdem
+Zustand wird in diesem Fall nach \ospcmd{Webview} geändert, au\ss{}erdem
 wird der (noch zu implementierende) Web-View mit der ID
 \ospcmd{webview} per \ospcmd{reload.trigger()} neu geladen. Bei
 \ospcmd{reload} handelt es sich um eine \ospcmd{action}, einen basalen
 QML-Typ. Aktionen haben u.\,a. nun einen Slot \ospcmd{trigger()}, der
 die Aktion auslöst. Nach der Deklaration des Buttons können nun die
-drei umschließenden Elemente für den \ospcmd{codeView} geschlossen
+drei umschlie\ss{}enden Elemente für den \ospcmd{codeView} geschlossen
 werden:
 
 \begin{ospsimplelisting}
@@ -1077,14 +1089,15 @@ werden:
 \end{ospsimplelisting}
 
 
-\ospsubsubsection{Der Web-View}{Der Web-View}{sec:webkit3webview}
+\subsubsection{Der Web-View}
+\label{sec:webkit3webview}
 
 \index{QML!WebView}%
 \index{QML!HTML-Interaktion}%
 \index{QML!Javascript-Interaktion}%
-Weiter geht es mit dem Web-View, der schließlich den Processing-Code
+Weiter geht es mit dem Web-View, der schlie\ss{}lich den Processing-Code
 ausführen soll. Der Web-View soll zunächst unsichtbar sein und die
-gesamte Größe des Fensters einnehmen. Außerdem brauchen wir eine
+gesamte Grö\ss{}e des Fensters einnehmen. Au\ss{}erdem brauchen wir eine
 Möglichkeit, wie der Benutzer aus dem Web-View wieder zum Editor
 zurückgelangt. Da wir keine zusätzlichen GUI-Elemente einführen
 wollen, stellen wir dem Web-View einfach eine \ospcmd{MouseArea} zur
@@ -1093,7 +1106,7 @@ Maustaste mindestens 800 Millisekunden lang gedrückt hält, wird
 wieder der Editor eingeblendet. Natürlich steht diese Art der
 Interaktion dann nicht für die Processing-Anwendung zur Verfügung, auf
 alle anderen Mausklicks und Eingaben kann sie aber reagieren. Das
-entsprechende Event heißt in QML \ospcmd{PressAndHold}, wir benutzen
+entsprechende Event hei\ss{}t in QML \ospcmd{PressAndHold}, wir benutzen
 den Event-Handler \ospcmd{onPressAndHold} der \ospcmd{MouseArea} und
 setzen auf das Event hin den Zustand \ospcmd{Editor}:
 
@@ -1119,7 +1132,7 @@ WebView {
 }
 \end{osplisting}
 
-Außer Layout und \ospcmd{MouseArea} lädt der Web-View eine HTML-Datei
+Au\ss{}er Layout und \ospcmd{MouseArea} lädt der Web-View eine HTML-Datei
 namens \ospfile{index.html}. Den Inhalt der Datei werden wir weiter
 unten näher besprechen; darin wird dann auch der Javascript-Code aus
 processing.js zur Interpretation des Processing-Codes geladen. Die
@@ -1137,7 +1150,8 @@ Objekts in QML können wir frei wählen, er wird per
 nicht notwendig.
 
 
-\ospsubsubsection{Zustände und Zustandsübergänge}{Zustände und Zustandsübergänge}{sec:webkit3states}
+\subsubsection{Zustände und Zustandsübergänge}
+\label{sec:webkit3states}
 
 Was nun noch fehlt, sind lediglich die Definitionen für Zustände und
 Zustandsübergänge. Parallel zum Beispiel des RSS-Readers in Kapitel
@@ -1203,12 +1217,13 @@ transitions: [
 Wir nähern die Werte hier kubisch an den Zielwert an. Damit haben wir
 den QML-Code vollständig implementiert. Vergessen Sie nicht, auch das
 Haupt-Element \ospcmd{Rectangle} nach der Deklaration der
-Zustandsübergänge mit geschweifter Klammer zu schließen. Nun fehlt nur
+Zustandsübergänge mit geschweifter Klammer zu schlie\ss{}en. Nun fehlt nur
 noch die HTML-Datei \ospfile{index.html}, die im Web-View geladen
 wird.
 
 
-\ospsubsubsection{Die HTML-Datei}{Die HTML-Datei}{sec:webkit3html}
+\subsubsection{Die HTML-Datei}
+\label{sec:webkit3html}
 
 Als Voraussetzung für das Starten des Processing-Codes müssen Sie noch
 die aktuelle Javascript-Datei des processing.js-Projekts von der oben
@@ -1247,7 +1262,7 @@ haben nun alles beisammen, um die Anwendung einmal zu starten. Als
 erstes Beispiel können Sie einfach folgenden Processing-Code in den
 Editor der QML-Oberfläche eintragen:
 
-\begin{osplisting}{Processing}{Eine erste Processing-Anwendung}{code:webkit3_qml13}
+\begin{osplisting}{C}{Eine erste Processing-Anwendung}{code:webkit3_qml13}
 void setup()
 {
   size(640, 480);
@@ -1265,7 +1280,7 @@ void draw()
 }
 \end{osplisting}
 
-Wenn Sie nun auf \ospcmd{run} klicken, bewegt sich eine weiße
+Wenn Sie nun auf \ospcmd{run} klicken, bewegt sich eine wei\ss{}e
 Linie auf schwarzem Hintergrund quer über das Fenster von oben nach
 unten. Nichts Spektakuläres, aber dafür führt nun ein
 Python-Interpreter Processing-Code aus -- über einen Umweg von QML zu
@@ -1276,7 +1291,7 @@ hier vorgestellten Anwendung einladen.
 
 \ospvacat
 
-%%% Local Variables: 
+%%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "pyqt"
 %%% End:
